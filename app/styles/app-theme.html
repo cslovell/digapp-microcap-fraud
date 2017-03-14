@@ -1,0 +1,615 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<style is="custom-style">
+
+  /*
+   Polymer includes a shim for CSS Custom Properties that we can use for application theming.
+   Below, you'll find the default palette for the Polymer Starter Kit layout. Feel free to play
+   with changing the colors used or generate your own palette of colours at MaterialPalette.com.
+
+   See https://www.polymer-project.org/1.0/docs/devguide/styling.html#xscope-styling-details
+   for further information on custom CSS properties.
+   */
+
+  /* Application theme */
+
+  :root {
+    /* From main.css */
+    --main-text-color: #37474F; /* paper-blue-grey-800 */
+
+    /* Now I'm not sure why this variable exists since polymer looks for --primary-color */
+    --default-primary-color: #455A64; /* paper-blue-grey-700 */
+
+    --dark-primary-color: #263238; /* paper-blue-grey-900 */
+    --primary-color: var(--default-primary-color);
+    --light-primary-color: #CFD8DC;
+    --text-primary-color: #ffffff; /*text/icons*/
+    --accent-color: #FFB300;
+    --primary-background-color: #CFD8DC; /* paper-blue-grey-100 */
+    --primary-text-color: #212121;
+    --secondary-text-color: #727272;
+    --disabled-text-color: #bdbdbd; /* paper-grey-400 */
+    --divider-color: #B6B6B6;
+    --facet-background-color: #B0BEC5;
+
+    /* Custom variables */
+    --dark-accent-color: #FF8F00;
+    --link-text-color: #2196F3;
+    --dark-link-text-color: #1565C0;
+
+    /* Colors from the Polymer Material Palette http://www.materialpalette.com/ and https://github.com/PolymerElements/paper-styles/blob/master/color.html */
+    --amber: var(--paper-amber-500);
+    --background-amber: var(--paper-amber-100);
+    --blue: var(--paper-blue-500);
+    --background-blue: var(--paper-blue-100);
+    --blue-grey: var(--paper-blue-grey-500);
+    --background-blue-grey: var(--paper-blue-grey-100);
+    --brown: var(--paper-brown-500);
+    --background-brown: var(--paper-brown-100);
+    --cyan: var(--paper-cyan-500);
+    --background-cyan: var(--paper-cyan-100);
+    --deep-orange: var(--paper-deep-orange-500);
+    --background-deep-orange: var(--paper-deep-orange-100);
+    --deep-purple: var(--paper-deep-purple-500);
+    --background-deep-purple: var(--paper-deep-purple-100);
+    --green: var(--paper-green-500);
+    --background-green: var(--paper-green-100);
+    --grey: var(--paper-grey-500);
+    --background-grey: var(--paper-grey-100);
+    --indigo: var(--paper-indigo-500);
+    --background-indigo: var(--paper-indigo-100);
+    --light-blue: var(--paper-light-blue-500);
+    --background-light-blue: var(--paper-light-blue-100);
+    --light-green: var(--paper-light-green-500);
+    --background-light-green: var(--paper-light-green-100);
+    --lime: var(--paper-lime-500);
+    --background-lime: var(--paper-lime-100);
+    --orange: var(--paper-orange-500);
+    --background-orange: var(--paper-orange-100);
+    --pink: var(--paper-pink-500);
+    --background-pink: var(--paper-pink-100);
+    --purple: var(--paper-purple-500);
+    --background-purple: var(--paper-purple-100);
+    --red: var(--paper-red-500);
+    --background-red: var(--paper-red-100);
+    --teal: var(--paper-teal-500);
+    --background-teal: var(--paper-teal-100);
+    --yellow: var(--paper-yellow-500);
+    --background-yellow: var(--paper-yellow-100);
+
+    /* Entity type colors */
+    --entity-cache-color: var(--grey);
+    --light-entity-cache-color: var(--background-grey);
+    --entity-date-color: var(--deep-purple);
+    --light-entity-date-color: var(--background-deep-purple);
+    --entity-email-color: var(--indigo);
+    --light-entity-email-color: var(--background-indigo);
+    --entity-image-color: var(--light-blue);
+    --light-entity-image-color: var(--background-light-blue);
+    --entity-location-color: var(--orange);
+    --light-entity-location-color: var(--background-orange);
+    --entity-money-color: var(--light-green);
+    --light-entity-money-color: var(--background-light-green);
+    --entity-offer-color: var(--blue-grey);
+    --light-entity-offer-color: var(--background-blue-grey);
+    --entity-provider-color: var(--teal);
+    --light-entity-provider-color: var(--background-teal);
+    --entity-phone-color: var(--purple);
+    --light-entity-phone-color: var(--background-purple);
+    --entity-review-color: var(--grey);
+    --light-entity-review-color: var(--background-grey);
+    --entity-service-color: var(--teal);
+    --light-entity-service-color: var(--background-teal);
+    --entity-social-color: var(--red);
+    --light-entity-social-color: var(--background-red);
+    --entity-webpage-color: var(--green);
+    --light-entity-webpage-color: var(--background-green);
+
+    /* Components */
+
+    /* paper-menu */
+    --paper-menu-background-color: #fff;
+    --menu-link-color: #111111;
+  }
+
+  body {
+    /* Flexbox can cause scrollbars to be shown in IE when not needed so hide them. */
+    overflow: hidden;
+  }
+
+  .white-input-container {
+    /* paper-input */
+    --paper-input-container-color: #dddddd;
+    --paper-input-container-input-color: #ffffff;
+    --paper-input-container-focus-color: #ffffff;
+  }
+
+  paper-button[accent]{
+    --paper-button: {
+      background-color: var(--accent-color);
+    }
+  }
+
+  a{
+    color: var(--link-text-color);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  a:focus,
+  a:hover{
+    color: var(--dark-link-text-color);
+    text-decoration: none;
+  }
+
+  paper-material {
+    background-color: #FFFFFF;
+  }
+
+  .v-divider {
+    width: 20px;
+  }
+
+  .h-divider {
+    height: 20px;
+  }
+
+  .content {
+    @apply(--layout-horizontal);
+    margin-bottom: 20px;
+    margin-right: 20px;
+  }
+
+  .content > * {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  /* General styles */
+
+  .container {
+    @apply(--layout-horizontal);
+    @apply(--layout-wrap);
+  }
+
+  .flexchild {
+    @apply(--layout-flex);
+    background-color: #dddddd;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  paper-scroll-header-panel {
+    height: 100%;
+  }
+
+  section {
+    padding: 24px;
+  }
+
+  section > :first-child{
+    margin-top: 0;
+  }
+
+  section > :last-child{
+    margin-bottom: 0;
+  }
+
+  hr{
+    background: none;
+    border-width: 1px 0 0;
+    border-style: solid;
+    border-color: rgba(0,0,0,var(--dark-divider-opacity));
+    margin: 20px 0;
+  }
+
+  /*********************************************************
+  /*
+  /*  New stuff for index.html. Maybe it goes in its own page style,
+  /*  because right now this breaks the entity page style.
+  /*
+  /*********************************************************/
+
+  /* Style icons in a dropdown menu*/
+  paper-menu iron-icon {
+    margin-right: 33px;
+    opacity: 0.54;
+  }
+
+  /* Style the selected item in a dropdown menu */
+  .paper-menu > .iron-selected {
+    color: var(--accent-color);
+  }
+
+  /* Sidebar drawer mixin */
+  paper-drawer-panel {
+    --paper-drawer-panel-left-drawer-container: {
+      background-color: var(--primary-background-color);
+      border-right: 1px solid rgba(0,0,0,var(--dark-divider-opacity));
+    };
+  }
+
+  /* Toolbar mixin */
+  #navbar {
+    --paper-toolbar-background: var(--dark-primary-color);
+    --paper-toolbar-height: 80px;
+  }
+
+  #navbar modal-icon {
+    --paper-icon-button: {
+      margin: 20px 0 0;
+    }
+  }
+
+  .show-fields {
+    color: yellowgreen;
+  }
+
+  #navbar paper-icon-button[icon=menu] {
+    /* Override default style */
+    margin-right: 0px;
+  }
+
+  #navbar paper-button {
+    --paper-button: {
+      margin: 20px 0 0;
+      min-width: initial;
+      padding: 8px;
+    }
+  }
+
+  #navbar paper-icon-button {
+    --paper-icon-button: {
+      margin: 20px 0 0;
+    }
+  }
+
+  #navbar .toggle[active] {
+    background-color: var(--text-primary-color);
+    color: var(--dark-primary-color);
+  }
+
+  #navbar load-user-info {
+    margin-top: 20px;
+  }
+
+  /* What is this? */
+  paper-dialog.size {
+    width: 800px;
+    height: 800px;
+    overflow: auto;
+  }
+
+  /* Spacer to match drawer width */
+  #navbar .drawer-spacer {
+    width: 200px;
+  }
+
+  /* Decreasing z-index for leaflet controls so that they
+     don't overlap with the image gallery modal */
+  .leaflet-top, .leaflet-bottom {
+    z-index: 100;
+  }
+
+  .filter-header {
+    cursor: pointer;
+    /* Match the font-weight of the Sort label */
+    font-weight: 500;
+    line-height: 24px;
+  }
+
+  #menuDropdown .dropdown-content {
+    background-color: var(--dark-primary-color);
+    border: 1px solid var(--dark-primary-color);
+    border-radius: 2px;
+    color: var(--text-primary-color);
+  }
+
+  #menuDropdown .dropdown-content paper-icon-item {
+    --paper-item-icon-width: 24px;
+    --paper-item-icon: {
+      margin-right: 10px;
+    }
+    --paper-icon-item: {
+      border: 1px solid var(--text-primary-color);
+      cursor: pointer;
+      /* Below is needed for IE */
+      line-height: 48px;
+      min-width: 300px;
+      /* Above is needed for IE */
+    }
+  }
+
+  .green[active],
+  .green:hover {
+    color: yellowgreen;
+  }
+
+  .search-fields-dialog {
+    max-width: 960px;
+    margin: 0;
+    padding: 30px;
+  }
+
+  .search-labels > div {
+    line-height: 25px;
+    padding-top: 20px;
+    text-align: end;
+  }
+
+  .search-labels > .instructions {
+    padding-top: 0;
+    padding-bottom: 30px;
+  }
+
+  .search-labels > .date {
+    padding-bottom: 10px;
+  }
+
+  .search-labels > .rows-1 {
+    padding-bottom: 5px;
+  }
+
+  .search-labels > .rows-2 {
+    padding-bottom: 55px;
+  }
+
+  .search-labels > .rows-3 {
+    padding-bottom: 105px;
+  }
+
+  .search-fields-dialog paper-dropdown-menu,
+  .search-fields-dialog paper-input {
+    display: inline-block;
+    --paper-input-container-color: var(--secondary-text-color);
+    --paper-input-container-input-color: var(--dark-primary-color);
+    --paper-input-container-focus-color: var(--dark-primary-color);
+    --paper-input-container: {
+      padding: 0 10px 4px;
+      width: 260px;
+    }
+    --paper-input-container-input: {
+      font-weight: 500;
+    }
+  }
+
+  .search-fields-dialog paper-dropdown-menu {
+    --paper-input-container: {
+      padding: 20px 10px 4px;
+      width: 260px;
+    }
+    --paper-input-container-input: {
+      cursor: pointer;
+    }
+  }
+
+  .search-fields-dialog paper-dropdown-menu paper-listbox {
+    --paper-listbox-background-color: #fff;
+    --paper-listbox: {
+      padding: 0;
+    }
+  }
+
+  .search-fields-dialog paper-dropdown-menu paper-listbox paper-item {
+    --paper-item: {
+      cursor: pointer;
+      padding: 0 20px;
+    }
+  }
+
+  .date-fields-container {
+    padding: 20px 0 0;
+  }
+
+  .date-fields-container > date-picker-display {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 5px 0 9px;
+    width: 260px;
+    --date-select-bg-color: #ffffff;
+    --date-select-text-color: #000000;
+  }
+
+  .search-fields-dialog .search-buttons {
+    padding-top: 20px;
+  }
+
+  #searchPanel ::content #mainContainer {
+    background-color: #ffffff;
+    overflow: hidden;
+  }
+
+  #searchTitle {
+    border-bottom: 1px solid var(--light-primary-color);
+    padding: 15px 25px;
+  }
+
+  #searchTitle .paper-font-title {
+    /* Match the height of the export button. */
+    line-height: 30px;
+  }
+
+  #searchResults ::content iron-scroll-threshold {
+    height: auto;
+    max-height: none;
+    position: absolute;
+    bottom: 70px;
+    top: 60px;
+    left: 0;
+    right: 0;
+  }
+
+  #searchResults ::content loading-spinner,
+  #searchResults ::content .show-more {
+    border-top: 1px solid var(--light-primary-color);
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
+  }
+
+  #searchResults ::content loading-spinner {
+    padding-top: 10px;
+  }
+
+  #searchResults ::content .show-more {
+    padding-top: 20px;
+  }
+
+  elastic-sort-input ::content label {
+    /* Vertically align the label with the dropdown menu. */
+    line-height: 30px;
+    padding-top: 25px;
+  }
+
+  elastic-sort-input ::content paper-menu {
+    /* Set the min-width so 'Best Match' won't wrap to a second line. */
+    min-width: 120px;
+    padding: 0px;
+  }
+
+  elastic-sort-input ::content paper-item {
+    cursor: pointer;
+    /* Needed for IE */
+    line-height: 48px;
+  }
+
+  elastic-sort-input ::content paper-dropdown-menu {
+    padding: 0 10px;
+    width: 150px;
+  }
+
+  image-gallery-popup ::content paper-dialog {
+    /* Needed for images in the similar image search dialog. */
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .drawer-header {
+    --paper-toolbar-height: auto;
+    background: inherit;
+    color: inherit;
+  }
+
+  .selected-facets-header {
+    font-weight: 500;
+    /* Same height as the selected-facet-display components. */
+    line-height: 30px;
+  }
+
+  checkbox-list-display ::content paper-checkbox {
+    margin-top: 5px;
+  }
+
+  checkbox-list-display ::content paper-checkbox #checkboxLabel {
+    line-height: 20px;
+  }
+
+  selected-facets-display {
+    --selected-facet-bg-color: var(--facet-background-color);
+    --selected-facet-text-color: var(--primary-text-color);
+    --selected-facet-icon-hover-color: #fff;
+  }
+
+  selected-facets-display ::content .item {
+    border-radius: 3px;
+  }
+
+  aggregation-popup ::content .bar,
+  feature-aggregation ::content .bar {
+    background-color: var(--facet-background-color);
+  }
+
+  aggregation-popup ::content .bar-count,
+  feature-aggregation ::content .bar-count {
+    color: var(--primary-text-color);
+    font-weight: normal;
+  }
+
+  .filter-list > date-picker-display {
+    padding-bottom: 5px;
+    padding-top: 15px;
+  }
+
+  @media all and (min-width: 500px) and (max-width: 650px) {
+    .search-options-title {
+      width: 100px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .search-fields-selected {
+      padding: 0px 10px 10px 10px;
+    }
+  }
+
+  @media all and (min-width: 0px) and (max-width: 500px) {
+    .search-options-title {
+      display: none;
+    }
+
+    .search-fields-selected {
+      padding: 0px 10px 10px 10px;
+    }
+  }
+
+  /*********************************************************/
+
+  /* Material Design Adaptive Breakpoints */
+  /*
+    Below you'll find CSS media queries based on the breakpoint guidance
+    published by the Material Design team. You can choose to use, customise
+    or remove these breakpoints based on your needs.
+
+    http://www.google.com/design/spec/layout/adaptive-ui.html#adaptive-ui-breakpoints
+   */
+
+  /* mobile-small */
+  @media all and (min-width: 0) and (max-width: 360px) and (orientation: portrait) { }
+  /* mobile-large */
+  @media all and (min-width: 361px) and (orientation: portrait) { }
+  /* mobile-small-landscape */
+  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
+  /* mobile-large-landscape */
+  @media all and (min-width: 481px) and (orientation: landscape) { }
+  /* tablet-small-landscape */
+  @media all and (min-width: 600px) and (max-width: 960px) and (orientation: landscape) { }
+  /* tablet-large-landscape */
+  @media all and (min-width: 961px) and (orientation: landscape) { }
+  /* tablet-small */
+  @media all and (min-width: 600px) and (orientation: portrait) { }
+  /* tablet-large */
+  @media all and (min-width: 601px) and (max-width: 840px) and (orientation : portrait) { }
+  /* desktop-x-small-landscape */
+  @media all and (min-width: 0) and (max-width: 480px) and (orientation: landscape) { }
+  /* desktop-x-small */
+  @media all and (min-width: 0) and (max-width: 480px) and (max-aspect-ratio: 4/3) { }
+  /* desktop-small-landscape */
+  @media all and (min-width: 481px) and (max-width: 840px) and (orientation: landscape) { }
+  /* desktop-small */
+  @media all and (min-width: 481px) and (max-width: 840px) and (max-aspect-ratio: 4/3) { }
+  /* desktop-medium-landscape */
+  @media all and (min-width: 841px) and (max-width: 1280px) and (orientation: landscape) { }
+  /* desktop-medium */
+  @media all and (min-width: 841px) and (max-width: 1280px) and (max-aspect-ratio: 4/3) { }
+  /* desktop-large */
+  @media all and (min-width: 1281px) and (max-width: 1600px) { }
+  /* desktop-xlarge */
+  @media all and (min-width: 1601px) and (max-width: 1920px) { }
+</style>

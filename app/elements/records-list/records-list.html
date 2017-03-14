@@ -1,0 +1,433 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paginated-list/paginated-list.html">
+<link rel="import" href="../single-record/single-record.html">
+<link rel="import" href="../../styles/list-styles.html">
+
+<dom-module id="records-list">
+  <template>
+    <style include="list-styles"></style>
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+      }
+    </style>
+
+    <paginated-list
+      loading="[[loading]]"
+      load-type="[[_computeLoadType(type)]]"
+      items="[[queryResults]]"
+      total-items="[[totalResults]]"
+      page="{{page}}"
+      page-size="[[pageSize]]"
+      shown-items="{{shownResults}}">
+
+      <template is="dom-repeat" items="[[shownResults]]" initial-count="25">
+        <single-record
+          class="item-with-border"
+          item="[[item]]"
+          item-highlighted-text-property="[[itemHighlightedTextProperty]]"
+          item-high-risk-property="[[itemHighRiskProperty]]"
+          item-icon-property="[[itemIconProperty]]"
+          item-icon-style-class-property="[[itemIconStyleClassProperty]]"
+          item-link-property="[[itemLinkProperty]]"
+          item-name-property="[[itemNameProperty]]"
+          item-rank-property="[[itemRankProperty]]"
+          item-type-property="[[itemTypeProperty]]"
+          descriptors="[[_getList(item, itemDescriptorProperty)]]"
+          descriptor-highlight-property="[[descriptorHighlightProperty]]"
+          descriptor-icon-property="[[descriptorIconProperty]]"
+          descriptor-icon-style-class-property="[[descriptorIconStyleClassProperty]]"
+          descriptor-link-property="[[descriptorLinkProperty]]"
+          descriptor-text-property="[[descriptorTextProperty]]"
+          descriptor-type-property="[[descriptorTypeProperty]]"
+          details="[[_getList(item, itemDetailProperty)]]"
+          detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
+          detail-link-property="[[detailLinkProperty]]"
+          detail-text-property="[[detailTextProperty]]"
+          images="{{item.images}}"
+          on-images-changed="_notifyResultChange"
+          image-aggregation-field="[[imageAggregationField]]"
+          image-aggregation-name="[[imageAggregationName]]"
+          image-index-name="[[imageIndexName]]"
+          image-index-type="[[imageIndexType]]"
+          image-query-field="[[imageQueryField]]"
+          image-transform-function="[[imageTransformFunction]]"
+          image-link-property="[[imageLinkProperty]]"
+          image-source-property="[[imageSourceProperty]]"
+          client="[[client]]"
+          annotation-manager="[[annotationManager]]"
+          new-tab="[[newTab]]"
+          blur="[[blur]]"
+          notification-query-date="[[notificationQueryDate]]"
+          modal-icon-last>
+        </single-record>
+      </template>
+    </paginated-list>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'records-list',
+
+      properties: {
+        /**
+         * The property for the highlighted text in the item.
+         */
+        itemHighlightedTextProperty: {
+          type: String,
+          value: 'highlightedText'
+        },
+
+        /**
+         * The property for the high risk in the item.
+         */
+        itemHighRiskProperty: {
+          type: String,
+          value: 'highRisk'
+        },
+
+        /**
+         * The property for the icon in the item.
+         */
+        itemIconProperty: {
+          type: String,
+          value: 'icon'
+        },
+
+        /**
+         * The property for the icon in the item.
+         */
+        itemIconStyleClassProperty: {
+          type: String,
+          value: 'styleClass'
+        },
+
+        /**
+         * The property for the link in the item.
+         */
+        itemLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property for the name in the item.
+         */
+        itemNameProperty: {
+          type: String,
+          value: 'name'
+        },
+
+        /**
+         * The property for the rank in the item.
+         */
+        itemRankProperty: {
+          type: String,
+          value: 'rank'
+        },
+
+        /**
+         * The property for the type in the item.
+         */
+        itemTypeProperty: {
+          type: String,
+          value: 'type'
+        },
+
+        /**
+         * The property for the list of descriptor objects in the item.
+         */
+        itemDescriptorProperty: {
+          type: String,
+          value: 'descriptors'
+        },
+
+        /**
+         * The property for the highlight status in the descriptors in the item.
+         */
+        descriptorHighlightProperty: {
+          type: String,
+          value: 'highlight'
+        },
+
+        /**
+         * The property for the icon in the descriptors in the item.
+         */
+        descriptorIconProperty: {
+          type: String,
+          value: 'icon'
+        },
+
+        /**
+         * The property for the icon style class in the descriptors in the item.
+         */
+        descriptorIconStyleClassProperty: {
+          type: String,
+          value: 'styleClass'
+        },
+
+        /**
+         * The property for the link in the descriptors in the item.
+         */
+        descriptorLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property for the text in the descriptors in the item.
+         */
+        descriptorTextProperty: {
+          type: String,
+          value: 'text'
+        },
+
+        /**
+         * The property for the type in the descriptors in the item.
+         */
+        descriptorTypeProperty: {
+          type: String,
+          value: 'type'
+        },
+
+        /**
+         * The property for the list of detail objects in the item.
+         */
+        itemDetailProperty: {
+          type: String,
+          value: 'details'
+        },
+
+        /**
+         * The property for the highlighted text in the details in the item.
+         */
+        detailHighlightedTextProperty: {
+          type: String,
+          value: 'highlightedText'
+        },
+
+        /**
+         * The property for the link in the details in the item.
+         */
+        detailLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property for the text in the details in the item.
+         */
+        detailTextProperty: {
+          type: String,
+          value: 'text'
+        },
+
+        /**
+         * The property for the list of image objects in the item.
+         */
+        itemImageProperty: {
+          type: String,
+          value: 'images'
+        },
+
+        /**
+         * The property for the link in the images in the item.
+         */
+        imageLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property for the source in the images in the item.
+         */
+        imageSourceProperty: {
+          type: String,
+          value: 'source'
+        },
+
+        imageAggregationField: {
+          type: String
+        },
+
+        imageAggregationName: {
+          type: String
+        },
+
+        imageIndexName: {
+          type: String
+        },
+
+        imageIndexType: {
+          type: String
+        },
+
+        imageQueryField: {
+          type: String
+        },
+
+        imageTransformFunction: {
+          type: Object
+        },
+
+        /**
+         * an instance of elasticsearch.Client which is connected to
+         * an elasticsearch server
+         */
+        client: {
+          type: Object
+        },
+
+        /**
+         * The results from a query to show in this list that are reset for each new page.
+         */
+        queryResults: {
+          type: Array
+        },
+
+        /**
+         * The total number of results for all pages.
+         */
+        totalResults: {
+          type: Number
+        },
+
+        /**
+         * The results shown in this list that are taken from the query results.
+         */
+        shownResults: {
+          type: Array,
+          notify: true
+        },
+
+        /**
+         * The current page.
+         */
+        page: {
+          type: Number,
+          value: 1,
+          notify: true
+        },
+
+        /**
+         * The page size.
+         */
+        pageSize: {
+          type: Number
+        },
+
+        /**
+         * Whether a query is running.
+         */
+        loading: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        /**
+         * The annotation manager.
+         */
+        annotationManager: {
+          type: Object
+        },
+
+        /**
+         * Whether to open a link in a new tab.
+         */
+        newTab: {
+          type: Boolean,
+          value: false,
+          notify: true
+        },
+
+        /**
+         * The type of the data to use in the title for this list.
+         */
+        type: {
+          type: String,
+          value: 'Record',
+          notify: true
+        },
+
+        /**
+         * The title for this list.
+         */
+        recordsListTitle: {
+          type: String,
+          value: 'No Records',
+          computed: '_computeTitle(type, shownResults.length, totalResults)',
+          notify: true
+        },
+
+        /**
+         * Whether to blur the images.
+         */
+        blur: {
+          type: Boolean,
+          notify: true
+        },
+
+        /**
+         * Whether a notification query is being viewed and the notification date associated with that query.
+         */
+        notificationQueryDate: {
+          type: Object,
+          notify: true
+        }
+
+      },
+
+      _computeLoadType: function(type) {
+        return type + 's';
+      },
+
+      /**
+       * Returns the title for this list based on the type, shownResults, and totalResults.
+       */
+      _computeTitle: function(type, count, total) {
+        if(total) {
+          // Use regex replace to add commas to count.
+          var totalString = total.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+          if(count && count < total) {
+            var countString = count.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return countString + ' of ' + totalString + ' ' + type + (total === 1 ? '' : 's');
+          }
+          return totalString + ' ' + type + (total === 1 ? '' : 's');
+        }
+        return 'No ' + type + 's';
+      },
+
+      _getList: function(item, property) {
+        return (item ? item[property] : undefined) || [];
+      },
+
+      _notifyResultChange: function(event) {
+        if(event.model.index) {
+          this.notifyPath('shownResults.' + event.model.index, this.shownResults[event.model.index]);
+        }
+      }
+    });
+  })();
+  </script>
+</dom-module>

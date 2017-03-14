@@ -1,0 +1,378 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>state-behavior</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../bower_components/polymer/polymer.html">
+  <script src="../behaviors/state-behavior.js"></script>
+</head>
+
+<body>
+<dom-module id="test-state-behavior-component">
+  <template>
+  </template>
+  <script>
+    /* globals DigBehaviors, HTMLImports, Polymer */
+    HTMLImports.whenReady(function() {
+      Polymer({
+        is: 'test-state-behavior-component',
+        behaviors: [DigBehaviors.StateBehavior]
+      });
+    });
+  </script>
+</dom-module>
+
+<test-fixture id="state-behavior-fixture">
+  <template>
+    <test-state-behavior-component></test-state-behavior-component>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, setup, fixture, test, expect */
+  /* jshint -W030 */
+  suite('state-behavior tests', function() {
+    var element;
+
+    setup(function() {
+      element = fixture('state-behavior-fixture');
+    });
+
+    test('buildEntityState given empty object does return default state object', function() {
+      expect(element.buildEntityState({})).to.deep.equal({
+        age: [],
+        email: [],
+        ethnicity: [],
+        eyeColor: [],
+        gender: [],
+        hairColor: [],
+        height: [],
+        image: [],
+        location: [],
+        name: [],
+        phone: [],
+        price: [],
+        publisher: [],
+        services: [],
+        social: [],
+        weight: []
+      });
+    });
+
+    test('buildEntityState does return new state object', function() {
+      var input = {
+        age: ['myAge'],
+        email: ['myEmail'],
+        ethnicity: ['myEthnicity'],
+        eyeColor: ['myEyeColor'],
+        gender: ['myGender'],
+        hairColor: ['myHairColor'],
+        height: ['myHeight'],
+        image: ['myImage'],
+        location: ['myLocation'],
+        name: ['myName'],
+        phone: ['myPhone'],
+        price: ['myPrice'],
+        publisher: ['myPublisher'],
+        services: ['myServices'],
+        social: ['mySocial'],
+        weight: ['myWeight']
+      };
+      var output = element.buildEntityState(input);
+      expect(output).to.not.equal(input);
+      expect(output).to.deep.equal(input);
+    });
+
+    test('buildEntityState does ignore unexpected properties', function() {
+      expect(element.buildEntityState({
+        otherValue: ['myOtherValue']
+      })).to.deep.equal({
+        age: [],
+        email: [],
+        ethnicity: [],
+        eyeColor: [],
+        gender: [],
+        hairColor: [],
+        height: [],
+        image: [],
+        location: [],
+        name: [],
+        phone: [],
+        price: [],
+        publisher: [],
+        services: [],
+        social: [],
+        weight: []
+      });
+    });
+
+    test('buildEntityState does support legacy IDs', function() {
+      expect(element.buildEntityState({
+        email: ['http://dig.isi.edu/ht/data/email/email%40gmail.com']
+      }).email).to.deep.equal(['email@gmail.com']);
+      expect(element.buildEntityState({
+        phone: ['http://dig.isi.edu/ht/data/phone/1234567890']
+      }).phone).to.deep.equal(['1234567890']);
+    });
+
+    test('buildSearchState given empty object does return default state object', function() {
+      expect(element.buildSearchState({})).to.deep.equal({
+        age: {},
+        city: {},
+        country: {},
+        description: {},
+        email: {},
+        ethnicity: {},
+        eyeColor: {},
+        gender: {},
+        hairColor: {},
+        height: {},
+        image: {},
+        location: {},
+        name: {},
+        phone: {},
+        postingDate: {},
+        price: {},
+        region: {},
+        review: {},
+        risk: {},
+        services: {},
+        social: {},
+        title: {},
+        website: {},
+        weight: {},
+        sort: ''
+      });
+    });
+
+    test('buildSearchState does return new state object', function() {
+      var input = {
+        age: {
+          age: {
+            key: 'myAge'
+          }
+        },
+        city: {
+          city: {
+            key: 'myCity'
+          }
+        },
+        country: {
+          country: {
+            key: 'myCountry'
+          }
+        },
+        postingDate: {
+          dateEnd: {
+            date: {
+              key: 'myDateEnd'
+            }
+          },
+          dateStart: {
+            date: {
+              key: 'myDateStart'
+            }
+          }
+        },
+        description: {
+          description: {
+            key: 'myDescription'
+          }
+        },
+        email: {
+          email: {
+            key: 'myEmail'
+          }
+        },
+        ethnicity: {
+          ethnicity: {
+            key: 'myEthnicity'
+          }
+        },
+        eyeColor: {
+          eye: {
+            key: 'myEye'
+          }
+        },
+        gender: {
+          hair: {
+            key: 'myGender'
+          }
+        },
+        hairColor: {
+          hair: {
+            key: 'myHair'
+          }
+        },
+        height: {
+          height: {
+            key: 'myHeight'
+          }
+        },
+        image: {
+          image: {
+            key: 'myImage'
+          }
+        },
+        location: {
+          location: {
+            key: 'myLocation'
+          }
+        },
+        name: {
+          name: {
+            key: 'myName'
+          }
+        },
+        phone: {
+          phone: {
+            key: 'myPhone'
+          }
+        },
+        price: {
+          phone: {
+            key: 'myPrice'
+          }
+        },
+        region: {
+          region: {
+            key: 'myRegion'
+          }
+        },
+        review: {
+          review: {
+            key: 'myReview'
+          }
+        },
+        risk: {
+          risk: {
+            key: 'myRisk'
+          }
+        },
+        services: {
+          region: {
+            key: 'myServices'
+          }
+        },
+        social: {
+          region: {
+            key: 'mySocial'
+          }
+        },
+        title: {
+          title: {
+            key: 'myTitle'
+          }
+        },
+        website: {
+          website: {
+            key: 'myWebsite'
+          }
+        },
+        weight: {
+          weight: {
+            key: 'myWeight'
+          }
+        },
+        sort: 'mySort'
+      };
+
+      var output = element.buildSearchState(input);
+      expect(output).to.not.equal(input);
+      expect(output.age).to.deep.equal(input.age);
+      expect(output.city).to.deep.equal(input.city);
+      expect(output.country).to.deep.equal(input.country);
+      expect(output.postingDate).to.deep.equal(input.postingDate);
+      expect(output.description).to.deep.equal(input.description);
+      expect(output.email).to.deep.equal(input.email);
+      expect(output.ethnicity).to.deep.equal(input.ethnicity);
+      expect(output.eyeColor).to.deep.equal(input.eyeColor);
+      expect(output.gender).to.deep.equal(input.gender);
+      expect(output.hairColor).to.deep.equal(input.hairColor);
+      expect(output.height).to.deep.equal(input.height);
+      expect(output.image).to.equal(input.image);
+      expect(output.location).to.equal(input.location);
+      expect(output.name).to.deep.equal(input.name);
+      expect(output.phone).to.deep.equal(input.phone);
+      expect(output.price).to.deep.equal(input.price);
+      expect(output.region).to.deep.equal(input.region);
+      expect(output.services).to.deep.equal(input.services);
+      expect(output.title).to.deep.equal(input.title);
+      expect(output.website).to.deep.equal(input.website);
+      expect(output.weight).to.deep.equal(input.weight);
+      expect(output.sort).to.equal(input.sort);
+    });
+
+    test('buildSearchState does ignore unexpected properties', function() {
+      expect(element.buildSearchState({
+        otherValue: ['myOtherValue']
+      })).to.deep.equal({
+        age: {},
+        city: {},
+        country: {},
+        description: {},
+        email: {},
+        ethnicity: {},
+        eyeColor: {},
+        gender: {},
+        hairColor: {},
+        height: {},
+        image: {},
+        location: {},
+        name: {},
+        phone: {},
+        postingDate: {},
+        price: {},
+        region: {},
+        review: {},
+        risk: {},
+        services: {},
+        social: {},
+        title: {},
+        website: {},
+        weight: {},
+        sort: ''
+      });
+    });
+
+    test('buildSearchState does support legacy IDs', function() {
+      expect(element.buildSearchState({
+        email: {
+          term: {
+            key: 'http://dig.isi.edu/ht/data/email/email%40gmail.com'
+          }
+        }
+      }).email.term.key).to.equal('email@gmail.com');
+      expect(element.buildSearchState({
+        phone: {
+          term: {
+            key: 'http://dig.isi.edu/ht/data/phone/1234567890'
+          }
+        }
+      }).phone.term.key).to.equal('1234567890');
+    });
+  });
+</script>
+</body>
+</html>

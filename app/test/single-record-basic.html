@@ -1,0 +1,647 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>single-record</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <script src="../bower_components/mustache.js/mustache.js" type="text/javascript"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../elements/single-record/single-record.html">
+</head>
+
+<body>
+<test-fixture id="single-record-fixture">
+  <template>
+    <single-record></single-record>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, test, expect, setup, fixture, flush */
+  /* jshint -W030 */
+  suite('<single-record>', function() {
+    var singleRecord;
+
+    setup(function(done) {
+      singleRecord = fixture('single-record-fixture');
+      singleRecord.item = {
+        id: '1',
+        link: 'somelink.html',
+        text: 'myTitle',
+        type: 'offer'
+      };
+      singleRecord.details = [{
+        label: 'address',
+        value: ['LA', 'SF']
+      }, {
+        label: 'date',
+        value: '2016-01-01'
+      }, {
+        label: 'description',
+        value: 'myDesc'
+      }, {
+        label: 'publisher',
+        value: 'myPublisher'
+      }];
+      flush(function() {
+        done();
+      });
+    });
+
+    test('does show a paper-material element', function() {
+      expect(singleRecord.$$('paper-material')).to.exist;
+    });
+
+    test('does show an iron-collapse element', function() {
+      expect(singleRecord.$$('iron-collapse')).to.exist;
+    });
+
+    test('showDetails is true', function() {
+      expect(singleRecord.showDetails).to.be.true;
+    });
+
+    test('modalIconLast is false', function() {
+      expect(singleRecord.modalIconLast).to.be.false;
+    });
+
+    test('_doesHaveDescriptors returns correct value', function() {
+      expect(!!singleRecord._doesHaveDescriptors({}, 'one', 'two')).to.be.false;
+      expect(!!singleRecord._doesHaveDescriptors({
+        zero: ['']
+      }, 'one', 'two')).to.be.false;
+      expect(!!singleRecord._doesHaveDescriptors({
+        one: []
+      }, 'one', 'two')).to.be.false;
+      expect(!!singleRecord._doesHaveDescriptors({
+        one: ['']
+      }, 'one', 'two')).to.be.true;
+      expect(!!singleRecord._doesHaveDescriptors({
+        two: ['']
+      }, 'one', 'two')).to.be.true;
+      expect(!!singleRecord._doesHaveDescriptors({
+        one: [''],
+        two: ['']
+      }, 'one', 'two')).to.be.true;
+      expect(!!singleRecord._doesHaveDescriptors({
+        zero: ['']
+      }, 'one')).to.be.false;
+      expect(!!singleRecord._doesHaveDescriptors({
+        one: ['']
+      }, 'one')).to.be.true;
+    });
+
+    test('_getDetailText() returns correct value for undefined', function() {
+      expect(singleRecord._getDetailText()).to.equal('None');
+    });
+
+    test('_getDetailText() returns correct value for no value', function() {
+      expect(singleRecord._getDetailText({}, 'highlightedText', 'text')).to.equal('None');
+    });
+
+    test('_getDetailText() returns correct value for one value', function() {
+      expect(singleRecord._getDetailText({
+        text: 'LA'
+      }, 'highlightedText', 'text')).to.equal('LA');
+    });
+
+    test('_getDetailText() returns correct value for highlight value', function() {
+      expect(singleRecord._getDetailText({
+        text: 'LA',
+        highlightedText: '<highlight>LA</highlight>'
+      }, 'highlightedText', 'text')).to.equal('<highlight>LA</highlight>');
+    });
+
+    test('_getBlurStyleClass() returns correct values', function() {
+      expect(singleRecord._getBlurStyleClass(true)).to.equal('small-blur');
+      expect(singleRecord._getBlurStyleClass(false)).to.equal('');
+    });
+
+    test('blur is set to true on default', function() {
+      expect(singleRecord.blur).to.equal(true);
+    });
+
+    test('_cleanCamelCase() returns correct strings', function() {
+      expect(singleRecord._cleanCamelCase({
+        property: 'test'
+      }, 'property')).to.be.equal('Test:');
+      expect(singleRecord._cleanCamelCase({
+        property: 'camelCase'
+      }, 'property')).to.be.equal('Camel Case:');
+    });
+
+    test('_getTarget() returns "_self" when newTab is false', function() {
+      expect(singleRecord._getTarget(false)).to.equal('_self');
+    });
+
+    test('_getTarget() returns "_blank" when newTab is true', function() {
+      expect(singleRecord._getTarget(true)).to.equal('_blank');
+    });
+
+    test('_getHeaderStyleClass() returns the correct values', function() {
+      expect(singleRecord._getHeaderStyleClass(true)).to.equal('opened');
+      expect(singleRecord._getHeaderStyleClass(false)).to.equal('closed');
+    });
+
+    test('_getHeaderText() returns the correct strings', function() {
+      expect(singleRecord._getHeaderText({
+        name: 'LA'
+      }, 'highlightedText', 'name')).to.equal('LA');
+      expect(singleRecord._getHeaderText({
+        name: 'LA',
+        highlightedText: '<highlight>LA</highlight>'
+      }, 'highlightedText', 'name')).to.equal('<highlight>LA</highlight>');
+    });
+
+    test('details start collapsed', function() {
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.exist;
+      expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+      expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+    });
+
+    test('toggleRecord() opens the details', function(done) {
+      var mockEvent = {
+        target: {
+          classList: {
+            contains: function() {
+              return false;
+            }
+          },
+          localName: 'my-element'
+        }
+      };
+
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      singleRecord.transitionEndListener = function() {
+        var head = singleRecord.$$('.head');
+        expect(head).to.exist;
+        expect(head.classList.contains('opened')).to.be.true;
+        expect(head.classList.contains('closed')).to.be.false;
+        expect(ironCollapse).to.exist;
+        expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.true;
+        expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.false;
+        done();
+      };
+      singleRecord.listen(ironCollapse, 'transitionend', 'transitionEndListener');
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.true;
+    });
+
+    test('toggleRecord() closes the details', function(done) {
+      singleRecord.open = true;
+
+      var mockEvent = {
+        target: {
+          classList: {
+            contains: function() {
+              return false;
+            }
+          },
+          localName: 'my-element'
+        }
+      };
+
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      singleRecord.transitionEndListener = function(event) {
+        if(event.target.opened) {
+          singleRecord.toggleRecord(mockEvent);
+          expect(singleRecord.open).to.be.false;
+        } else {
+          var head = singleRecord.$$('.head');
+          expect(head).to.exist;
+          expect(head.classList.contains('closed')).to.be.true;
+          expect(head.classList.contains('opened')).to.be.false;
+          expect(ironCollapse).to.exist;
+          expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+          expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+          done();
+        }
+      };
+      singleRecord.listen(ironCollapse, 'transitionend', 'transitionEndListener');
+      ironCollapse.show();
+    });
+
+    test('toggleRecord() does nothing if a paper-button is clicked', function() {
+      var mockEvent = {
+        target: {
+          localName: 'paper-button'
+        }
+      };
+
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.exist;
+      expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+      expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+    });
+
+    test('toggleRecord() does nothing if a annotate-record is clicked', function() {
+      var mockEvent = {
+        target: {
+          localName: 'my-element',
+          parentElement: {
+            localName: 'parent-element',
+            classList: {
+              contains: function(item) {
+                return item === 'annotate-record';
+              }
+            }
+          }
+        }
+      };
+
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.exist;
+      expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+      expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+    });
+
+    test('toggleRecord() does nothing if a link is clicked', function() {
+      var mockEvent = {
+        target: {
+          localName: 'a'
+        }
+      };
+
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.exist;
+      expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+      expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+    });
+
+    test('toggleRecord() does nothing if a link child is clicked', function() {
+      var mockEvent = {
+        target: {
+          localName: 'my-element',
+          parentElement: {
+            localName: 'a',
+            classList: {
+              contains: function() {
+                return false;
+              }
+            }
+          }
+        }
+      };
+
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.exist;
+      expect(ironCollapse.classList.contains('iron-collapse-closed')).to.be.true;
+      expect(ironCollapse.classList.contains('iron-collapse-opened')).to.be.false;
+    });
+
+    test('does not show an iron-image element', function() {
+      var image = singleRecord.$$('iron-image');
+      expect(image).to.exist;
+      expect(image.classList.contains('hide')).to.be.true;
+      expect(image.classList.contains('show')).to.be.false;
+    });
+
+    test('does not show an image-gallery element', function() {
+      expect(singleRecord.$$('image-gallery')).to.not.exist;
+    });
+
+    test('_getTypeText returns a string', function() {
+      expect(singleRecord._getTypeText({
+        type: 'date'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'email'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'image'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'location'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'money'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'phone'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'provider'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'offer'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'seller'
+      }, 'type')).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'webpage'
+      }, 'type')).to.be.a('String');
+    });
+
+    test('_getTypeText with longText as true returns a different string for email and phone types', function() {
+      expect(singleRecord._getTypeText({
+        type: 'email'
+      }, 'type', true)).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'phone'
+      }, 'type', true)).to.be.a('String');
+      expect(singleRecord._getTypeText({
+        type: 'email'
+      }, 'type', true)).to.not.equal(singleRecord._getTypeText({
+        type: 'email'
+      }, 'type'));
+      expect(singleRecord._getTypeText({
+        type: 'phone'
+      }, 'type', true)).to.not.equal(singleRecord._getTypeText({
+        type: 'phone'
+      }, 'type'));
+    });
+
+    test('_getNewIconDivClass returns correct value', function() {
+      var date = new Date('October 2, 2016');
+      expect(singleRecord._getNewIconDivClass([{
+        type: 'date',
+        text: 'October 3, 2016'
+      }], 'text', 'type', date)).to.be.equal('');
+      expect(singleRecord._getNewIconDivClass([{
+        type: 'date',
+        text: 'October 1, 2016'
+      }], 'text', 'type', date)).to.be.equal('hidden');
+    });
+
+    test('does not show the new icon by default', function() {
+      expect(singleRecord.$$('iron-icon[icon="av:fiber-new"]')).to.not.exist;
+    });
+
+    test('does not show the new icon if the item is not new', function(done) {
+      singleRecord.descriptors = [{
+        type: 'date',
+        text: 'October 1, 2016'
+      }];
+      singleRecord.notificationQueryDate = new Date('October 2, 2016');
+
+      flush(function() {
+        expect(singleRecord.$$('iron-icon[icon="av:fiber-new"]')).to.exist;
+        expect(singleRecord.$$('iron-icon[icon="av:fiber-new"]').className.split(' ').indexOf('hidden') < 0).to.be.false;
+        done();
+      });
+    });
+
+    test('does show the new icon if the item is new', function(done) {
+      singleRecord.descriptors = [{
+        type: 'date',
+        text: 'October 3, 2016'
+      }];
+      singleRecord.notificationQueryDate = new Date('October 2, 2016');
+
+      flush(function() {
+        expect(singleRecord.$$('iron-icon[icon="av:fiber-new"]')).to.exist;
+        expect(singleRecord.$$('iron-icon[icon="av:fiber-new"]').className.split(' ').indexOf('hidden') < 0).to.be.true;
+        done();
+      });
+    });
+
+    test('link to entity page exists', function(done) {
+      flush(function() {
+        expect(singleRecord.$$('a[title="Open Ad"]')).to.exist;
+        expect(singleRecord.$$('a[title="Open Ad"]').className.includes('entity-page-link')).to.be.true;
+        expect(singleRecord.$$('a[title="Open Ad"]').getAttribute('href')).to.equal('somelink.html');
+        expect(singleRecord.$$('a[title="Open Ad"]').target).to.equal(singleRecord._getTarget(singleRecord.newTab));
+        expect(singleRecord.$$('paper-icon-button[icon="open-in-new"]')).to.exist;
+        done();
+      });
+    });
+
+    test('_updateImageSrcFromImages() sets imageSource', function() {
+      expect(singleRecord.imageSource).to.equal('');
+      singleRecord._updateImageSrcFromImages([{
+        id: 'id1',
+        source: 'url1'
+      }, {
+        id: 'id2',
+        source: 'url2'
+      }], 'source');
+      expect(singleRecord.imageSource).to.equal('url1');
+    });
+
+    test('_updateImageSrcFromImages() with an empty array sets imageSource to undefined', function() {
+      singleRecord.imageSource = 'imageSource';
+      singleRecord._updateImageSrcFromImages([], 'source');
+      expect(singleRecord.imageSource).to.be.undefined;
+    });
+
+    test('_getConfidenceLevelClass(item) returns correct value', function() {
+      expect(singleRecord._getConfidenceLevelClass({confidence: 'strict'}, 'high-confidence'));
+      expect(singleRecord._getConfidenceLevelClass({confidence: 'relaxed'}, 'low-confidence'));
+    });
+
+    test('_getConfidenceLevelText(item) returns correct value', function() {
+      expect(singleRecord._getConfidenceLevelText({confidence: 'strict'}, 'High Confidence Score'));
+      expect(singleRecord._getConfidenceLevelText({confidence: 'relaxed'}, 'Low Confidence Score'));
+    });
+  });
+
+  suite('<single-record> with no details', function() {
+    var singleRecord;
+
+    setup(function(done) {
+      singleRecord = fixture('single-record-fixture');
+      singleRecord.item = {'id': '1', 'type': 'offer', 'text': 'myTitle'};
+      flush(function() {
+        done();
+      });
+    });
+
+    test('does not show an iron-collapse element for no details', function() {
+      expect(singleRecord.$$('iron-collapse')).to.not.exist;
+    });
+
+    test('showDetails is false for no details', function() {
+      expect(singleRecord.showDetails).to.be.false;
+    });
+
+    test('toggleRecord() does nothing for no details', function() {
+      var mockEvent = {
+        target: {
+          classList: {
+            contains: function() {
+              return false;
+            }
+          },
+          localName: 'my-element'
+        }
+      };
+
+      singleRecord.toggleRecord(mockEvent);
+      expect(singleRecord.open).to.be.false;
+      var head = singleRecord.$$('.head');
+      expect(head).to.exist;
+      expect(head.classList.contains('closed')).to.be.true;
+      expect(head.classList.contains('opened')).to.be.false;
+      var ironCollapse = singleRecord.$$('#recordDetail');
+      expect(ironCollapse).to.not.exist;
+    });
+
+    test('_updateImageSrcFromImages() sets imageSource and showDetails', function() {
+      expect(singleRecord.imageSource).to.equal('');
+      singleRecord._updateImageSrcFromImages([{
+        id: 'id1',
+        source: 'url1'
+      }, {
+        id: 'id2',
+        source: 'url2'
+      }], 'source');
+      expect(singleRecord.imageSource).to.equal('url1');
+      expect(singleRecord.showDetails).to.be.true;
+    });
+
+    test('_updateImageSrcFromImages() with an empty array sets imageSource to undefined and showDetails to false', function() {
+      expect(singleRecord.imageSource).to.equal('');
+      singleRecord._updateImageSrcFromImages([]);
+      expect(singleRecord.imageSource).to.be.undefined;
+      expect(singleRecord.showDetails).to.be.false;
+    });
+
+    test('_showImageSpace returns correct class name', function() {
+      expect(singleRecord._showImageSpace()).to.equal('');
+      expect(singleRecord._showImageSpace(['someimage'])).to.equal('show');
+    });
+  });
+
+  suite('<single-record> with images', function() {
+    var singleRecord;
+
+    setup(function(done) {
+      singleRecord = fixture('single-record-fixture');
+      singleRecord.item = {'id': '1', 'type': 'offer'};
+      singleRecord.images = [{
+        id: 'id1',
+        source: 'url1'
+      }, {
+        id: 'id2',
+        source: 'url2'
+      }];
+      flush(function() {
+        done();
+      });
+    });
+
+    test('has images', function() {
+      expect(singleRecord.images).to.be.deep.equal([{
+        id: 'id1',
+        source: 'url1'
+      }, {
+        id: 'id2',
+        source: 'url2'
+      }]);
+    });
+
+    test('imageSource equals images[0].source', function() {
+      expect(singleRecord.imageSource).to.equal('url1');
+    });
+
+    test('does show an iron-image element with source', function() {
+      var image = singleRecord.$$('iron-image');
+      expect(image).to.exist;
+      expect(image.classList.contains('show')).to.be.true;
+      expect(image.src).to.equal('url1');
+    });
+
+    test('showDetails is true for images', function() {
+      expect(singleRecord.showDetails).to.be.true;
+    });
+
+    test('does show an iron-collapse element for the images', function() {
+      expect(singleRecord.$$('iron-collapse')).to.exist;
+    });
+
+    test('does show an image-gallery element for the images', function() {
+      expect(singleRecord.$$('image-gallery')).to.exist;
+    });
+  });
+
+  suite('<single-record> with empty image array', function() {
+    var singleRecord;
+
+    setup(function(done) {
+      singleRecord = fixture('single-record-fixture');
+      singleRecord.item = {'id': '1', 'type': 'offer'};
+      singleRecord.images = [];
+      flush(function() {
+        done();
+      });
+    });
+
+    test('has empty image array', function() {
+      expect(singleRecord.images).to.be.deep.equal([]);
+    });
+
+    test('imageSource is undefined', function() {
+      expect(singleRecord.imageSource).to.be.undefined;
+    });
+
+    test('does show an iron-image element with no source', function() {
+      var image = singleRecord.$$('iron-image');
+      expect(image).to.exist;
+      expect(image.classList.contains('show')).to.be.true;
+      expect(image.src).to.be.undefined;
+    });
+
+    test('showDetails is false for an empty image array', function() {
+      expect(singleRecord.showDetails).to.be.false;
+    });
+
+    test('does not show an iron-collapse element', function() {
+      expect(singleRecord.$$('iron-collapse')).to.not.exist;
+    });
+
+    test('does not show an image-gallery element', function() {
+      expect(singleRecord.$$('image-gallery')).to.not.exist;
+    });
+  });
+</script>
+</body>
+</html>

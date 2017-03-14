@@ -1,0 +1,107 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>itinerary-list</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../elements/itinerary-list/itinerary-list.html">
+</head>
+
+<body>
+<test-fixture id="itinerary-list-fixture">
+  <template>
+    <itinerary-list></itinerary-list>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, test, expect, setup, fixture, flush */
+  /* jshint -W030 */
+  suite('<itinerary-list> default tests', function() {
+    var component;
+    var data;
+
+    setup(function(done) {
+      data = [{
+        date: 'July 1, 2016',
+        subtitle: 'Subtitle',
+        parts: [{
+          name: 'Washington, DC',
+          count: 2,
+          notes: []
+        }]
+      }];
+
+      component = fixture('itinerary-list-fixture');
+      component.data = data;
+
+      flush(function() {
+        done();
+      });
+    });
+
+    test('data is set to input array', function() {
+      expect(component.data).to.be.deep.equal(data);
+    });
+
+    test('data properties are set to default values', function() {
+      expect(component.dateProperty).to.be.deep.equal('date');
+      expect(component.iconProperty).to.be.deep.equal('icon');
+      expect(component.styleClassProperty).to.be.deep.equal('styleClass');
+      expect(component.partsProperty).to.be.deep.equal('parts');
+      expect(component.partNameProperty).to.be.deep.equal('name');
+      expect(component.partLocationLinkProperty).to.be.deep.equal('link');
+      expect(component.partIconProperty).to.be.deep.equal('icon');
+      expect(component.partStyleClassProperty).to.be.deep.equal('styleClass');
+      expect(component.partCountProperty).to.be.deep.equal('count');
+      expect(component.notesProperty).to.be.deep.equal('notes');
+      expect(component.noteNameProperty).to.be.deep.equal('name');
+      expect(component.noteDataProperty).to.be.deep.equal('data');
+      expect(component.subtitleProperty).to.be.deep.equal('subtitle');
+    });
+
+    test('loading and source are set to default values', function() {
+      expect(component.loading).to.be.false;
+      expect(component.source).to.equal('');
+    });
+
+    test('interval is not set', function() {
+      expect(component.interval).to.not.exist;
+    });
+
+    test('itineraryTitle is a string', function() {
+      expect(component.itineraryTitle).to.be.a('String');
+    });
+
+    test('computeTitle works', function() {
+      expect(component.computeTitle('', 0)).to.be.a('String');
+      expect(component.computeTitle('', 1)).to.be.a('String');
+      expect(component.computeTitle('', 2)).to.be.a('String');
+      expect(component.computeTitle('source', 0)).to.be.a('String');
+      expect(component.computeTitle('source', 1)).to.be.a('String');
+      expect(component.computeTitle('source', 2)).to.be.a('String');
+    });
+  });
+</script>
+</body>
+</html>

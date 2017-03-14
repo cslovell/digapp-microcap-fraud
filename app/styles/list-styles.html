@@ -1,0 +1,38 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<dom-module id="list-styles">
+  <template>
+    <style>
+      paginated-list {
+        /* Max Height = Height of 50 Single Records */
+        --paginated-list-max-height: 3000px;
+      }
+
+      .item-with-border:first-of-type {
+        border-top-style: solid;
+        border-top-width: 1px;
+        border-top-color: var(--primary-background-color);
+      }
+
+      .item-with-border {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-bottom-color: var(--primary-background-color);
+      }
+    </style>
+  </template>
+</dom-module>

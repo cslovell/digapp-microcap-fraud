@@ -1,0 +1,298 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/icon-label-grid/icon-label-grid.html">
+<link rel="import" href="../../bower_components/iron-collapse/iron-collapse.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/av-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/communication-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/editor-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/image-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-icons/maps-icons.html">
+<link rel="import" href="../../bower_components/modal-icon/modal-icon.html">
+<link rel="import" href="../../bower_components/moment-element/moment-with-locales-import.html">
+<link rel="import" href="../../bower_components/paper-material/paper-material.html">
+<link rel="import" href="../../styles/single-item-styles.html">
+
+<dom-module id="single-itinerary">
+  <template>
+    <style include="iron-flex iron-flex-alignment"></style>
+    <style include="single-item-styles"></style>
+
+    <style>
+      :host {
+        display: block;
+      }
+
+      .body .part-name {
+        margin-left: 6px;
+      }
+
+      .body .indent {
+        margin: 0 30px;
+      }
+
+      a {
+        color: var(--primary-text-color);
+      }
+
+      a:hover {
+        color: var(--secondary-text-color);
+      }
+    </style>
+
+    <paper-material class$="layout horizontal flex head [[getHeaderClass(open)]]" clickable on-mouseover="startHover" on-mouseout="endHover" on-tap="toggleItinerary">
+      <modal-icon
+        icon="[[getProperty(item, iconProperty)]]"
+        icon-style-class="[[getProperty(item, styleClassProperty)]]"
+        show-icon="[[!hovering]]"
+        openable
+        open="[[open]]">
+      </modal-icon>
+
+      <div class="layout vertical flex center-justified vertical-text">
+        <div class="text" title$="[[getDateText(interval, item, dateProperty)]]"><strong>[[getDateText(interval, item, dateProperty)]]</strong></div>
+
+        <div class="text" title$="[[getProperty(item, subtitleProperty, 'Unknown')]]" secondary>
+          <strong>[[getProperty(item, subtitleProperty, 'Unknown')]]</strong>
+        </div>
+      </div>
+    </paper-material>
+
+    <iron-collapse id="itineraryNotes">
+      <div>
+        <template is="dom-repeat" items="[[getProperty(item, partsProperty)]]" as="part">
+          <paper-material class="layout vertical flex body">
+            <div class="layout horizontal">
+              <iron-icon class$="[[getProperty(part, partStyleClassProperty)]]" icon="[[getProperty(part, partIconProperty)]]" item-icon></iron-icon>
+              <template is="dom-if" if="[[getProperty(part, partLocationLinkProperty)]]">
+                <a href$="[[getProperty(part, partLocationLinkProperty)]]">
+                  <strong class="text part-name">[[getProperty(part, partNameProperty, 'Unknown')]]</strong>
+                </a>
+              </template>
+              <template is="dom-if" if="[[!getProperty(part, partLocationLinkProperty)]]">
+                <strong class="text part-name">[[getProperty(part, partNameProperty, 'Unknown')]]</strong>
+              </template>
+            </div>
+
+            <div class="indent"><strong class="text">[[getCount(part, partCountProperty)]]</strong></div>
+
+            <template is="dom-repeat" items="[[getProperty(part, notesProperty)]]" as="note">
+              <div class="indent"><strong class="text">[[getPropertyWithColon(note, noteNameProperty)]]</strong></div>
+
+              <icon-label-grid class="indent"
+                icon-style-class-property="[[styleClassProperty]]"
+                data="[[getProperty(note, noteDataProperty)]]">
+              </icon-label-grid>
+            </template>
+          </paper-material>
+        </template>
+      </div>
+    </iron-collapse>
+  </template>
+
+  <script>
+    Polymer({
+      /* globals moment */
+      is: 'single-itinerary',
+
+      properties: {
+        /**
+         * The property for the date in the item.
+         */
+        dateProperty: {
+          type: String,
+          value: 'date'
+        },
+
+        /**
+         * The property for the icon in the item.
+         */
+        iconProperty: {
+          type: String,
+          value: 'icon'
+        },
+
+        /**
+         * The property for the style class of the icon in the item.
+         */
+        styleClassProperty: {
+          type: String,
+          value: 'styleClass'
+        },
+
+        /**
+         * The property for the items in the item.
+         */
+        partsProperty: {
+          type: String,
+          value: 'parts'
+        },
+
+        /**
+         * The property for the name of each part in the item.
+         */
+        partNameProperty: {
+          type: String,
+          value: 'name'
+        },
+
+        /**
+         * The property for the location link in the item.
+         */
+        partLocationLinkProperty: {
+          type: String,
+          value: 'link'
+        },
+
+        /**
+         * The property for the icon of each part in the item.
+         */
+        partIconProperty: {
+          type: String,
+          value: 'icon'
+        },
+
+        /**
+         * The property for the style class of the icon of each part in the item.
+         */
+        partStyleClassProperty: {
+          type: String,
+          value: 'styleClass'
+        },
+
+        /**
+         * The property for the count of each part in the item.
+         */
+        partCountProperty: {
+          type: String,
+          value: 'count'
+        },
+
+        /**
+         * The property for the notes of each part in the item.
+         */
+        notesProperty: {
+          type: String,
+          value: 'notes'
+        },
+
+        /**
+         * The property for the name of each note in the notes of each part in the item.
+         */
+        noteNameProperty: {
+          type: String,
+          value: 'name'
+        },
+
+        /**
+         * The property for the data of each note in the notes of each part in the item.
+         */
+        noteDataProperty: {
+          type: String,
+          value: 'data'
+        },
+
+        /**
+         * The property for the subtitle in the item.
+         */
+        subtitleProperty: {
+          type: String,
+          value: 'subtitle'
+        },
+
+        /**
+         * The item to show.
+         */
+        item: {
+          type: Object,
+          value: function() {
+            return {};
+          }
+        },
+
+        /**
+         * The time interval for the item.
+         */
+        interval: {
+          type: String
+        },
+
+        /**
+         * Whether the itinerary is opened.
+         */
+        open: {
+          type: Boolean,
+          value: false
+        },
+
+        /**
+         * Whether the user is hovering over the itinerary.
+         */
+        hovering: {
+          type: Boolean,
+          value: false
+        }
+      },
+
+      getCount: function(part, partCountProperty) {
+        return 'Count: ' + this.getProperty(part, partCountProperty, 'Unknown');
+      },
+
+      getDateText: function(interval, item, dateProperty) {
+        var dateString = this.getProperty(item, dateProperty);
+        if(interval === 'week') {
+          return 'Week of ' + moment.utc(new Date(dateString)).format('MMM D, YYYY');
+        }
+        if(interval === 'month') {
+          return 'Month of ' + moment.utc(new Date(dateString)).format('MMM YYYY');
+        }
+        if(interval === 'year') {
+          return 'Year of ' + moment.utc(new Date(dateString)).format('YYYY');
+        }
+        return moment.utc(new Date(dateString)).format('MMM D, YYYY');
+      },
+
+      getHeaderClass: function(open) {
+        return (open ? 'opened' : 'closed');
+      },
+
+      getProperty: function(item, property, defaultValue) {
+        return item[property] || defaultValue;
+      },
+
+      getPropertyWithColon: function(item, property) {
+        return this.getProperty(item, property) + ':';
+      },
+
+      startHover: function() {
+        this.set('hovering', true);
+      },
+
+      endHover: function() {
+        this.set('hovering', false);
+      },
+
+      toggleItinerary: function() {
+        this.set('open', !this.open);
+        this.$$('#itineraryNotes').toggle();
+      }
+    });
+  </script>
+</dom-module>

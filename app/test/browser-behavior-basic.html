@@ -1,0 +1,125 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>browser-behavior</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../bower_components/polymer/polymer.html">
+  <script src="../behaviors/browser-behavior.js"></script>
+</head>
+
+<body>
+<dom-module id="test-browser-behavior-component">
+  <template>
+  </template>
+  <script>
+    /* globals DigBehaviors, HTMLImports, Polymer */
+    HTMLImports.whenReady(function() {
+      Polymer({
+        is: 'test-browser-behavior-component',
+        behaviors: [DigBehaviors.BrowserBehavior]
+      });
+    });
+  </script>
+</dom-module>
+
+<test-fixture id="browser-behavior-fixture">
+  <template>
+    <test-browser-behavior-component></test-browser-behavior-component>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, setup, fixture, test, expect */
+  /* jshint -W030 */
+  suite('browser-behavior tests', function() {
+    var component;
+
+    setup(function() {
+      component = fixture('browser-behavior-fixture');
+    });
+
+    test('generateLinkWithStateParameter returns the correct link', function() {
+      expect(component.generateLinkWithStateParameter({
+        protocol: 'http:',
+        host: 'localhost:8080',
+        pathname: '/index.html',
+        search: ''
+      })).to.equal('http://localhost:8080/index.html');
+      expect(component.generateLinkWithStateParameter({
+        protocol: 'http:',
+        host: 'localhost:8080',
+        pathname: '/index.html',
+        search: ''
+      }, 'myState')).to.equal('http://localhost:8080/index.html?state=myState');
+      expect(component.generateLinkWithStateParameter({
+        protocol: 'http:',
+        host: 'localhost:8080',
+        pathname: '/index.html',
+        search: '?field=myField'
+      }, 'myState')).to.equal('http://localhost:8080/index.html?field=myField&state=myState');
+      expect(component.generateLinkWithStateParameter({
+        protocol: 'http:',
+        host: 'localhost:8080',
+        pathname: '/index.html',
+        search: 'state=myState'
+      })).to.equal('http://localhost:8080/index.html');
+    });
+
+    test('getUrlParameters returns the correct parameters', function() {
+      expect(component.getUrlParameters('')).to.deep.equal({});
+      expect(component.getUrlParameters('?')).to.deep.equal({});
+      expect(component.getUrlParameters('field=myField')).to.deep.equal({
+        field: 'myField'
+      });
+      expect(component.getUrlParameters('?field=myField')).to.deep.equal({
+        field: 'myField'
+      });
+      expect(component.getUrlParameters('?field=myField&value=myValue')).to.deep.equal({
+        field: 'myField',
+        value: 'myValue'
+      });
+      expect(component.getUrlParameters('?value')).to.deep.equal({
+        value: true
+      });
+    });
+
+    /*
+    test('removeStateParameter removes the state parameter', function(done) {
+      component.removeStateParameter({
+        pushState: function(a, b, link) {
+          expect(link).to.equal('http://localhost:8080/index.html');
+          done();
+        }
+      }, {
+        protocol: 'http:',
+        host: 'localhost:8080',
+        pathname: '/index.html',
+        search: 'state=myState'
+      });
+    });
+    */
+  });
+</script>
+</body>
+</html>

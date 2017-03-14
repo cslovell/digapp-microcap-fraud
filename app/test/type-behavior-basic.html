@@ -1,0 +1,128 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>type-behavior</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../bower_components/polymer/polymer.html">
+  <script src="../behaviors/type-behavior.js"></script>
+</head>
+
+<body>
+<dom-module id="test-type-behavior-component">
+  <template>
+  </template>
+  <script>
+    /* globals DigBehaviors, HTMLImports, Polymer */
+    HTMLImports.whenReady(function() {
+      Polymer({
+        is: 'test-type-behavior-component',
+        behaviors: [DigBehaviors.TypeBehavior]
+      });
+    });
+  </script>
+</dom-module>
+
+<test-fixture id="type-behavior-fixture">
+  <template>
+    <test-type-behavior-component></test-type-behavior-component>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, setup, fixture, test, expect */
+  /* jshint -W030 */
+  suite('type-behavior tests', function() {
+    var element;
+
+    setup(function() {
+      element = fixture('type-behavior-fixture');
+    });
+
+    test('getPageLink works for valid types', function() {
+      expect(element.getPageLink('testId', 'cache')).to.equal('/cache.html?id=testId');
+      expect(element.getPageLink('testId', 'email')).to.equal('/email.html?id=testId');
+      expect(element.getPageLink('testId', 'image')).to.equal('/image.html?url=testId');
+      expect(element.getPageLink('testId', 'location')).to.equal('/location.html?id=testId');
+      expect(element.getPageLink('testId', 'offer')).to.equal('/offer.html?id=testId');
+      expect(element.getPageLink('testId', 'phone')).to.equal('/phone.html?id=testId');
+      expect(element.getPageLink('testId', 'provider')).to.equal('/provider.html?id=testId');
+      expect(element.getPageLink('testId', 'seller')).to.equal('/seller.html?id=testId');
+    });
+
+    test('getPageLink does encode URI components', function() {
+      expect(element.getPageLink('testId@gmail.com', 'email')).to.equal('/email.html?id=testId%40gmail.com');
+    });
+
+    test('getPageLink does support legacy IDs', function() {
+      expect(element.getPageLink('http://dig.isi.edu/ht/data/email/testId%40gmail.com', 'email')).to.equal('/email.html?id=testId%40gmail.com');
+      expect(element.getPageLink('http://dig.isi.edu/ht/data/image/ABC123', 'image')).to.equal('/image.html?url=ABC123');
+      expect(element.getPageLink('http://dig.isi.edu/ht/data/offer/ABC123', 'offer')).to.equal('/offer.html?id=ABC123');
+      expect(element.getPageLink('http://dig.isi.edu/ht/data/phone/1234567890', 'phone')).to.equal('/phone.html?id=1234567890');
+    });
+
+    test('getTypeIcon works', function() {
+      expect(element.getTypeIcon('cache')).to.equal('icons:cached');
+      expect(element.getTypeIcon('date')).to.equal('icons:date-range');
+      expect(element.getTypeIcon('email')).to.equal('communication:email');
+      expect(element.getTypeIcon('image')).to.equal('image:photo');
+      expect(element.getTypeIcon('location')).to.equal('communication:location-on');
+      expect(element.getTypeIcon('money')).to.equal('editor:attach-money');
+      expect(element.getTypeIcon('offer')).to.equal('maps:local-offer');
+      expect(element.getTypeIcon('phone')).to.equal('communication:phone');
+      expect(element.getTypeIcon('provider')).to.equal('icons:account-circle');
+      expect(element.getTypeIcon('seller')).to.equal('icons:group-work');
+      expect(element.getTypeIcon('webpage')).to.equal('av:web');
+    });
+
+    test('getTypeName works', function() {
+      expect(element.getTypeName('cache')).to.equal('Cached Webpage');
+      expect(element.getTypeName('date')).to.equal('Date');
+      expect(element.getTypeName('email')).to.equal('Email Address');
+      expect(element.getTypeName('image')).to.equal('Image');
+      expect(element.getTypeName('location')).to.equal('Location');
+      expect(element.getTypeName('money')).to.equal('Price');
+      expect(element.getTypeName('offer')).to.equal('Ad');
+      expect(element.getTypeName('phone')).to.equal('Telephone Number');
+      expect(element.getTypeName('provider')).to.equal('Provider');
+      expect(element.getTypeName('seller')).to.equal('Seller');
+      expect(element.getTypeName('webpage')).to.equal('Website');
+    });
+
+    test('getTypeStyleClass works', function() {
+      expect(element.getTypeStyleClass('cache')).to.equal('entity-cache-font');
+      expect(element.getTypeStyleClass('date')).to.equal('entity-date-font');
+      expect(element.getTypeStyleClass('email')).to.equal('entity-email-font');
+      expect(element.getTypeStyleClass('image')).to.equal('entity-image-font');
+      expect(element.getTypeStyleClass('location')).to.equal('entity-location-font');
+      expect(element.getTypeStyleClass('money')).to.equal('entity-money-font');
+      expect(element.getTypeStyleClass('offer')).to.equal('entity-offer-font');
+      expect(element.getTypeStyleClass('phone')).to.equal('entity-phone-font');
+      expect(element.getTypeStyleClass('provider')).to.equal('entity-provider-font');
+      expect(element.getTypeStyleClass('seller')).to.equal('entity-seller-font');
+      expect(element.getTypeStyleClass('webpage')).to.equal('entity-webpage-font');
+    });
+  });
+</script>
+</body>
+</html>

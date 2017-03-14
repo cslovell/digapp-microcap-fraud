@@ -1,0 +1,264 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <title>single-record</title>
+  <script src="../bower_components/webcomponentsjs/webcomponents.min.js"></script>
+  <script src="../bower_components/web-component-tester/browser.js"></script>
+  <script src="../bower_components/test-fixture/test-fixture-mocha.js"></script>
+  <link rel="import" href="../bower_components/test-fixture/test-fixture.html">
+  <link rel="import" href="../elements/export-button/export-button.html">
+</head>
+
+<body>
+<test-fixture id="export-button-fixture">
+  <template>
+    <export-button></export-button>
+  </template>
+</test-fixture>
+
+<script>
+  /* globals suite, test, expect, setup, fixture, flush */
+  /* jshint -W030 */
+  suite('<export-button> with no data', function() {
+    var element;
+
+    setup(function() {
+      element = fixture('export-button-fixture');
+      element.data = [];
+      element.downloadImageUrl = 'downloadImage';
+      element.csvTransformFunction = function(data) {
+        return [{
+          csv: data
+        }];
+      };
+      element.pdfTransformFunction = function(data) {
+        return [{
+          pdf: data
+        }];
+      };
+    });
+
+    test('properties are set correctly', function() {
+      expect(element.data).to.deep.equal([]);
+      expect(element.filename).to.equal('data');
+      expect(element.csvTransformFunction).to.be.a('Function');
+      expect(element.pdfTransformFunction).to.be.a('Function');
+      expect(element.type).to.equal('Result');
+      expect(element._dataForCsv).to.deep.equal([{
+        csv: []
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        pdf: []
+      }]);
+    });
+
+    test('does not show a csv-download, link, or img', function() {
+      expect(element.$$('a')).to.not.exist;
+      expect(element.$$('.link')).to.not.exist;
+      expect(element.$$('img')).to.not.exist;
+    });
+
+    test('changing data does update dataForCsv and dataForPdf', function() {
+      element.data = ['a'];
+      expect(element._dataForCsv).to.deep.equal([{
+        csv: ['a']
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        pdf: ['a']
+      }]);
+
+      element.data = ['a', 'b'];
+      expect(element._dataForCsv).to.deep.equal([{
+        csv: ['a', 'b']
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        pdf: ['a', 'b']
+      }]);
+    });
+
+    test('changing a property in data does update dataForCsv and dataForPdf', function() {
+      element.data = [{
+        property1: 'a'
+      }];
+      expect(element._dataForCsv).to.deep.equal([{
+        csv: [{
+          property1: 'a'
+        }]
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        pdf: [{
+          property1: 'a'
+        }]
+      }]);
+
+      element.data[0].property2 = 'b';
+      expect(element._dataForCsv).to.deep.equal([{
+        csv: [{
+          property1: 'a',
+          property2: 'b'
+        }]
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        pdf: [{
+          property1: 'a',
+          property2: 'b'
+        }]
+      }]);
+    });
+  });
+
+  suite('<export-button> with data', function() {
+    var element;
+
+    setup(function(done) {
+      element = fixture('export-button-fixture');
+      element.data = ['a', 'b', 'c'];
+      element.downloadImageUrl = 'downloadImage';
+      element.filename = 'file';
+      element.csvTransformFunction = function(data) {
+        return data.map(function(item) {
+          return {
+            property: item
+          };
+        });
+      };
+      element.pdfTransformFunction = function(data) {
+        var paragraphs = data.map(function(item, index) {
+          return {
+            big: (index === 1),
+            label: 'label-' + item,
+            value: 'value-' + item
+          };
+        });
+        return [{
+          images: [{
+            id: 'imageId',
+            source: 'imageSource',
+            text: 'imageText'
+          }],
+          paragraphs: paragraphs
+        }];
+      };
+      element.type = 'Type';
+      flush(done);
+    });
+
+    test('properties are set correctly', function() {
+      expect(element.data).to.deep.equal(['a', 'b', 'c']);
+      expect(element.filename).to.equal('file');
+      expect(element.csvTransformFunction).to.be.a('Function');
+      expect(element.pdfTransformFunction).to.be.a('Function');
+      expect(element.type).to.equal('Type');
+      expect(element._dataForCsv).to.deep.equal([{
+        property: 'a'
+      }, {
+        property: 'b'
+      }, {
+        property: 'c'
+      }]);
+      expect(element._dataForPdf).to.deep.equal([{
+        images: [{
+          id: 'imageId',
+          source: 'imageSource',
+          text: 'imageText'
+        }],
+        paragraphs: [{
+          big: false,
+          label: 'label-a',
+          value: 'value-a'
+        }, {
+          big: true,
+          label: 'label-b',
+          value: 'value-b'
+        }, {
+          big: false,
+          label: 'label-c',
+          value: 'value-c'
+        }]
+      }]);
+    });
+
+    test('does show a csv-download, link, and img', function() {
+      expect(element.$$('a')).to.exist;
+      expect(element.$$('a').getAttribute('download')).to.equal('file.csv');
+      expect(element.$$('a').getAttribute('is')).to.equal('csv-download');
+      expect(element.$$('a').getAttribute('title')).to.equal('Export 3 Types to CSV');
+      expect(element.$$('.link')).to.exist;
+      expect(element.$$('.link').getAttribute('title')).to.equal('Export 3 Types to PDF');
+      expect(element.$$('img')).to.exist;
+      expect(element.$$('img').getAttribute('crossorigin')).to.equal('anonymous');
+      expect(element.$$('img').getAttribute('id')).to.equal('imageId');
+      expect(element.$$('img').getAttribute('src')).to.equal('/downloadImage/imageSource');
+      expect(element.$$('img').getAttribute('style')).to.equal('display:none');
+    });
+
+    test('_createPdfContent returns correctly', function() {
+      expect(element._createPdfContent().content).to.deep.equal([{
+        fontSize: 12,
+        margin: [0, 0, 0, 10],
+        text: [{
+          bold: true,
+          text: 'label-a'
+        }, {
+          text: 'value-a'
+        }]
+      }, {
+        fontSize: 16,
+        margin: [0, 0, 0, 10],
+        text: [{
+          bold: true,
+          text: 'label-b'
+        }, {
+          text: 'value-b'
+        }]
+      }, {
+        fontSize: 12,
+        margin: [0, 0, 0, 10],
+        text: [{
+          bold: true,
+          text: 'label-c'
+        }, {
+          text: 'value-c'
+        }]
+      }, {
+        bold: true,
+        fontSize: 12,
+        margin: [0, 0, 0, 10],
+        text: 'Image(s):'
+      }, {
+        fontSize: 12,
+        margin: [0, 0, 0, 10],
+        text: 'imageText'
+      }, {
+        fit: [500, 250],
+        image: 'data:,',
+        margin: [0, 0, 0, 10]
+      }]);
+    });
+
+    test('_getLabel returns correctly', function() {
+      expect(element._getLabel(1, 'Apple')).to.equal('Export 1 Apple');
+      expect(element._getLabel(2, 'Banana')).to.equal('Export 2 Bananas');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,253 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../pdfmake.html">
+
+<dom-module id="export-button">
+  <template>
+    <style include="iron-flex"></style>
+    <style>
+      :host {
+        display: block;
+      }
+
+      div {
+        color: var(--secondary-text-color);
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 30px;
+      }
+
+      a[is=csv-download],
+      .link {
+        color: var(--secondary-text-color);
+        cursor: pointer;
+        text-decoration: underline;
+      }
+
+      a[is=csv-download]:hover,
+      .link:hover {
+        color: var(--primary-text-color);
+      }
+
+      iron-icon {
+        margin-top: 2px;
+      }
+
+      span {
+        margin-left: 5px;
+      }
+    </style>
+
+    <template is="dom-if" if="[[data.length]]">
+      <div class="layout horizontal center">
+        <iron-icon icon="file-download"></iron-icon>
+        <span>[[_getLabel(data.length, type)]]:</span>
+        <a is="csv-download" data="[[_dataForCsv]]" download="[[filename]].csv" title="[[_getLabel(data.length, type)]] to CSV">
+          <span>CSV</span>
+        </a>
+        <span>|</span>
+        <span class="link" title="[[_getLabel(data.length, type)]] to PDF" on-tap="_exportToPdf">PDF</span>
+      </div>
+    </template>
+
+    <template is="dom-repeat" items="[[_dataForPdf]]">
+      <template is="dom-repeat" items="[[item.images]]" as="image">
+        <img id$="[[image.id]]" crossorigin="anonymous" src="[[_getImageSrc(downloadImageUrl, image.source)]]" style="display:none"/>
+      </template>
+    </template>
+  </template>
+
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'export-button',
+
+      /* globals pdfMake */
+      properties: {
+        /**
+         * The data to transform and export.
+         */
+        data: {
+          type: Array
+        },
+
+        /**
+         * The URL needed by the PDF export to download each image.
+         */
+        downloadImageUrl: {
+          type: String
+        },
+
+        /**
+         * The name of the exported file.
+         */
+        filename: {
+          type: String,
+          value: 'data'
+        },
+
+        /**
+         * The function to transform the input data into CSV export data.
+         */
+        csvTransformFunction: {
+          type: Function
+        },
+
+        /**
+         * The function to transform the input data into PDF export data.
+         */
+        pdfTransformFunction: {
+          type: Function
+        },
+
+        /**
+         * The type of data being exported.
+         */
+        type: {
+          type: String,
+          value: 'Result'
+        },
+
+        /**
+         * The CSV export data for the csv-download component.
+         */
+        _dataForCsv: {
+          type: Array
+        },
+
+        /**
+         * The PDF export data.
+         */
+        _dataForPdf: {
+          notify: true,
+          type: Array
+        }
+      },
+
+      observers: [
+        // Use observers rather than a json-transform element because we must observe changes on data.* rather than data itself.
+        '_computeDataForCsv(data.length, csvTransformFunction)',
+        '_computeDataForCsv(data.*, csvTransformFunction)',
+        '_computeDataForPdf(data.length, pdfTransformFunction)',
+        '_computeDataForPdf(data.*, pdfTransformFunction)'
+      ],
+
+      /**
+       * Computes the CSV export data using the input data and the transform function.
+       */
+      _computeDataForCsv: function() {
+        this._dataForCsv = this.csvTransformFunction(this.data);
+      },
+
+      /**
+       * Computes the PDF export data using the input data and the transform function.
+       */
+      _computeDataForPdf: function() {
+        this._dataForPdf = this.pdfTransformFunction(this.data);
+      },
+
+      /**
+       * Creates and returns the PDF content for pdfMake.
+       */
+      _createPdfContent: function() {
+        var doc = {
+          content: []
+        };
+
+        this._dataForPdf.forEach(function(item, index) {
+          if(index) {
+            doc.content.push({
+              pageBreak: 'after',
+              text: ''
+            });
+          }
+
+          item.paragraphs.forEach(function(object) {
+            doc.content.push({
+              fontSize: object.big ? 16 : 12,
+              margin: [0, 0, 0, 10],
+              text: [{
+                bold: true,
+                text: object.label
+              }, {
+                text: object.value
+              }]
+            });
+          });
+
+          doc.content.push({
+            bold: true,
+            fontSize: 12,
+            margin: [0, 0, 0, 10],
+            text: 'Image(s):'
+          });
+
+          item.images.forEach(function(image) {
+            doc.content.push({
+              fontSize: 12,
+              margin: [0, 0, 0, 10],
+              text: image.text
+            });
+
+            var imageElement = document.getElementById(image.id);
+            var canvas = document.createElement('canvas');
+            canvas.width = imageElement.width;
+            canvas.height = imageElement.height;
+            canvas.getContext('2d').drawImage(imageElement, 0, 0);
+            var source = canvas.toDataURL('image/jpeg');
+            doc.content.push({
+              fit: [500, 250],
+              image: source,
+              margin: [0, 0, 0, 10]
+            });
+          });
+        });
+
+        return doc;
+      },
+
+      /**
+       * Creates a PDF from the data and downloads it automatically with pdfMake.
+       */
+      _exportToPdf: function() {
+        var doc = this._createPdfContent();
+        pdfMake.createPdf(doc).download(this.filename + '.pdf');
+      },
+
+      /**
+       * Returns the image source needed by the PDF export to download each image.
+       */
+      _getImageSrc: function(url, source) {
+        return '/' + url + '/' + source;
+      },
+
+      /**
+       * Returns the label for the export button.
+       */
+      _getLabel: function(length, type) {
+        return 'Export ' + length + ' ' + type + (length === 1 ? '' : 's');
+      }
+    });
+  })();
+  </script>
+</dom-module>

@@ -1,0 +1,377 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/elastic-client-aggregation-builder/elastic-client-aggregation-builder.html">
+<link rel="import" href="../../bower_components/elastic-client-query-builder/elastic-client-query-builder.html">
+<link rel="import" href="../../bower_components/elastic-client-search/elastic-client-search.html">
+<link rel="import" href="../../bower_components/json-combine/json-combine.html">
+<link rel="import" href="../behaviors.html">
+
+<dom-module id="location-timeline">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+
+    <elastic-client-aggregation-builder
+      name="[[emailAggregationName]]"
+      type="terms"
+      count="[[aggregationCount]]"
+      field="[[emailAggregationField]]"
+      ejs-aggregation="{{emailsAggregation}}">
+    </elastic-client-aggregation-builder>
+
+    <elastic-client-aggregation-builder
+      name="[[phoneAggregationName]]"
+      type="terms"
+      count="[[aggregationCount]]"
+      field="[[phoneAggregationField]]"
+      ejs-aggregation="{{phonesAggregation}}">
+    </elastic-client-aggregation-builder>
+
+    <elastic-client-aggregation-builder
+      name="[[publisherAggregationName]]"
+      type="terms"
+      count="[[aggregationCount]]"
+      field="[[publisherAggregationField]]"
+      ejs-aggregation="{{publishersAggregation}}">
+    </elastic-client-aggregation-builder>
+
+    <elastic-client-aggregation-builder
+      name="[[locationAggregationName]]"
+      type="terms"
+      count="0"
+      order="_term"
+      direction="asc"
+      field="[[locationAggregationField]]"
+      nested-aggregations="[[buildArray(emailsAggregation, phonesAggregation, publishersAggregation)]]"
+      ejs-aggregation="{{locationsAggregation}}">
+    </elastic-client-aggregation-builder>
+
+    <elastic-client-query-builder
+      type="terms"
+      fields="[[queryField]]"
+      values="[[queryValue]]"
+      ejs-query="{{offerQuery}}">
+    </elastic-client-query-builder>
+
+    <!-- Use a template to ensure that the datesAggregation is built only once the interval is set. -->
+    <template is="dom-if" if="[[interval]]">
+      <elastic-client-aggregation-builder
+        name="[[dateAggregationName]]"
+        type="date_histogram"
+        interval="[[interval]]"
+        count="0"
+        field="[[dateAggregationField]]"
+        nested-aggregations="[[buildArray(locationsAggregation)]]"
+        ejs-aggregation="{{datesAggregation}}">
+      </elastic-client-aggregation-builder>
+    </template>
+
+    <elastic-client-search
+      client="[[client]]"
+      index="[[indexName]]"
+      elastic-types="[[indexTypes]]"
+      query="[[offerQuery]]"
+      page-size="0"
+      aggregations="[[buildArray(datesAggregation)]]"
+      filters="[[filters]]"
+      results="{{queryResults}}"
+      loading="{{loading}}"
+      page-size="[[hitsPerPage]]"
+      last-error="{{error}}">
+    </elastic-client-search>
+
+    <json-combine
+      data-in1="[[queryResults]]"
+      data-in2="[[locationId]]"
+      data-out="{{results}}"
+      combine-function="[[offerTransform]]">
+    </json-combine>
+  </template>
+
+  <script>
+  (function() {
+    /* globals DigBehaviors */
+    'use strict';
+
+    Polymer({
+      is: 'location-timeline',
+
+      behaviors: [DigBehaviors.ArrayBehavior],
+
+      properties: {
+        /**
+         * The field for the date aggregation.
+         */
+        dateAggregationField: {
+          type: String
+        },
+
+        /**
+         * The name for the date aggregation.
+         */
+        dateAggregationName: {
+          type: String
+        },
+
+        /**
+         * The field for the email aggregation.
+         */
+        emailAggregationField: {
+          type: String
+        },
+
+        /**
+         * The name for the email aggregation.
+         */
+        emailAggregationName: {
+          type: String
+        },
+
+        /**
+         * The field for the location aggregation.
+         */
+        locationAggregationField: {
+          type: String
+        },
+
+        /**
+         * The name for the location aggregation.
+         */
+        locationAggregationName: {
+          type: String
+        },
+
+        /**
+         * The field for the phone aggregation.
+         */
+        phoneAggregationField: {
+          type: String
+        },
+
+        /**
+         * The name for the phone aggregation.
+         */
+        phoneAggregationName: {
+          type: String
+        },
+
+        /**
+         * The field for the publisher aggregation.
+         */
+        publisherAggregationField: {
+          type: String
+        },
+
+        /**
+         * The name for the publisher aggregation.
+         */
+        publisherAggregationName: {
+          type: String
+        },
+
+        /**
+         * The field on which to query.
+         */
+        queryField: {
+          type: String
+        },
+
+        /**
+         * The value on which to query.
+         */
+        queryValue: {
+          type: String
+        },
+
+        /**
+         * The elasticsearch client.
+         */
+        client: {
+          type: Object
+        },
+
+        /**
+         * The elasticsearch index to query.
+         */
+        indexName: {
+          type: String
+        },
+
+        /**
+         * The elasticsearch index types to query.
+         */
+        indexTypes: {
+          type: Array
+        },
+
+        /**
+         * The filters for the location timeline query.
+         */
+        filters: {
+          type: Object
+        },
+
+        /**
+         * The location ID to give to the offer transform function (if any).
+         */
+        locationId: {
+          type: Number,
+          value: null
+        },
+
+        /**
+         * The location timeline offer transform function.
+         */
+        offerTransform: {
+          type: Function
+        },
+
+        /**
+         * The number of ads used to determine the interval of the date histogram aggregation.
+         */
+        count: {
+          type: Number
+        },
+
+        /**
+         * The count of results for the publisher, phone, and email aggregations.  Default is 0 (all results).
+         */
+        aggregationCount: {
+          type: Number,
+          value: 0
+        },
+
+        /**
+         * The interval of the date histogram aggregation.
+         */
+        interval: {
+          type: String,
+          notify: true,
+          computed: 'computeInterval(count)'
+        },
+
+        /**
+         * The emails aggregation for the location timeline query.
+         */
+        emailsAggregation: {
+          type: Object
+        },
+
+        /**
+         * The phones aggregation for the location timeline query.
+         */
+        phonesAggregation: {
+          type: Object
+        },
+
+        /**
+         * The publishers aggregation for the location timeline query.
+         */
+        publishersAggregation: {
+          type: Object
+        },
+
+        /**
+         * The locations aggregation for the location timeline query.
+         */
+        locationsAggregation: {
+          type: Object
+        },
+
+        /**
+         * The dates aggregation for the location timeline query.
+         */
+        datesAggregation: {
+          type: Object
+        },
+
+        /**
+         * The offer query for the location timeline query.
+         */
+        offerQuery: {
+          type: Object
+        },
+
+        /**
+         * The location timeline query results.
+         */
+        queryResults: {
+          type: Object
+        },
+
+        /**
+         * Whether the location timeline query is loading.
+         */
+        loading: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * The location timeline query error.
+         */
+        error: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * The location timeline transform results.
+         */
+        results: {
+          type: Object,
+          notify: true
+        },
+
+        /**
+         * Only aggregations are required from elasticsearch here (not hits).
+         * Therefore, size will be set to 0 to avoid returning hits and make
+         * the request more efficient.
+         */
+        hitsPerPage: {
+          type: Number,
+          notify: true,
+          value: 0
+        }
+      },
+
+      computeInterval: function(count) {
+        if(this.interval) {
+          return this.interval;
+        }
+        if(count) {
+          if(count > 100000) {
+            return 'year';
+          }
+          if(count > 10000) {
+            return 'month';
+          }
+          if(count > 1000) {
+            return 'week';
+          }
+          return 'day';
+        }
+        return undefined;
+      }
+    });
+  })();
+  </script>
+</dom-module>

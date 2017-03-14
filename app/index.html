@@ -1,0 +1,3545 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit" />
+  <title>DIG</title>
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#2E3AA1">
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+  <!-- build:css styles/main.css -->
+  <!-- Must link leaflet css (https://github.com/leaflet-extras/leaflet-map/issues/46) -->
+  <link rel="stylesheet" href="bower_components/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <script src="scripts/google-analytics.js"></script>
+  
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+
+  <link rel="import" href="styles/custom-icons.html">
+  <link rel="import" href="styles/icon-styles.html">
+  <link rel="import" href="styles/user-dialog-styles.html">
+  <style is="custom-style" include="icon-styles"></style>
+  <style is="custom-style" include="user-dialog-styles"></style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+  <span id="browser-sync-binding"></span>
+
+  <template is="dom-bind" id="app">
+    <!-- exposes clientConfig object which is a container for data
+      transform functions -->
+    <client-config config="{{clientConfig}}"></client-config>
+
+    <!--get app configuration from server -->
+    <iron-ajax
+      auto
+      url="/config"
+      handle-as="json"
+      last-response="{{config}}">
+    </iron-ajax>
+
+    <!--initialize new elastic client connection to server
+      esclient can be used throughout the application lifecycle -->
+    <elastic-client
+      config="[[config.elasticConfig]]"
+      client="{{esclient}}">
+    </elastic-client>
+
+    <query-transformer
+      demand="[[demandSearch]]"
+      error="{{searchError}}"
+      loading="{{searchLoading}}"
+      page="{{pageNum}}"
+      page-size="20"
+      process-request="[[processRequest]]"
+      result-function="[[clientConfig.transforms.search.result]]"
+      results="{{searchResults}}"
+      search-parameters="[[searchParameters]]"
+      search-function="[[clientConfig.transforms.search.search]]"
+      url="[[config.queryUrl]]">
+    </query-transformer>
+
+    <json-transform
+      data-in="{{searchResults}}"
+      data-out="{{records}}"
+      transform-function="[[clientConfig.transforms.offer.offers]]">
+    </json-transform>
+
+    <!-- Facets -->
+    <query-builder
+      ignore-type="website"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{websiteQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[websiteQuery]]"
+      page-size="0"
+      results="{{websiteResult}}"
+      last-error="{{websiteError}}"
+      aggregations="{{buildArray(websiteAgg)}}"
+      filters="[]"
+      loading="{{websiteLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="country"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{countryQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[countryQuery]]"
+      page-size="0"
+      results="{{countryResult}}"
+      last-error="{{countryError}}"
+      aggregations="{{buildArray(countryAgg)}}"
+      filters="[]"
+      loading="{{countryLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="region"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{regionQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[regionQuery]]"
+      page-size="0"
+      results="{{regionResult}}"
+      last-error="{{regionError}}"
+      aggregations="{{buildArray(regionAgg)}}"
+      filters="[]"
+      loading="{{regionLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="city"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{cityQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[cityQuery]]"
+      page-size="0"
+      results="{{cityResult}}"
+      last-error="{{cityError}}"
+      aggregations="{{buildArray(cityAgg)}}"
+      filters="[]"
+      loading="{{cityLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="phone"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{phoneQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[phoneQuery]]"
+      page-size="0"
+      results="{{phoneResult}}"
+      last-error="{{phoneError}}"
+      aggregations="{{buildArray(phoneAgg)}}"
+      filters="[]"
+      loading="{{phoneLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="email"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{emailQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[emailQuery]]"
+      page-size="0"
+      results="{{emailResult}}"
+      last-error="{{emailError}}"
+      aggregations="{{buildArray(emailAgg)}}"
+      filters="[]"
+      loading="{{emailLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="social"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{socialQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[socialQuery]]"
+      page-size="0"
+      results="{{socialResult}}"
+      last-error="{{socialError}}"
+      aggregations="{{buildArray(socialAgg)}}"
+      filters="[]"
+      loading="{{socialLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="services"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{servicesQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[servicesQuery]]"
+      page-size="0"
+      results="{{servicesResult}}"
+      last-error="{{servicesError}}"
+      aggregations="{{buildArray(servicesAgg)}}"
+      filters="[]"
+      loading="{{servicesLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="price"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{priceQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[priceQuery]]"
+      page-size="0"
+      results="{{priceResult}}"
+      last-error="{{priceError}}"
+      aggregations="{{buildArray(priceAgg)}}"
+      filters="[]"
+      loading="{{priceLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="name"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{nameQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[nameQuery]]"
+      page-size="0"
+      results="{{nameResult}}"
+      last-error="{{nameError}}"
+      aggregations="{{buildArray(nameAgg)}}"
+      filters="[]"
+      loading="{{nameLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="gender"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{genderQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[genderQuery]]"
+      page-size="0"
+      results="{{genderResult}}"
+      last-error="{{genderError}}"
+      aggregations="{{buildArray(genderAgg)}}"
+      filters="[]"
+      loading="{{genderLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="age"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{ageQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[ageQuery]]"
+      page-size="0"
+      results="{{ageResult}}"
+      last-error="{{ageError}}"
+      aggregations="{{buildArray(ageAgg)}}"
+      filters="[]"
+      loading="{{ageLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="ethnicity"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{ethnicityQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[ethnicityQuery]]"
+      page-size="0"
+      results="{{ethnicityResult}}"
+      last-error="{{ethnicityError}}"
+      aggregations="{{buildArray(ethnicityAgg)}}"
+      filters="[]"
+      loading="{{ethnicityLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="eyeColor"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{eyeColorQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[eyeColorQuery]]"
+      page-size="0"
+      results="{{eyeColorResult}}"
+      last-error="{{eyeColorError}}"
+      aggregations="{{buildArray(eyeColorAgg)}}"
+      filters="[]"
+      loading="{{eyeColorLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="hairColor"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{hairColorQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[hairColorQuery]]"
+      page-size="0"
+      results="{{hairColorResult}}"
+      last-error="{{hairColorError}}"
+      aggregations="{{buildArray(hairColorAgg)}}"
+      filters="[]"
+      loading="{{hairColorLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="height"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{heightQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[heightQuery]]"
+      page-size="0"
+      results="{{heightResult}}"
+      last-error="{{heightError}}"
+      aggregations="{{buildArray(heightAgg)}}"
+      filters="[]"
+      loading="{{heightLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="weight"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{weightQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[weightQuery]]"
+      page-size="0"
+      results="{{weightResult}}"
+      last-error="{{weightError}}"
+      aggregations="{{buildArray(weightAgg)}}"
+      filters="[]"
+      loading="{{weightLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="review"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{reviewQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[reviewQuery]]"
+      page-size="0"
+      results="{{reviewResult}}"
+      last-error="{{reviewError}}"
+      aggregations="{{buildArray(reviewAgg)}}"
+      filters="[]"
+      loading="{{reviewLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="risk"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{riskQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[riskQuery]]"
+      page-size="0"
+      results="{{riskResult}}"
+      last-error="{{riskError}}"
+      aggregations="{{buildArray(riskAgg)}}"
+      filters="[]"
+      loading="{{riskLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
+      ignore-type="image"
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{imageQuery}}"
+      demand="[[demandSearch]]">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[imageQuery]]"
+      page-size="0"
+      results="{{imageResult}}"
+      last-error="{{imageError}}"
+      aggregations="{{buildArray(imageAgg)}}"
+      filters="[]"
+      loading="{{imageLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+    <!-- End Facets -->
+
+    <demand-search demand="{{demandSearch}}"></demand-search>
+
+    <!-- Logger for Page View -->
+    <dig-logger log-page-view
+      es-client="[[esclient]]"
+      es-index="[[config.logIndex]]"
+      es-type="[[config.logType]]"
+      type="Search-Open"
+      data=""
+      username="[[config.username]]"
+      logger="{{logger}}">
+    </dig-logger>
+
+    <!-- Logger for Search Terms -->
+    <dig-logger
+      es-client="[[esclient]]"
+      es-index="[[config.logIndex]]"
+      es-type="[[config.logType]]"
+      type="Search-SubmitSearch"
+      data="[[logMessage]]"
+      username="[[config.username]]">
+    </dig-logger>
+
+    <!-- Logger for Pagination -->
+    <dig-logger
+      es-client="[[esclient]]"
+      es-index="[[config.logIndex]]"
+      es-type="[[config.logType]]"
+      type="Search-ShowResultPageNumber"
+      data="[[pageNum]]"
+      username="[[config.username]]">
+    </dig-logger>
+
+    <!-- logging: single top level object referenced for start and end dates
+         internal component logic figures out which date is which -->
+    <create-log-message
+      age-selected="[[searchParameters.age]]"
+      city-selected="[[searchParameters.city]]"
+      country-selected="[[searchParameters.country]]"
+      date-end-selected="[[searchParameters.postingDate]]"
+      date-start-selected="[[searchParameters.postingDate]]"
+      description-selected="[[searchParameters.description]]"
+      email-selected="[[searchParameters.email]]"
+      ethnicity-selected="[[searchParameters.ethnicity]]"
+      eye-selected="[[searchParameters.eyeColor]]"
+      gender-selected="[[searchParameters.gender]]"
+      hair-selected="[[searchParameters.hairColor]]"
+      height-selected="[[searchParameters.height]]"
+      image-selected="[[searchParameters.image]]"
+      name-selected="[[searchParameters.name]]"
+      phone-selected="[[searchParameters.phone]]"
+      price-selected="[[searchParameters.price]]"
+      region-selected="[[searchParameters.region]]"
+      review-selected="[[searchParameters.review]]"
+      risk-selected="[[searchParameters.risk]]"
+      services-selected="[[searchParameters.services]]"
+      social-selected="[[searchParameters.social]]"
+      title-selected="[[searchParameters.title]]"
+      website-selected="[[searchParameters.website]]"
+      weight-selected="[[searchParameters.weight]]"
+      log-message="{{logMessage}}">
+    </create-log-message>
+
+    <annotation-manager
+      client="[[esclient]]"
+      annotation-index="[[config.annotationIndex]]"
+      annotation-type="[[config.annotationType]]"
+      relevant="[[config.annotationRelevant]]"
+      username="[[config.username]]"
+      annotations="{{annotations}}"
+      annotation-manager="{{annotationManager}}">
+    </annotation-manager>
+
+    <paper-header-panel class="flex" mode="waterfall">
+
+      <!-- Search toolbar -->
+      <paper-toolbar id="navbar">
+        <img class="bottom" src="images/dig-logo-original.png" alt="">
+        <div class="bottom drawer-spacer"></div>
+
+        <!-- Hide until we can support multiple search types.
+        <div class="bottom v-divider"></div>
+        <elastic-type-selector class="bottom white-input-container"
+          available-types="{{config.elasticTypes}}"
+          elastic-types="{{esTypes}}">
+        </elastic-type-selector>
+        -->
+
+        <div class="bottom v-divider"></div>
+
+        <div class="white-input-container bottom flex">
+          <paper-button class="layout horizontal center bottom green" active="[[searchFieldsDialogOpened]]" on-tap="toggleSearchFieldsDialog" title="Click to Enter Search Terms">
+            <iron-icon icon="search" class="bottom" style="margin-right: 5px;"></iron-icon>
+            <span class="search-options-title">Click to Enter Search Terms</span>
+          </paper-button>
+        </div>
+
+        <a class="bottom" href="." style="color: #ffffff;">
+          <paper-icon-button icon="clear" title="Reset Page"></paper-icon-button>
+        </a>
+
+        <load-user-info class="bottom"
+          show-search
+          client="[[esclient]]"
+          loading="[[searchLoading]]"
+          username="[[config.username]]"
+          user-id="{{userId}}"
+          user-record-exists="{{userRecordExists}}"
+          blur-images="{{blurImages}}"
+          searches="{{userSearches}}"
+          entities="{{userEntities}}"
+          search-parameters="{{searchParameters}}"
+          user-index="[[config.userIndex]]"
+          user-type="[[config.userType]]"
+          notification-query-date="{{notificationDate}}"
+          sort-newest='Sort("fields.posting_date.strict.key").order("desc")'
+          current-sort="[[selectedSort]]"
+          save-user-data-callback="[[saveUserDataCallback]]"
+          run-user-query-callback="{{runUserQueryCallback}}"
+          user-update-body="{{userUpdateBody}}"
+          process-request="{{processRequest}}">
+        </load-user-info>
+
+        <query-builder
+          age-field="[[ageConfig.queryField]]"
+          city-field="[[cityConfig.queryField]]"
+          country-field="[[countryConfig.queryField]]"
+          date-field="[[dateStartConfig.queryField]]"
+          description-field="[[descriptionConfig.queryField]]"
+          email-field="[[emailConfig.queryField]]"
+          ethnicity-field="[[ethnicityConfig.queryField]]"
+          eye-field="[[eyeColorConfig.queryField]]"
+          gender-field="[[genderConfig.queryField]]"
+          hair-field="[[hairColorConfig.queryField]]"
+          height-field="[[heightConfig.queryField]]"
+          name-field="[[nameConfig.queryField]]"
+          phone-field="[[phoneConfig.queryField]]"
+          price-field="[[priceConfig.queryField]]"
+          region-field="[[regionConfig.queryField]]"
+          review-field="[[reviewConfig.queryField]]"
+          risk-field="[[riskConfig.queryField]]"
+          services-field="[[servicesConfig.queryField]]"
+          social-field="[[socialConfig.queryField]]"
+          title-field="[[titleConfig.queryField]]"
+          website-field="[[websiteConfig.queryField]]"
+          weight-field="[[weightConfig.queryField]]"
+          search-parameters="[[searchParameters]]"
+          query="{{wholeQuery}}">
+        </query-builder>
+
+        <save-search id="saveSearchDialog"
+          client="[[esclient]]"
+          username="[[config.username]]"
+          user-id="[[userId]]"
+          existing-searches="{{userSearches}}"
+          search-parameters="[[searchParameters]]"
+          es-query="[[wholeQuery]]"
+          user-index="[[config.userIndex]]"
+          user-type="[[config.userType]]"
+          user-record-exists="[[userRecordExists]]"
+          run-user-query-callback="[[runUserQueryCallback]]"
+          save-user-data-callback="{{saveUserDataCallback}}">
+        </save-search>
+
+        <bulk-search
+          id="bulkSearchDialog"
+          category="[[phoneConfig.title]]"
+          search-parameters="{{searchParameters}}"
+          process-request="{{processRequest}}">
+        </bulk-search>
+
+        <similar-image-search id="similarImageSearchDialog"
+          logger="[[logger]]"
+          blur="[[blurImages]]"
+          image-service-auth="[[config.imageServiceAuth]]"
+          image-service-host="[[config.imageServiceHost]]"
+          link-function="[[clientConfig.transforms.image.externalImageLink]]">
+        </similar-image-search>
+
+        <entity-list-dialog id="entityListDialog"
+          annotation-ids="[[annotations.all]]"
+          annotation-manager="[[annotationManager]]"
+          client="[[esclient]]"
+          index-name="[[config.elasticIndex]]"
+          email-field="[[emailConfig.aggregationField]]"
+          image-field="[[imageConfig.aggregationField]]"
+          offer-field="doc_id"
+          phone-field="[[phoneConfig.aggregationField]]"
+          transform-function="[[clientConfig.transforms.entity.entities]]"
+          entities="{{userEntities}}"
+          user-update-body="{{userUpdateBody}}">
+        </entity-list-dialog>
+
+        <state-manager id="stateManager"
+          page-type="search"
+          client="[[esclient]]"
+          state-index="[[config.filterStatesIndex]]"
+          state-type="[[config.filterStatesType]]"
+          state-id="[[params.state]]"
+          filter-collection="{{searchParameters}}"
+          process-request="{{processRequest}}">
+        </state-manager>
+
+        <paper-icon-button icon="menu" class="bottom dropdown-trigger" title="More Options" on-tap="toggleMenu"></paper-icon-button>
+
+        <iron-dropdown id="menuDropdown" class="bottom" horizontal-align="right" vertical-align="top" vertical-offset="80">
+          <div class="dropdown-content">
+            <!-- TODO FIXME
+            <paper-icon-item title="Search for All Results" on-tap="showAll">
+              <iron-icon icon="custom-icons:show-all" item-icon></iron-icon>
+              Search for All Results
+            </paper-icon-item>
+            -->
+
+            <paper-icon-item disabled="[[isSaveButtonDisabled(searchResults, searchError)]]" title="Save the Selected Search Terms" on-tap="openSaveSearchDialog">
+              <iron-icon icon="save" item-icon></iron-icon>
+              Save Search
+            </paper-icon-item>
+
+            <paper-icon-item disabled="[[noSearchParameters(searchParameters.*)]]" title="Generate a Link for this Page with the Selected Search Terms" on-tap="generateLink">
+              <iron-icon icon="link" item-icon></iron-icon>
+              Generate Link
+            </paper-icon-item>
+
+            <paper-icon-item title="Upload or Enter Multiple Telephone Numbers" on-tap="openBatchPhoneSearchDialog">
+              <iron-icon icon="file-upload" item-icon></iron-icon>
+              Bulk Telephone Search
+            </paper-icon-item>
+
+            <paper-icon-item title="Search on an Image URL or Uploaded Image" on-tap="openSimilarImageSearchDialog">
+              <iron-icon icon="image:compare" item-icon></iron-icon>
+              Similar Image Search
+            </paper-icon-item>
+
+            <paper-icon-item title="View Annotated & Saved Pages" on-tap="openEntityListDialog">
+              <iron-icon icon="pageview" item-icon></iron-icon>
+              View Annotated & Saved Pages
+            </paper-icon-item>
+
+            <paper-icon-item title="Open DIG Search in a New Tab" on-tap="openNewTab">
+              <iron-icon icon="open-in-new" item-icon></iron-icon>
+              Open DIG Search in a New Tab
+            </paper-icon-item>
+
+            <paper-icon-item title="Contact DIG Support" on-tap="emailSupport">
+              <iron-icon icon="communication:contact-mail" item-icon></iron-icon>
+              Contact DIG Support
+            </paper-icon-item>
+          </div>
+        </iron-dropdown>
+      </paper-toolbar>
+
+      <!-- search fields dropdown panel -->
+      <paper-dialog
+        class="small"
+        modal
+        opened="{{searchFieldsDialogOpened}}"
+        entry-animation="fade-in-animation"
+        exit-animation="fade-out-animation"
+        on-opened-changed="toggleProcessRequest">
+
+        <div class="search-fields-dialog">
+          <!-- searchFields -->
+          <div class="layout horizontal">
+            <div class="layout vertical right-space search-labels">
+              <div class="name instructions">Instructions:</div>
+              <div class="name date">Dates:</div>
+              <div class="name rows-2">Identifiers:</div>
+              <div class="name rows-1">Location:</div>
+              <div class="name rows-3">Provider:</div>
+              <div class="name rows-1">Ad:</div>
+              <div class="name rows-1">High Risk:</div>
+            </div>
+
+            <div class="layout vertical">
+              <div class="text">
+                Enter words or phrases as search terms in one or more of the text fields below.
+                Click the Search button or press ENTER when finished.
+                Use commas to separate search terms.
+                Example:  <strong>New York, Washington</strong>
+              </div>
+
+              <div class="layout horizontal date-fields-container">
+                <date-picker-display
+                  facet-selection="{{dateStartConfig.value}}"
+                  key="{{dateStartConfig.key}}"
+                  prefix-label="{{dateStartConfig.prefixLabel}}"
+                  date-identifier="{{dateStartConfig.dateIdentifier}}"
+                  title="{{dateStartConfig.title}}">
+                </date-picker-display>
+                <date-picker-display
+                  facet-selection="{{dateEndConfig.value}}"
+                  key="{{dateEndConfig.key}}"
+                  prefix-label="{{dateEndConfig.prefixLabel}}"
+                  date-identifier="{{dateEndConfig.dateIdentifier}}"
+                  title="{{dateEndConfig.title}}">
+                </date-picker-display>
+              </div>
+
+              <div class="layout horizontal wrap">
+                <paper-input
+                  id$="input_[[phoneConfig.key]]"
+                  label="[[phoneConfig.title]]"
+                  value="{{phoneConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[emailConfig.key]]"
+                  label="[[emailConfig.title]]"
+                  value="{{emailConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[socialConfig.key]]"
+                  label="[[socialConfig.title]]"
+                  value="{{socialConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[reviewConfig.key]]"
+                  label="[[reviewConfig.title]]"
+                  value="{{reviewConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+              </div>
+
+              <div class="layout horizontal wrap">
+                <paper-input
+                  id$="input_[[cityConfig.key]]"
+                  label="[[cityConfig.title]]"
+                  value="{{cityConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[regionConfig.key]]"
+                  label="[[regionConfig.title]]"
+                  value="{{regionConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <!-- TODO Hiding country for now...
+                <paper-input
+                  id$="input_[[countryConfig.key]]"
+                  label="[[countryConfig.title]]"
+                  value="{{countryConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                -->
+              </div>
+
+              <div class="layout horizontal wrap">
+                <paper-input
+                  id$="input_[[nameConfig.key]]"
+                  label="[[nameConfig.title]]"
+                  value="{{nameConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[ageConfig.key]]"
+                  label="[[ageConfig.title]]"
+                  value="{{ageConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[ethnicityConfig.key]]"
+                  label="[[ethnicityConfig.title]]"
+                  value="{{ethnicityConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[eyeColorConfig.key]]"
+                  label="[[eyeColorConfig.title]]"
+                  value="{{eyeColorConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[hairColorConfig.key]]"
+                  label="[[hairColorConfig.title]]"
+                  value="{{hairColorConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[heightConfig.key]]"
+                  label="[[heightConfig.title]]"
+                  value="{{heightConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[weightConfig.key]]"
+                  label="[[weightConfig.title]]"
+                  value="{{weightConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[servicesConfig.key]]"
+                  label="[[servicesConfig.title]]"
+                  value="{{servicesConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[priceConfig.key]]"
+                  label="[[priceConfig.title]]"
+                  value="{{priceConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+              </div>
+
+              <div class="layout horizontal wrap">
+                <paper-input
+                  id$="input_[[websiteConfig.key]]"
+                  label="[[websiteConfig.title]]"
+                  value="{{websiteConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[titleConfig.key]]"
+                  label="[[titleConfig.title]]"
+                  value="{{titleConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[descriptionConfig.key]]"
+                  label="[[descriptionConfig.title]]"
+                  value="{{descriptionConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+              </div>
+
+              <div class="layout horizontal wrap">
+                <paper-dropdown-menu
+                  id$="input_[[riskConfig.key]]"
+                  label="[[riskConfig.title]]"
+                  value="{{riskConfig.value}}"
+                  vertical-align="bottom"
+                  no-label-float>
+
+                  <paper-listbox id="riskList" class="dropdown-content" selected="0">
+                    <paper-item>Any</paper-item>
+                    <paper-item>Yes</paper-item>
+                    <paper-item>No</paper-item>
+                  </paper-listbox>
+                </paper-dropdown-menu>
+              </div>
+            </div>
+          </div>
+
+          <div class="horizontal layout center-justified search-buttons">
+            <button-action class="inline" text="Search" on-tap="handleSearch"></button-action>
+            <button-action class="inline" text="Reset" on-tap="resetSearchFields"></button-action>
+            <button-action class="inline" text="Cancel" on-tap="cancelSearch"></button-action>
+          </div>
+        </div>
+      </paper-dialog>
+
+      <paper-drawer-panel drawer-width="320px">
+
+        <!-- Sidebar on left side -->
+        <paper-header-panel drawer>
+          <paper-toolbar class="drawer-header">
+            <div class="layout vertical">
+              <!-- TODO
+              <elastic-sort-input class="layout horizontal" field="fields.posting_date.strict.key" selected="{{searchParameters.sort}}">
+              </elastic-sort-input>
+              <elastic-sort input-string="[[searchParameters.sort]]" sort="{{sort}}"></elastic-sort>
+              -->
+
+              <div class="h-divider"></div>
+
+              <template is="dom-if" if="[[!noSearchParameters(searchParameters.*)]]">
+                <div class="selected-facets-header">Search Terms</div>
+              </template>
+
+              <template is="dom-if" if="[[noSearchParameters(searchParameters.*)]]">
+                <div class="selected-facets-header">No Search Terms</div>
+              </template>
+
+              <!-- Ensure that facet interactions still work after user hits cancel in search dialog -->
+              <!-- TODO: move to component as observer when index.html is cleaned up -->
+              <span>{{toggleProcessRequest(searchParameters.*)}}</span>
+
+              <div class="layout horizontal wrap">
+                <!-- Nesting keys for start and end dates under postingDate to be consistent with how other -->
+                <!-- facetSelections are represented. -->
+                <selected-facets-display facet-selection="{{searchParameters.postingDate}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.website}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.country}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.region}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.city}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.phone}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.email}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.social}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.services}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.price}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.name}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.gender}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.age}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.ethnicity}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.eyeColor}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.hairColor}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.height}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.weight}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.review}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.risk}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.image}}"></selected-facets-display>
+              </div>
+
+              <div class="h-divider"></div>
+            </div>
+          </paper-toolbar>
+
+          <iron-pages attr-for-selected="data-type" selected="ads">
+            <section data-type="ads">
+              <div class="layout horizontal facet filter-header" title="Toggle All Facets" on-tap="toggleAllFacetLists">
+                <span class="flex">Facets</span>
+                <span>[[getToggleAllFacetsText(facetListsExpanded)]]</span>
+                <iron-icon icon="[[getToggleAllFacetsIcon(facetListsExpanded)]]"</iron-icon>
+              </div>
+
+              <div class="h-divider"></div>
+
+              <div id="date" class="layout horizontal facet filter-header" title="Toggle Dates" on-tap="toggleList">
+                <span class="flex">Date</span>
+                <iron-icon id="date-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="date-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <iron-collapse id="date-list" class="filter-list" opened>
+                <date-picker-display
+                  facet-selection="{{searchParameters.postingDate}}"
+                  key="[[dateStartConfig.key]]"
+                  title="[[dateStartConfig.title]]"
+                  prefix-label="[[dateStartConfig.prefixLabel]]"
+                  date-identifier="[[dateStartConfig.dateIdentifier]]">
+                </date-picker-display>
+
+                <date-picker-display
+                  facet-selection="{{searchParameters.postingDate}}"
+                  key="[[dateEndConfig.key]]"
+                  title="[[dateEndConfig.title]]"
+                  prefix-label="[[dateEndConfig.prefixLabel]]"
+                  date-identifier="[[dateEndConfig.dateIdentifier]]">
+                </date-picker-display>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="phone" class="layout horizontal facet filter-header" title="Toggle [[phoneConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(phoneConfig.title, phoneResultList)]]</span>
+                <iron-icon id="phone-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="phone-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[phoneConfig.key]]"
+                field="[[phoneConfig.aggregationField]]"
+                count="{{phoneCount}}"
+                ejs-aggregation="{{phoneAgg}}"
+                type="terms"
+                order="{{phoneSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[phoneResult]]"
+                data-in2="[[phoneConfig.key]]"
+                data-out="{{phoneResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.phoneList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[phoneConfig.title]]"
+                list="{{phoneSelectedList}}"
+                object="{{searchParameters.phone}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{phoneCount}}"
+                    items="[[phoneResultList]]"
+                    error="[[phoneError]]"
+                    loading="[[phoneLoading]]"
+                    item-type="[[phoneConfig.title]]"
+                    count-type="Ads"
+                    order-by="{{phoneSortOrder}}"
+                    selected-ids="{{phoneSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <div class="self-end">
+                  <template is="dom-if" if="[[phoneResultList.length]]">
+                    <aggregation-sort order-by="{{phoneSortOrder}}"></aggregation-sort>
+                  </template>
+                </div>
+              </div>
+
+              <select-all
+                list="[[phoneResultList]]"
+                loading="[[phoneLoading]]"
+                selected="{{phoneSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="phone-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  items="[[phoneResultList]]"
+                  selected-ids="{{phoneSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[phoneError]]" message="{{phoneErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[phoneResultList.length]]"
+                  error="[[phoneErrorMessage]]"
+                  loading="[[phoneLoading]]"
+                  empty="No [[phoneConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="email" class="layout horizontal facet filter-header" title="Toggle [[emailConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(emailConfig.title, emailResultList)]]</span>
+                <iron-icon id="email-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="email-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[emailConfig.key]]"
+                field="[[emailConfig.aggregationField]]"
+                count="{{emailCount}}"
+                ejs-aggregation="{{emailAgg}}"
+                type="terms"
+                order="{{emailSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[emailResult]]"
+                data-in2="[[emailConfig.key]]"
+                data-out="{{emailResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[emailConfig.title]]"
+                list="{{emailSelectedList}}"
+                object="{{searchParameters.email}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{emailCount}}"
+                    items="[[emailResultList]]"
+                    error="[[emailError]]"
+                    loading="[[emailLoading]]"
+                    item-type="[[emailConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{emailSortOrder}}"
+                    selected-ids="{{emailSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[emailResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{emailSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[emailResultList]]"
+                loading="[[emailLoading]]"
+                selected="{{emailSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="email-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[emailResultList]]"
+                  selected-ids="{{emailSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[emailError]]" message="{{emailErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[emailResultList.length]]"
+                  error="[[emailErrorMessage]]"
+                  loading="[[emailLoading]]"
+                  empty="No [[emailConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="social" class="layout horizontal facet filter-header" title="Toggle [[socialConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(socialConfig.title, socialResultList)]]</span>
+                <iron-icon id="social-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="social-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[socialConfig.key]]"
+                field="[[socialConfig.aggregationField]]"
+                count="{{socialCount}}"
+                ejs-aggregation="{{socialAgg}}"
+                type="terms"
+                order="{{socialSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[socialResult]]"
+                data-in2="[[socialConfig.key]]"
+                data-out="{{socialResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.socialMediaList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[socialConfig.title]]"
+                list="{{socialSelectedList}}"
+                object="{{searchParameters.social}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{socialCount}}"
+                    items="[[socialResultList]]"
+                    error="[[socialError]]"
+                    loading="[[socialLoading]]"
+                    item-type="[[socialConfig.title]]"
+                    count-type="Ads"
+                    order-by="{{socialSortOrder}}"
+                    selected-ids="{{socialSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[socialResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{socialSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[socialResultList]]"
+                loading="[[socialLoading]]"
+                selected="{{socialSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="social-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  items="[[socialResultList]]"
+                  selected-ids="{{socialSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[socialError]]" message="{{socialErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[socialResultList.length]]"
+                  error="[[socialErrorMessage]]"
+                  loading="[[socialLoading]]"
+                  empty="No [[socialConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="review" class="layout horizontal facet filter-header" title="Toggle [[reviewConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(reviewConfig.title, reviewResultList)]]</span>
+                <iron-icon id="review-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="review-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[reviewConfig.key]]"
+                field="[[reviewConfig.aggregationField]]"
+                count="{{reviewCount}}"
+                ejs-aggregation="{{reviewAgg}}"
+                type="terms"
+                order="{{reviewSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[reviewResult]]"
+                data-in2="[[reviewConfig.key]]"
+                data-out="{{reviewResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[reviewConfig.title]]"
+                list="{{reviewSelectedList}}"
+                object="{{searchParameters.review}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{reviewCount}}"
+                    items="[[reviewResultList]]"
+                    error="[[reviewError]]"
+                    loading="[[reviewLoading]]"
+                    item-type="[[reviewConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{reviewSortOrder}}"
+                    selected-ids="{{reviewSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[reviewResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{reviewSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[reviewResultList]]"
+                loading="[[reviewLoading]]"
+                selected="{{reviewSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="review-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[reviewResultList]]"
+                  selected-ids="{{reviewSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[reviewError]]" message="{{reviewErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[reviewResultList.length]]"
+                  error="[[reviewErrorMessage]]"
+                  loading="[[reviewLoading]]"
+                  empty="No [[reviewConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="city" class="layout horizontal facet filter-header" title="Toggle [[cityConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(cityConfig.title, cityResultList)]]</span>
+                <iron-icon id="city-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="city-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[cityConfig.key]]"
+                field="[[cityConfig.aggregationField]]"
+                count="{{cityCount}}"
+                ejs-aggregation="{{cityAgg}}"
+                type="terms"
+                order="{{citySortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[cityResult]]"
+                data-in2="[[cityConfig.key]]"
+                data-out="{{cityResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.cityList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[cityConfig.title]]"
+                list="{{citySelectedList}}"
+                object="{{searchParameters.city}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{cityCount}}"
+                    items="[[cityResultList]]"
+                    error="[[cityError]]"
+                    loading="[[cityLoading]]"
+                    item-type="[[cityConfig.title]]"
+                    count-type="Ads"
+                    order-by="{{citySortOrder}}"
+                    selected-ids="{{citySelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[cityResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{citySortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[cityResultList]]"
+                loading="[[cityLoading]]"
+                selected="{{citySelectedList}}">
+              </select-all>
+
+              <iron-collapse id="city-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  items="[[cityResultList]]"
+                  selected-ids="{{citySelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[cityError]]" message="{{cityErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[cityResultList.length]]"
+                  error="[[cityErrorMessage]]"
+                  loading="[[cityLoading]]"
+                  empty="No [[cityConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="region" class="layout horizontal facet filter-header" title="Toggle [[regionConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(regionConfig.title, regionResultList)]]</span>
+                <iron-icon id="region-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="region-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[regionConfig.key]]"
+                field="[[regionConfig.aggregationField]]"
+                count="{{regionCount}}"
+                ejs-aggregation="{{regionAgg}}"
+                type="terms"
+                order="{{regionSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[regionResult]]"
+                data-in2="[[regionConfig.key]]"
+                data-out="{{regionResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[regionConfig.title]]"
+                list="{{regionSelectedList}}"
+                object="{{searchParameters.region}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{regionCount}}"
+                    items="[[regionResultList]]"
+                    error="[[regionError]]"
+                    loading="[[regionLoading]]"
+                    item-type="[[regionConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{regionSortOrder}}"
+                    selected-ids="{{regionSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[regionResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{regionSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[regionResultList]]"
+                loading="[[regionLoading]]"
+                selected="{{regionSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="region-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[regionResultList]]"
+                  selected-ids="{{regionSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[regionError]]" message="{{regionErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[regionResultList.length]]"
+                  error="[[regionErrorMessage]]"
+                  loading="[[regionLoading]]"
+                  empty="No [[regionConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <!-- TODO Hiding country for now...
+              <div id="country" class="layout horizontal facet filter-header" title="Toggle [[countryConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(countryConfig.title, countryResultList)]]</span>
+                <iron-icon id="country-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="country-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[countryConfig.key]]"
+                field="[[countryConfig.aggregationField]]"
+                count="{{countryCount}}"
+                ejs-aggregation="{{countryAgg}}"
+                type="terms"
+                order="{{countrySortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[countryResult]]"
+                data-in2="[[countryConfig.key]]"
+                data-out="{{countryResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[countryConfig.title]]"
+                list="{{countrySelectedList}}"
+                object="{{searchParameters.country}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{countryCount}}"
+                    items="[[countryResultList]]"
+                    error="[[countryError]]"
+                    loading="[[countryLoading]]"
+                    item-type="[[countryConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{countrySortOrder}}"
+                    selected-ids="{{countrySelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[countryResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{countrySortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[countryResultList]]"
+                loading="[[countryLoading]]"
+                selected="{{countrySelectedList}}">
+              </select-all>
+
+              <iron-collapse id="country-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[countryResultList]]"
+                  selected-ids="{{countrySelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[countryError]]" message="{{countryErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[countryResultList.length]]"
+                  error="[[countryErrorMessage]]"
+                  loading="[[countryLoading]]"
+                  empty="No [[countryConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+              -->
+
+              <div id="name" class="layout horizontal facet filter-header" title="Toggle [[nameConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(nameConfig.title, nameResultList)]]</span>
+                <iron-icon id="name-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="name-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[nameConfig.key]]"
+                field="[[nameConfig.aggregationField]]"
+                count="{{nameCount}}"
+                ejs-aggregation="{{nameAgg}}"
+                type="terms"
+                order="{{nameSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[nameResult]]"
+                data-in2="[[nameConfig.key]]"
+                data-out="{{nameResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[nameConfig.title]]"
+                list="{{nameSelectedList}}"
+                object="{{searchParameters.name}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{nameCount}}"
+                    items="[[nameResultList]]"
+                    error="[[nameError]]"
+                    loading="[[nameLoading]]"
+                    item-type="[[nameConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{nameSortOrder}}"
+                    selected-ids="{{nameSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[nameResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{nameSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[nameResultList]]"
+                loading="[[nameLoading]]"
+                selected="{{nameSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="name-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[nameResultList]]"
+                  selected-ids="{{nameSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[nameError]]" message="{{nameErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[nameResultList.length]]"
+                  error="[[nameErrorMessage]]"
+                  loading="[[nameLoading]]"
+                  empty="No [[nameConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <!-- TODO Hiding gender for now...
+              <div id="gender" class="layout horizontal facet filter-header" title="Toggle [[genderConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(genderConfig.title, genderResultList)]]</span>
+                <iron-icon id="gender-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="gender-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[genderConfig.key]]"
+                field="[[genderConfig.aggregationField]]"
+                count="{{genderCount}}"
+                ejs-aggregation="{{genderAgg}}"
+                type="terms"
+                order="{{genderSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[genderResult]]"
+                data-in2="[[genderConfig.key]]"
+                data-out="{{genderResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[genderConfig.title]]"
+                list="{{genderSelectedList}}"
+                object="{{searchParameters.gender}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{genderCount}}"
+                    items="[[genderResultList]]"
+                    error="[[genderError]]"
+                    loading="[[genderLoading]]"
+                    item-type="[[genderConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{genderSortOrder}}"
+                    selected-ids="{{genderSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[genderResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{genderSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[genderResultList]]"
+                loading="[[genderLoading]]"
+                selected="{{genderSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="gender-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[genderResultList]]"
+                  selected-ids="{{genderSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[genderError]]" message="{{genderErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[genderResultList.length]]"
+                  error="[[genderErrorMessage]]"
+                  loading="[[genderLoading]]"
+                  empty="No [[genderConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+              -->
+
+              <div id="age" class="layout horizontal facet filter-header" title="Toggle [[ageConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(ageConfig.title, ageResultList)]]</span>
+                <iron-icon id="age-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="age-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[ageConfig.key]]"
+                field="[[ageConfig.aggregationField]]"
+                count="{{ageCount}}"
+                ejs-aggregation="{{ageAgg}}"
+                type="terms"
+                order="{{ageSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[ageResult]]"
+                data-in2="[[ageConfig.key]]"
+                data-out="{{ageResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[ageConfig.title]]"
+                list="{{ageSelectedList}}"
+                object="{{searchParameters.age}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{ageCount}}"
+                    items="[[ageResultList]]"
+                    error="[[ageError]]"
+                    loading="[[ageLoading]]"
+                    item-type="[[ageConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{ageSortOrder}}"
+                    selected-ids="{{ageSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[ageResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{ageSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[ageResultList]]"
+                loading="[[ageLoading]]"
+                selected="{{ageSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="age-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[ageResultList]]"
+                  selected-ids="{{ageSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[ageError]]" message="{{ageErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[ageResultList.length]]"
+                  error="[[ageErrorMessage]]"
+                  loading="[[ageLoading]]"
+                  empty="No [[ageConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="ethnicity" class="layout horizontal facet filter-header" title="Toggle [[ethnicityConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(ethnicityConfig.title, ethnicityResultList)]]</span>
+                <iron-icon id="ethnicity-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="ethnicity-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[ethnicityConfig.key]]"
+                field="[[ethnicityConfig.aggregationField]]"
+                count="{{ethnicityCount}}"
+                ejs-aggregation="{{ethnicityAgg}}"
+                type="terms"
+                order="{{ethnicitySortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[ethnicityResult]]"
+                data-in2="[[ethnicityConfig.key]]"
+                data-out="{{ethnicityResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[ethnicityConfig.title]]"
+                list="{{ethnicitySelectedList}}"
+                object="{{searchParameters.ethnicity}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{ethnicityCount}}"
+                    items="[[ethnicityResultList]]"
+                    error="[[ethnicityError]]"
+                    loading="[[ethnicityLoading]]"
+                    item-type="[[ethnicityConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{ethnicitySortOrder}}"
+                    selected-ids="{{ethnicitySelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[ethnicityResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{ethnicitySortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[ethnicityResultList]]"
+                loading="[[ethnicityLoading]]"
+                selected="{{ethnicitySelectedList}}">
+              </select-all>
+
+              <iron-collapse id="ethnicity-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[ethnicityResultList]]"
+                  selected-ids="{{ethnicitySelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[ethnicityError]]" message="{{ethnicityErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[ethnicityResultList.length]]"
+                  error="[[ethnicityErrorMessage]]"
+                  loading="[[ethnicityLoading]]"
+                  empty="No [[ethnicityConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="eye-color" class="layout horizontal facet filter-header" title="Toggle [[eyeColorConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(eyeColorConfig.title, eyeColorResultList)]]</span>
+                <iron-icon id="eye-color-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="eye-color-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[eyeColorConfig.key]]"
+                field="[[eyeColorConfig.aggregationField]]"
+                count="{{eyeColorCount}}"
+                ejs-aggregation="{{eyeColorAgg}}"
+                type="terms"
+                order="{{eyeColorSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[eyeColorResult]]"
+                data-in2="[[eyeColorConfig.key]]"
+                data-out="{{eyeColorResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[eyeColorConfig.title]]"
+                list="{{eyeColorSelectedList}}"
+                object="{{searchParameters.eyeColor}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{eyeColorCount}}"
+                    items="[[eyeColorResultList]]"
+                    error="[[eyeColorError]]"
+                    loading="[[eyeColorLoading]]"
+                    item-type="[[eyeColorConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{eyeColorSortOrder}}"
+                    selected-ids="{{eyeColorSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[eyeColorResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{eyeColorSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[eyeColorResultList]]"
+                loading="[[eyeColorLoading]]"
+                selected="{{eyeColorSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="eye-color-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[eyeColorResultList]]"
+                  selected-ids="{{eyeColorSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[eyeColorError]]" message="{{eyeColorErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[eyeColorResultList.length]]"
+                  error="[[eyeColorErrorMessage]]"
+                  loading="[[eyeColorLoading]]"
+                  empty="No [[eyeColorConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="hair-color" class="layout horizontal facet filter-header" title="Toggle [[hairColorConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(hairColorConfig.title, hairColorResultList)]]</span>
+                <iron-icon id="hair-color-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="hair-color-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[hairColorConfig.key]]"
+                field="[[hairColorConfig.aggregationField]]"
+                count="{{hairColorCount}}"
+                ejs-aggregation="{{hairColorAgg}}"
+                type="terms"
+                order="{{hairColorSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[hairColorResult]]"
+                data-in2="[[hairColorConfig.key]]"
+                data-out="{{hairColorResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[hairColorConfig.title]]"
+                list="{{hairColorSelectedList}}"
+                object="{{searchParameters.hairColor}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{hairColorCount}}"
+                    items="[[hairColorResultList]]"
+                    error="[[hairColorError]]"
+                    loading="[[hairColorLoading]]"
+                    item-type="[[hairColorConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{hairColorSortOrder}}"
+                    selected-ids="{{hairColorSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <div class="self-end">
+                  <template is="dom-if" if="[[hairColorResultList.length]]">
+                    <aggregation-sort order-by="{{hairColorSortOrder}}"></aggregation-sort>
+                  </template>
+                </div>
+              </div>
+
+              <select-all
+                list="[[hairColorResultList]]"
+                loading="[[hairColorLoading]]"
+                selected="{{hairColorSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="hair-color-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[hairColorResultList]]"
+                  selected-ids="{{hairColorSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[hairColorError]]" message="{{hairColorErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[hairColorResultList.length]]"
+                  error="[[hairColorErrorMessage]]"
+                  loading="[[hairColorLoading]]"
+                  empty="No [[hairColorConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="height" class="layout horizontal facet filter-header" title="Toggle [[heightConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(heightConfig.title, heightResultList)]]</span>
+                <iron-icon id="height-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="height-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[heightConfig.key]]"
+                field="[[heightConfig.aggregationField]]"
+                count="{{heightCount}}"
+                ejs-aggregation="{{heightAgg}}"
+                type="terms"
+                order="{{heightSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[heightResult]]"
+                data-in2="[[heightConfig.key]]"
+                data-out="{{heightResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[heightConfig.title]]"
+                list="{{heightSelectedList}}"
+                object="{{searchParameters.height}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{heightCount}}"
+                    items="[[heightResultList]]"
+                    error="[[heightError]]"
+                    loading="[[heightLoading]]"
+                    item-type="[[heightConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{heightSortOrder}}"
+                    selected-ids="{{heightSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[heightResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{heightSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[heightResultList]]"
+                loading="[[heightLoading]]"
+                selected="{{heightSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="height-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[heightResultList]]"
+                  selected-ids="{{heightSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[heightError]]" message="{{heightErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[heightResultList.length]]"
+                  error="[[heightErrorMessage]]"
+                  loading="[[heightLoading]]"
+                  empty="No [[heightConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="weight" class="layout horizontal facet filter-header" title="Toggle [[weightConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(weightConfig.title, weightResultList)]]</span>
+                <iron-icon id="weight-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="weight-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[weightConfig.key]]"
+                field="[[weightConfig.aggregationField]]"
+                count="{{weightCount}}"
+                ejs-aggregation="{{weightAgg}}"
+                type="terms"
+                order="{{weightSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[weightResult]]"
+                data-in2="[[weightConfig.key]]"
+                data-out="{{weightResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[weightConfig.title]]"
+                list="{{weightSelectedList}}"
+                object="{{searchParameters.weight}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{weightCount}}"
+                    items="[[weightResultList]]"
+                    error="[[weightError]]"
+                    loading="[[weightLoading]]"
+                    item-type="[[weightConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{weightSortOrder}}"
+                    selected-ids="{{weightSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[weightResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{weightSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[weightResultList]]"
+                loading="[[weightLoading]]"
+                selected="{{weightSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="weight-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[weightResultList]]"
+                  selected-ids="{{weightSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[weightError]]" message="{{weightErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[weightResultList.length]]"
+                  error="[[weightErrorMessage]]"
+                  loading="[[weightLoading]]"
+                  empty="No [[weightConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="services" class="layout horizontal facet filter-header" title="Toggle [[servicesConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(servicesConfig.title, servicesResultList)]]</span>
+                <iron-icon id="services-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="services-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[servicesConfig.key]]"
+                field="[[servicesConfig.aggregationField]]"
+                count="{{servicesCount}}"
+                ejs-aggregation="{{servicesAgg}}"
+                type="terms"
+                order="{{servicesSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[servicesResult]]"
+                data-in2="[[servicesConfig.key]]"
+                data-out="{{servicesResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[servicesConfig.title]]"
+                list="{{servicesSelectedList}}"
+                object="{{searchParameters.services}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{servicesCount}}"
+                    items="[[servicesResultList]]"
+                    error="[[servicesError]]"
+                    loading="[[servicesLoading]]"
+                    item-type="[[servicesConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{servicesSortOrder}}"
+                    selected-ids="{{servicesSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[servicesResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{servicesSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[servicesResultList]]"
+                loading="[[servicesLoading]]"
+                selected="{{servicesSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="services-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[servicesResultList]]"
+                  selected-ids="{{servicesSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[servicesError]]" message="{{servicesErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[servicesResultList.length]]"
+                  error="[[servicesErrorMessage]]"
+                  loading="[[servicesLoading]]"
+                  empty="No [[servicesConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="price" class="layout horizontal facet filter-header" title="Toggle [[priceConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(priceConfig.title, priceResultList)]]</span>
+                <iron-icon id="price-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="price-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[priceConfig.key]]"
+                field="[[priceConfig.aggregationField]]"
+                count="{{priceCount}}"
+                ejs-aggregation="{{priceAgg}}"
+                type="terms"
+                order="{{priceSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[priceResult]]"
+                data-in2="[[priceConfig.key]]"
+                data-out="{{priceResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[priceConfig.title]]"
+                list="{{priceSelectedList}}"
+                object="{{searchParameters.price}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{priceCount}}"
+                    items="[[priceResultList]]"
+                    error="[[priceError]]"
+                    loading="[[priceLoading]]"
+                    item-type="[[priceConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{priceSortOrder}}"
+                    selected-ids="{{priceSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[priceResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{priceSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[priceResultList]]"
+                loading="[[priceLoading]]"
+                selected="{{priceSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="price-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[priceResultList]]"
+                  selected-ids="{{priceSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[priceError]]" message="{{priceErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[priceResultList.length]]"
+                  error="[[priceErrorMessage]]"
+                  loading="[[priceLoading]]"
+                  empty="No [[priceConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="website" class="layout horizontal facet filter-header" title="Toggle [[websiteConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(websiteConfig.title, websiteResultList)]]</span>
+                <iron-icon id="website-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="website-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[websiteConfig.key]]"
+                field="[[websiteConfig.aggregationField]]"
+                count="{{websiteCount}}"
+                ejs-aggregation="{{websiteAgg}}"
+                type="terms"
+                order="{{websiteSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[websiteResult]]"
+                data-in2="[[websiteConfig.key]]"
+                data-out="{{websiteResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[websiteConfig.title]]"
+                list="{{websiteSelectedList}}"
+                object="{{searchParameters.website}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{websiteCount}}"
+                    items="[[websiteResultList]]"
+                    error="[[websiteError]]"
+                    loading="[[websiteLoading]]"
+                    item-type="[[websiteConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{websiteSortOrder}}"
+                    selected-ids="{{websiteSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[websiteResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{websiteSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[websiteResultList]]"
+                loading="[[websiteLoading]]"
+                selected="{{websiteSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="website-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[websiteResultList]]"
+                  selected-ids="{{websiteSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[websiteError]]" message="{{websiteErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[websiteResultList.length]]"
+                  error="[[websiteErrorMessage]]"
+                  loading="[[websiteLoading]]"
+                  empty="No [[websiteConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="risk" class="layout horizontal facet filter-header" title="Toggle [[riskConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(riskConfig.title, riskResultList)]]</span>
+                <iron-icon id="risk-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="risk-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[riskConfig.key]]"
+                field="[[riskConfig.aggregationField]]"
+                count="{{riskCount}}"
+                ejs-aggregation="{{riskAgg}}"
+                type="terms"
+                order="{{riskSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[riskResult]]"
+                data-in2="[[riskConfig.key]]"
+                data-out="{{riskResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[riskConfig.title]]"
+                list="{{riskSelectedList}}"
+                object="{{searchParameters.risk}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{riskCount}}"
+                    items="[[riskResultList]]"
+                    error="[[riskError]]"
+                    loading="[[riskLoading]]"
+                    item-type="[[riskConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{riskSortOrder}}"
+                    selected-ids="{{riskSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[riskResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{riskSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[riskResultList]]"
+                loading="[[riskLoading]]"
+                selected="{{riskSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="risk-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[riskResultList]]"
+                  selected-ids="{{riskSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[riskError]]" message="{{riskErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[riskResultList.length]]"
+                  error="[[riskErrorMessage]]"
+                  loading="[[riskLoading]]"
+                  empty="No [[riskConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <!-- TODO
+              <div class="h-divider"></div>
+
+              <div id="image" class="layout horizontal facet filter-header" title="Toggle [[imageConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(imageConfig.title, imageResultList)]]</span>
+                <iron-icon id="image-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="image-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="image"
+                field="fields.image.relaxed.key"
+                count="{{imageCount}}"
+                ejs-aggregation="{{imageAgg}}"
+                type="terms"
+                order="{{imageSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[imageResult]]"
+                data-in2="image"
+                data-out="{{imageResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[imageConfig.title]]"
+                list="{{imageSelectedList}}"
+                object="{{searchParameters.image}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{imageCount}}"
+                    items="[[imageResultList]]"
+                    image-style-class="[[getBlurStyleClass(blurImages)]]"
+                    error="[[imageError]]"
+                    loading="[[imageLoading]]"
+                    item-type="[[imageConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{imageSortOrder}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[imageResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{imageSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <iron-collapse id="image-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[imageResultList]]"
+                  selected-ids="{{imageSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[imageError]]" message="{{imageErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[imageResultList.length]]"
+                  error="[[imageErrorMessage]]"
+                  loading="[[imageLoading]]"
+                  empty="No [[imageConfig.title]]">
+                </status-text>
+              </iron-collapse>
+              -->
+            </section>
+
+            <section data-type="image"></section>
+          </iron-pages>
+        </paper-header-panel>
+
+        <!-- Main content on right side -->
+        <paper-header-panel main id="searchPanel">
+          <div id="searchTitle" class="layout horizontal">
+            <template is="dom-if" if="[[!searchError]]">
+              <div class="paper-font-title flex">[[recordsListTitle]]</div>
+            </template>
+
+            <template is="dom-if" if="[[searchError]]">
+              <elastic-error error="[[searchError]]" message="{{searchErrorMessage}}"></elastic-error>
+              <div class="paper-font-title flex">
+                [[searchErrorMessage]]
+              </div>
+            </template>
+
+            <export-button
+              data="[[shownRecords]]"
+              download-image-url="[[config.downloadImageUrl]]"
+              csv-transform-function="[[clientConfig.transforms.offer.createExportDataForCsv]]"
+              pdf-transform-function="[[clientConfig.transforms.offer.createExportDataForPdf]]">
+            </export-button>
+          </div>
+
+          <records-list id="searchResults"
+            annotation-manager="[[annotationManager]]"
+            client="[[esclient]]"
+            image-aggregation-field="url.raw"
+            image-aggregation-name="image"
+            image-index-name="[[config.elasticIndex]]"
+            image-index-type="images"
+            image-query-field="isImagePartOf.uri"
+            image-transform-function="[[clientConfig.transforms.image.images]]"
+            new-tab="true"
+            item-name-property="title"
+            query-results="{{records.data}}"
+            total-results="{{records.count}}"
+            shown-results="{{shownRecords}}"
+            page="{{pageNum}}"
+            page-size="20"
+            loading="{{searchLoading}}"
+            type="Result"
+            records-list-title="{{recordsListTitle}}"
+            current-user="[[config.username]]"
+            blur="[[blurImages]]"
+            notification-query-date="{{notificationDate}}">
+          </records-list>
+        </paper-header-panel>
+
+      </paper-drawer-panel>
+
+    </paper-header-panel>
+
+  </template>
+
+  <!-- Need to include dependencies here for IE -->
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="behaviors/array-behavior.js"></script>
+  <script src="behaviors/browser-behavior.js"></script>
+  <script src="behaviors/filter-behavior.js"></script>
+  <script src="behaviors/phone-behavior.js"></script>
+  <script src="behaviors/state-behavior.js"></script>
+
+  <script>
+    (function(document) {
+      /* globals _, DigBehaviors */
+      var app = document.querySelector('#app');
+
+      app.facetListsExpanded = true;
+
+      app.searchParameters = DigBehaviors.StateBehavior.buildSearchState({});
+
+      app.params = DigBehaviors.BrowserBehavior.getUrlParameters(window.location.search);
+
+      DigBehaviors.BrowserBehavior.removeStateParameter(window.history, window.location);
+
+      app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
+
+      app.ageConfig = {
+        key: 'age',
+        title: 'Age of Provider',
+        queryField: 'fields.age.relaxed.name',
+        aggregationField: 'fields.age.strict.key',
+        value: ''
+      };
+      app.cityConfig = {
+        key: 'city',
+        title: 'City',
+        queryField: 'fields.city.relaxed.name',
+        aggregationField: 'fields.city.strict.key',
+        value: ''
+      };
+      app.countryConfig = {
+        key: 'country',
+        title: 'Country',
+        queryField: 'fields.country.relaxed.name',
+        aggregationField: 'fields.country.strict.key',
+        value: ''
+      };
+      app.dateStartConfig = {
+        key: 'dateStart',
+        title: 'From',
+        queryField: 'fields.posting_date.strict.key',
+        aggregationField: 'fields.posting_date.strict.key',
+        value: {},
+        prefixLabel: 'From',
+        dateIdentifier: 'start'
+      };
+      app.dateEndConfig = {
+        key: 'dateEnd',
+        title: 'To',
+        queryField: 'fields.posting_date.strict.key',
+        aggregationField: 'fields.posting_date.strict.key',
+        value: {},
+        prefixLabel: 'To',
+        dateIdentifier: 'end'
+      };
+      app.descriptionConfig = {
+        key: 'description',
+        title: 'Page',
+        queryField: 'fields.description.relaxed.name',
+        aggregationField: 'fields.description.relaxed.name',
+        value: ''
+      };
+      app.emailConfig = {
+        key: 'email',
+        title: 'Email Address',
+        queryField: 'fields.email.relaxed.name',
+        aggregationField: 'fields.email.strict.key',
+        value: ''
+      };
+      app.ethnicityConfig = {
+        key: 'ethnicity',
+        title: 'Ethnicity of Provider',
+        queryField: 'fields.ethnicity.relaxed.name',
+        aggregationField: 'fields.ethnicity.strict.key',
+        value: ''
+      };
+      app.eyeColorConfig = {
+        key: 'eyeColor',
+        title: 'Eye Color of Provider',
+        queryField: 'fields.eye_color.relaxed.name',
+        aggregationField: 'fields.eye_color.strict.key',
+        value: ''
+      };
+      app.genderConfig = {
+        key: 'gender',
+        title: 'Gender of Provider',
+        queryField: 'fields.gender.relaxed.name',
+        aggregationField: 'fields.gender.strict.key',
+        value: ''
+      };
+      app.hairColorConfig = {
+        key: 'hairColor',
+        title: 'Hair Color of Provider',
+        queryField: 'fields.hair_color.relaxed.name',
+        aggregationField: 'fields.hair_color.strict.key',
+        value: ''
+      };
+      app.heightConfig = {
+        key: 'height',
+        title: 'Height (cm) of Provider',
+        queryField: 'fields.height.relaxed.name',
+        aggregationField: 'fields.height.strict.key',
+        value: ''
+      };
+      app.imageConfig = {
+        key: 'image',
+        title: 'Image',
+        queryField: 'fields.image.relaxed.name',
+        aggregationField: 'fields.image.strict.key',
+        value: ''
+      };
+      app.nameConfig = {
+        key: 'name',
+        title: 'Name of Provider',
+        queryField: 'fields.name.relaxed.name',
+        aggregationField: 'fields.name.strict.key',
+        value: ''
+      };
+      app.phoneConfig = {
+        key: 'phone',
+        title: 'Telephone Number',
+        queryField: 'fields.phone.relaxed.name',
+        aggregationField: 'fields.phone.strict.key',
+        value: ''
+      };
+      app.priceConfig = {
+        key: 'price',
+        title: 'Price of Provider',
+        queryField: 'fields.price.relaxed.name',
+        aggregationField: 'fields.price.strict.key',
+        value: ''
+      };
+      app.regionConfig = {
+        key: 'region',
+        title: 'State/Region',
+        queryField: 'fields.state.relaxed.name',
+        aggregationField: 'fields.state.strict.key',
+        value: ''
+      };
+      app.reviewConfig = {
+        key: 'review',
+        title: 'Review ID',
+        queryField: 'fields.review_id.relaxed.name',
+        aggregationField: 'fields.review_id.strict.key',
+        value: ''
+      };
+      app.riskConfig = {
+        key: 'risk',
+        title: 'High Risk',
+        queryField: 'fields.risk.strict.name',
+        aggregationField: 'fields.risk.strict.key',
+        value: ''
+      };
+      app.servicesConfig = {
+        key: 'services',
+        title: 'Services Provided',
+        queryField: 'fields.service.relaxed.name',
+        aggregationField: 'fields.service.strict.key',
+        value: ''
+      };
+      app.socialConfig = {
+        key: 'social',
+        title: 'Social Media ID',
+        queryField: 'fields.social_media_id.relaxed.name',
+        aggregationField: 'fields.social_media_id.strict.key',
+        value: ''
+      };
+      app.titleConfig = {
+        key: 'title',
+        title: 'Title',
+        queryField: 'fields.title.strict.name',
+        aggregationField: 'fields.title.strict.name',
+        value: ''
+      };
+      app.websiteConfig = {
+        key: 'website',
+        title: 'Website',
+        queryField: 'tld',
+        aggregationField: 'tld.raw',
+        value: ''
+      };
+      app.weightConfig = {
+        key: 'weight',
+        title: 'Weight (kg) of Provider',
+        queryField: 'fields.weight.relaxed.name',
+        aggregationField: 'fields.weight.strict.key',
+        value: ''
+      };
+
+      app.userCanceled = false;
+
+      app.searchFields = [
+        app.ageConfig,
+        app.cityConfig,
+        //app.countryConfig,
+        app.descriptionConfig,
+        app.emailConfig,
+        app.ethnicityConfig,
+        app.eyeColorConfig,
+        //app.genderConfig,
+        app.hairColorConfig,
+        app.heightConfig,
+        app.nameConfig,
+        app.phoneConfig,
+        app.priceConfig,
+        app.regionConfig,
+        app.reviewConfig,
+        app.riskConfig,
+        app.servicesConfig,
+        app.socialConfig,
+        app.titleConfig,
+        app.websiteConfig,
+        app.weightConfig
+      ];
+
+      app.updateSearchParameterAndNotify = function(type, term, title, enabled) {
+        this.searchParameters[type][term] = {
+          category: title,
+          enabled: enabled,
+          key: term,
+          text: term
+        };
+
+        this.notifyPath(['searchParameters', type, '*'], {
+          category: title,
+          enabled: enabled,
+          key: term,
+          text: term
+        });
+      };
+
+      app.updateSearchParameterFromField = function(searchConfig) {
+        var terms = searchConfig.value.split(',').map(function(term) {
+          if(searchConfig.key === 'phone') {
+            return DigBehaviors.PhoneBehavior.getUnformattedPhones(term);
+          }
+          if(searchConfig.key === 'risk') {
+            return term === 'Yes' || term === 'No' ? term.toLowerCase() : '';
+          }
+          return term.trim();
+        });
+
+        _.keys(app.searchParameters[searchConfig.key]).forEach(function(term) {
+          if(app.searchParameters[searchConfig.key][term].enabled && terms.indexOf(term) < 0) {
+            app.updateSearchParameterAndNotify(searchConfig.key, term, searchConfig.title, false);
+          }
+        });
+
+        terms.forEach(function(term) {
+          if(term) {
+            app.updateSearchParameterAndNotify(searchConfig.key, term, searchConfig.title, true);
+          }
+        });
+      };
+
+      app.updateDateAndNotify = function(key, date, text, category, enabled) {
+        this.searchParameters.postingDate[key] = {
+          key: key,
+          category: category,
+          enabled: enabled,
+          date: date,
+          text: text
+        };
+
+        this.notifyPath(['searchParameters', 'postingDate', key], {
+          key: key,
+          category: category,
+          enabled: enabled,
+          date: date,
+          text: text
+        });
+      };
+
+      app.updateDateParameterFromField = function(dateConfig) {
+        if(dateConfig.value[dateConfig.key]) {
+          var dateObject = dateConfig.value[dateConfig.key];
+          app.updateDateAndNotify(dateObject.key, dateObject.date, dateObject.text, dateObject.category, dateObject.enabled);
+        } else if(app.searchParameters.postingDate[dateConfig.key]) {
+          app.searchParameters.postingDate[dateConfig.key] = {};
+          app.notifyPath(['searchParameters', 'postingDate', dateConfig.key], {});
+        }
+      };
+
+      app.updateSearchParametersFromFields = function() {
+        this.searchFields.forEach(function(searchConfig) {
+          app.updateSearchParameterFromField(searchConfig);
+        });
+
+        app.updateDateParameterFromField(app.dateStartConfig);
+        app.updateDateParameterFromField(app.dateEndConfig);
+      };
+
+      app.updateSearchFieldFromParameter = function(searchConfig, index) {
+        searchConfig.value = _.keys(app.searchParameters[searchConfig.key]).filter(function(term) {
+          return app.searchParameters[searchConfig.key][term].enabled;
+        }).map(function(term) {
+          return app.searchParameters[searchConfig.key][term].text;
+        }).join(', ');
+
+        if(searchConfig.key === 'risk') {
+          searchConfig.value = searchConfig.value === 'yes' ? 'Yes' : (searchConfig.value === 'no' ? 'No' : 'Any');
+          document.querySelector('#riskList').selected = searchConfig.value === 'Yes' ? '1' : (searchConfig.value === 'No' ? '2' : '0');
+        }
+
+        // Must update both the property value and the input element value!
+        app.set(['searchFields', index, 'value'], searchConfig.value);
+        document.querySelector('#input_' + searchConfig.key).value = searchConfig.value;
+      };
+
+      app.updateDateFieldFromParameter = function(dateConfig, property) {
+        dateConfig.value = {};
+        if(app.searchParameters.postingDate[dateConfig.key]) {
+          dateConfig.value[dateConfig.key] = app.searchParameters.postingDate[dateConfig.key];
+        }
+        app.set([property + '.value'], dateConfig.value);
+      };
+
+      app.toggleSearchFieldsDialog = function() {
+        // Set or clear the search fields whenever the dialog is opened.
+        if(!this.searchFieldsDialogOpened) {
+          this.searchFields.forEach(function(searchConfig, index) {
+            app.updateSearchFieldFromParameter(searchConfig, index);
+          });
+
+          app.updateDateFieldFromParameter(app.dateStartConfig, 'dateStartConfig');
+          app.updateDateFieldFromParameter(app.dateEndConfig, 'dateEndConfig');
+        }
+
+        this.searchFieldsDialogOpened = !this.searchFieldsDialogOpened;
+      };
+
+      app.handleSearch = function() {
+        app.updateSearchParametersFromFields();
+
+        if(app.noSearchParameters()) {
+          return;
+        }
+
+        app.toggleSearchFieldsDialog();
+      };
+
+      app.resetSearchFields = function() {
+        this.searchFields.forEach(function(searchConfig, index) {
+          // Must update both the property value and the input element value!
+          app.set(['searchFields', index, 'value'], '');
+          document.querySelector('#input_' + searchConfig.key).value = '';
+        });
+
+        app.dateStartConfig.value = {};
+        app.set('dateStartConfig.value', {});
+        app.dateEndConfig.value = {};
+        app.set('dateEndConfig.value', {});
+      };
+
+      // clear tempSeachParameters and close dialog when user cancels
+      app.cancelSearch = function() {
+        app.userCanceled = true;
+        app.toggleSearchFieldsDialog();
+      };
+      /* end search dropdown panel code */
+
+      app.openNewTab = function() {
+        window.open('.');
+      };
+
+      app.emailSupport = function() {
+        window.open('mailto:dig-support@nextcentury.com');
+      };
+
+      app.generateLink = function() {
+        this.$.menuDropdown.close();
+        this.$.stateManager.generateLink();
+      };
+
+      app.getBlurStyleClass = function(blurImages) {
+        return blurImages ? 'small-blur' : '';
+      };
+
+      app.getElasticTypes = function() {
+        return ['ads'];
+      };
+
+      app.isSaveButtonDisabled = function(searchResults, searchError) {
+        return !(searchResults !== null && searchError === null);
+      };
+
+      app.noSearchParameters = function() {
+        return DigBehaviors.FilterBehavior.areAllDisabled(this.searchParameters, ['sort']);
+      };
+
+      app.openBatchPhoneSearchDialog = function() {
+        this.$.menuDropdown.close();
+        this.$.bulkSearchDialog.open();
+      };
+
+      app.openSaveSearchDialog = function() {
+        this.$.menuDropdown.close();
+        this.$.saveSearchDialog.open();
+      };
+
+      app.openSimilarImageSearchDialog = function() {
+        this.$.menuDropdown.close();
+        this.$.similarImageSearchDialog.open();
+      };
+
+      app.openEntityListDialog = function() {
+        this.$.menuDropdown.close();
+        this.$.entityListDialog.open();
+      };
+
+      app.showAll = function() {
+        this.$.menuDropdown.close();
+        app.set('searchParameters', DigBehaviors.StateBehavior.buildSearchState({}));
+        app.demandSearch = true;
+        app.toggleProcessRequest();
+      };
+
+      app.toggleMenu = function() {
+        if(this.$.menuDropdown.style.display === 'none') {
+          this.$.menuDropdown.open();
+        } else {
+          this.$.menuDropdown.close();
+        }
+      };
+
+      /**
+       * Opens or closes the facet list corresponding to the ID of the element that triggered the event.
+       */
+      app.toggleList = function(event) {
+        if(event.target.parentElement && event.target.parentElement.id) {
+          var type = event.target.parentElement.id;
+          if(this.$[type + '-list']) {
+            this.$[type + '-list'].toggle();
+            this.$[type + '-icon-closed'].style.display = (this.$[type + '-icon-closed'].style.display !== 'none' ? 'none' : '');
+            this.$[type + '-icon-opened'].style.display = (this.$[type + '-icon-opened'].style.display !== 'none' ? 'none' : '');
+          }
+        }
+      };
+
+      app.toggleAllFacetLists = function() {
+        app.facetListsExpanded = !app.facetListsExpanded;
+        // All facet lists should have the class 'facet' and an id
+        var allFacetListNames = document.querySelectorAll('.facet');
+
+        for(var i = 0, length = allFacetListNames.length; i < length; i++) {
+          if(allFacetListNames[i].id) {
+            var name = allFacetListNames[i].id;
+            this.$[name + '-list'].opened = app.facetListsExpanded;
+            this.$[name + '-icon-closed'].style.display = app.facetListsExpanded ? 'none' : '';
+            this.$[name + '-icon-opened'].style.display = (!app.facetListsExpanded) ? 'none' : '';
+          }
+        }
+      };
+
+      app.getToggleAllFacetsText = function() {
+        return (app.facetListsExpanded ? 'Collapse' : 'Expand') + ' All';
+      };
+
+      app.getToggleAllFacetsIcon = function() {
+        return (app.facetListsExpanded ? 'icons:expand-less' : 'icons:expand-more');
+      };
+
+      app.getLabelAndCount = function(name, list) {
+        return name + (list.length ? (list.length >= 10 ? ' (Top 10)' : ' (' + list.length + ')') : '');
+      };
+
+      app.toggleProcessRequest = function() {
+        app.processRequest = !app.searchFieldsDialogOpened && !app.userCanceled;
+        // reset user canceled variable
+        app.userCanceled = false;
+      };
+
+      app.checkSearchFieldInputKey = function(event) {
+        if(event.keyCode === 13) {
+          app.handleSearch();
+        }
+      };
+    })(document);
+  </script>
+</body>
+
+</html>
