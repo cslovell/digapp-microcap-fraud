@@ -95,8 +95,50 @@ limitations under the License.
       client="{{esclient}}">
     </elastic-client>
 
+    <query-builder
+      age-field="[[ageConfig.queryField]]"
+      city-field="[[cityConfig.queryField]]"
+      country-field="[[countryConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      email-field="[[emailConfig.queryField]]"
+      ethnicity-field="[[ethnicityConfig.queryField]]"
+      eye-field="[[eyeColorConfig.queryField]]"
+      gender-field="[[genderConfig.queryField]]"
+      hair-field="[[hairColorConfig.queryField]]"
+      height-field="[[heightConfig.queryField]]"
+      name-field="[[nameConfig.queryField]]"
+      phone-field="[[phoneConfig.queryField]]"
+      price-field="[[priceConfig.queryField]]"
+      region-field="[[regionConfig.queryField]]"
+      review-field="[[reviewConfig.queryField]]"
+      risk-field="[[riskConfig.queryField]]"
+      services-field="[[servicesConfig.queryField]]"
+      social-field="[[socialConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{wholeQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[wholeQuery]]"
+      page="{{pageNum}}"
+      page-size="20"
+      results="{{searchResults}}"
+      last-error="{{searchError}}"
+      aggregations="[]"
+      filters="[]"
+      loading="{{searchLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <!--
     <query-transformer
-      demand="[[demandSearch]]"
       error="{{searchError}}"
       loading="{{searchLoading}}"
       page="{{pageNum}}"
@@ -108,6 +150,7 @@ limitations under the License.
       search-function="[[clientConfig.transforms.search.search]]"
       url="[[config.queryUrl]]">
     </query-transformer>
+    -->
 
     <json-transform
       data-in="{{searchResults}}"
@@ -141,8 +184,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{websiteQuery}}"
-      demand="[[demandSearch]]">
+      query="{{websiteQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -184,8 +226,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{countryQuery}}"
-      demand="[[demandSearch]]">
+      query="{{countryQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -227,8 +268,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{regionQuery}}"
-      demand="[[demandSearch]]">
+      query="{{regionQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -270,8 +310,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{cityQuery}}"
-      demand="[[demandSearch]]">
+      query="{{cityQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -313,8 +352,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{phoneQuery}}"
-      demand="[[demandSearch]]">
+      query="{{phoneQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -356,8 +394,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{emailQuery}}"
-      demand="[[demandSearch]]">
+      query="{{emailQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -399,8 +436,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{socialQuery}}"
-      demand="[[demandSearch]]">
+      query="{{socialQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -442,8 +478,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{servicesQuery}}"
-      demand="[[demandSearch]]">
+      query="{{servicesQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -485,8 +520,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{priceQuery}}"
-      demand="[[demandSearch]]">
+      query="{{priceQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -528,8 +562,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{nameQuery}}"
-      demand="[[demandSearch]]">
+      query="{{nameQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -571,8 +604,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{genderQuery}}"
-      demand="[[demandSearch]]">
+      query="{{genderQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -614,8 +646,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{ageQuery}}"
-      demand="[[demandSearch]]">
+      query="{{ageQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -657,8 +688,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{ethnicityQuery}}"
-      demand="[[demandSearch]]">
+      query="{{ethnicityQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -700,8 +730,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{eyeColorQuery}}"
-      demand="[[demandSearch]]">
+      query="{{eyeColorQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -743,8 +772,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{hairColorQuery}}"
-      demand="[[demandSearch]]">
+      query="{{hairColorQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -786,8 +814,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{heightQuery}}"
-      demand="[[demandSearch]]">
+      query="{{heightQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -829,8 +856,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{weightQuery}}"
-      demand="[[demandSearch]]">
+      query="{{weightQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -872,8 +898,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{reviewQuery}}"
-      demand="[[demandSearch]]">
+      query="{{reviewQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -915,8 +940,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{riskQuery}}"
-      demand="[[demandSearch]]">
+      query="{{riskQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -958,8 +982,7 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{imageQuery}}"
-      demand="[[demandSearch]]">
+      query="{{imageQuery}}">
     </query-builder>
 
     <elastic-client-search
@@ -977,93 +1000,12 @@ limitations under the License.
     </elastic-client-search>
     <!-- End Facets -->
 
-    <demand-search demand="{{demandSearch}}"></demand-search>
-
-    <!-- Logger for Page View -->
-    <dig-logger log-page-view
-      es-client="[[esclient]]"
-      es-index="[[config.logIndex]]"
-      es-type="[[config.logType]]"
-      type="Search-Open"
-      data=""
-      username="[[config.username]]"
-      logger="{{logger}}">
-    </dig-logger>
-
-    <!-- Logger for Search Terms -->
-    <dig-logger
-      es-client="[[esclient]]"
-      es-index="[[config.logIndex]]"
-      es-type="[[config.logType]]"
-      type="Search-SubmitSearch"
-      data="[[logMessage]]"
-      username="[[config.username]]">
-    </dig-logger>
-
-    <!-- Logger for Pagination -->
-    <dig-logger
-      es-client="[[esclient]]"
-      es-index="[[config.logIndex]]"
-      es-type="[[config.logType]]"
-      type="Search-ShowResultPageNumber"
-      data="[[pageNum]]"
-      username="[[config.username]]">
-    </dig-logger>
-
-    <!-- logging: single top level object referenced for start and end dates
-         internal component logic figures out which date is which -->
-    <create-log-message
-      age-selected="[[searchParameters.age]]"
-      city-selected="[[searchParameters.city]]"
-      country-selected="[[searchParameters.country]]"
-      date-end-selected="[[searchParameters.postingDate]]"
-      date-start-selected="[[searchParameters.postingDate]]"
-      description-selected="[[searchParameters.description]]"
-      email-selected="[[searchParameters.email]]"
-      ethnicity-selected="[[searchParameters.ethnicity]]"
-      eye-selected="[[searchParameters.eyeColor]]"
-      gender-selected="[[searchParameters.gender]]"
-      hair-selected="[[searchParameters.hairColor]]"
-      height-selected="[[searchParameters.height]]"
-      image-selected="[[searchParameters.image]]"
-      name-selected="[[searchParameters.name]]"
-      phone-selected="[[searchParameters.phone]]"
-      price-selected="[[searchParameters.price]]"
-      region-selected="[[searchParameters.region]]"
-      review-selected="[[searchParameters.review]]"
-      risk-selected="[[searchParameters.risk]]"
-      services-selected="[[searchParameters.services]]"
-      social-selected="[[searchParameters.social]]"
-      title-selected="[[searchParameters.title]]"
-      website-selected="[[searchParameters.website]]"
-      weight-selected="[[searchParameters.weight]]"
-      log-message="{{logMessage}}">
-    </create-log-message>
-
-    <annotation-manager
-      client="[[esclient]]"
-      annotation-index="[[config.annotationIndex]]"
-      annotation-type="[[config.annotationType]]"
-      relevant="[[config.annotationRelevant]]"
-      username="[[config.username]]"
-      annotations="{{annotations}}"
-      annotation-manager="{{annotationManager}}">
-    </annotation-manager>
-
     <paper-header-panel class="flex" mode="waterfall">
 
       <!-- Search toolbar -->
       <paper-toolbar id="navbar">
         <img class="bottom" src="images/dig-logo-original.png" alt="">
         <div class="bottom drawer-spacer"></div>
-
-        <!-- Hide until we can support multiple search types.
-        <div class="bottom v-divider"></div>
-        <elastic-type-selector class="bottom white-input-container"
-          available-types="{{config.elasticTypes}}"
-          elastic-types="{{esTypes}}">
-        </elastic-type-selector>
-        -->
 
         <div class="bottom v-divider"></div>
 
@@ -1077,156 +1019,6 @@ limitations under the License.
         <a class="bottom" href="." style="color: #ffffff;">
           <paper-icon-button icon="clear" title="Reset Page"></paper-icon-button>
         </a>
-
-        <load-user-info class="bottom"
-          show-search
-          client="[[esclient]]"
-          loading="[[searchLoading]]"
-          username="[[config.username]]"
-          user-id="{{userId}}"
-          user-record-exists="{{userRecordExists}}"
-          blur-images="{{blurImages}}"
-          searches="{{userSearches}}"
-          entities="{{userEntities}}"
-          search-parameters="{{searchParameters}}"
-          user-index="[[config.userIndex]]"
-          user-type="[[config.userType]]"
-          notification-query-date="{{notificationDate}}"
-          sort-newest='Sort("fields.posting_date.strict.key").order("desc")'
-          current-sort="[[selectedSort]]"
-          save-user-data-callback="[[saveUserDataCallback]]"
-          run-user-query-callback="{{runUserQueryCallback}}"
-          user-update-body="{{userUpdateBody}}"
-          process-request="{{processRequest}}">
-        </load-user-info>
-
-        <query-builder
-          age-field="[[ageConfig.queryField]]"
-          city-field="[[cityConfig.queryField]]"
-          country-field="[[countryConfig.queryField]]"
-          date-field="[[dateStartConfig.queryField]]"
-          description-field="[[descriptionConfig.queryField]]"
-          email-field="[[emailConfig.queryField]]"
-          ethnicity-field="[[ethnicityConfig.queryField]]"
-          eye-field="[[eyeColorConfig.queryField]]"
-          gender-field="[[genderConfig.queryField]]"
-          hair-field="[[hairColorConfig.queryField]]"
-          height-field="[[heightConfig.queryField]]"
-          name-field="[[nameConfig.queryField]]"
-          phone-field="[[phoneConfig.queryField]]"
-          price-field="[[priceConfig.queryField]]"
-          region-field="[[regionConfig.queryField]]"
-          review-field="[[reviewConfig.queryField]]"
-          risk-field="[[riskConfig.queryField]]"
-          services-field="[[servicesConfig.queryField]]"
-          social-field="[[socialConfig.queryField]]"
-          title-field="[[titleConfig.queryField]]"
-          website-field="[[websiteConfig.queryField]]"
-          weight-field="[[weightConfig.queryField]]"
-          search-parameters="[[searchParameters]]"
-          query="{{wholeQuery}}">
-        </query-builder>
-
-        <save-search id="saveSearchDialog"
-          client="[[esclient]]"
-          username="[[config.username]]"
-          user-id="[[userId]]"
-          existing-searches="{{userSearches}}"
-          search-parameters="[[searchParameters]]"
-          es-query="[[wholeQuery]]"
-          user-index="[[config.userIndex]]"
-          user-type="[[config.userType]]"
-          user-record-exists="[[userRecordExists]]"
-          run-user-query-callback="[[runUserQueryCallback]]"
-          save-user-data-callback="{{saveUserDataCallback}}">
-        </save-search>
-
-        <bulk-search
-          id="bulkSearchDialog"
-          category="[[phoneConfig.title]]"
-          search-parameters="{{searchParameters}}"
-          process-request="{{processRequest}}">
-        </bulk-search>
-
-        <similar-image-search id="similarImageSearchDialog"
-          logger="[[logger]]"
-          blur="[[blurImages]]"
-          image-service-auth="[[config.imageServiceAuth]]"
-          image-service-host="[[config.imageServiceHost]]"
-          link-function="[[clientConfig.transforms.image.externalImageLink]]">
-        </similar-image-search>
-
-        <entity-list-dialog id="entityListDialog"
-          annotation-ids="[[annotations.all]]"
-          annotation-manager="[[annotationManager]]"
-          client="[[esclient]]"
-          index-name="[[config.elasticIndex]]"
-          email-field="[[emailConfig.aggregationField]]"
-          image-field="[[imageConfig.aggregationField]]"
-          offer-field="doc_id"
-          phone-field="[[phoneConfig.aggregationField]]"
-          transform-function="[[clientConfig.transforms.entity.entities]]"
-          entities="{{userEntities}}"
-          user-update-body="{{userUpdateBody}}">
-        </entity-list-dialog>
-
-        <state-manager id="stateManager"
-          page-type="search"
-          client="[[esclient]]"
-          state-index="[[config.filterStatesIndex]]"
-          state-type="[[config.filterStatesType]]"
-          state-id="[[params.state]]"
-          filter-collection="{{searchParameters}}"
-          process-request="{{processRequest}}">
-        </state-manager>
-
-        <paper-icon-button icon="menu" class="bottom dropdown-trigger" title="More Options" on-tap="toggleMenu"></paper-icon-button>
-
-        <iron-dropdown id="menuDropdown" class="bottom" horizontal-align="right" vertical-align="top" vertical-offset="80">
-          <div class="dropdown-content">
-            <!-- TODO FIXME
-            <paper-icon-item title="Search for All Results" on-tap="showAll">
-              <iron-icon icon="custom-icons:show-all" item-icon></iron-icon>
-              Search for All Results
-            </paper-icon-item>
-            -->
-
-            <paper-icon-item disabled="[[isSaveButtonDisabled(searchResults, searchError)]]" title="Save the Selected Search Terms" on-tap="openSaveSearchDialog">
-              <iron-icon icon="save" item-icon></iron-icon>
-              Save Search
-            </paper-icon-item>
-
-            <paper-icon-item disabled="[[noSearchParameters(searchParameters.*)]]" title="Generate a Link for this Page with the Selected Search Terms" on-tap="generateLink">
-              <iron-icon icon="link" item-icon></iron-icon>
-              Generate Link
-            </paper-icon-item>
-
-            <paper-icon-item title="Upload or Enter Multiple Telephone Numbers" on-tap="openBatchPhoneSearchDialog">
-              <iron-icon icon="file-upload" item-icon></iron-icon>
-              Bulk Telephone Search
-            </paper-icon-item>
-
-            <paper-icon-item title="Search on an Image URL or Uploaded Image" on-tap="openSimilarImageSearchDialog">
-              <iron-icon icon="image:compare" item-icon></iron-icon>
-              Similar Image Search
-            </paper-icon-item>
-
-            <paper-icon-item title="View Annotated & Saved Pages" on-tap="openEntityListDialog">
-              <iron-icon icon="pageview" item-icon></iron-icon>
-              View Annotated & Saved Pages
-            </paper-icon-item>
-
-            <paper-icon-item title="Open DIG Search in a New Tab" on-tap="openNewTab">
-              <iron-icon icon="open-in-new" item-icon></iron-icon>
-              Open DIG Search in a New Tab
-            </paper-icon-item>
-
-            <paper-icon-item title="Contact DIG Support" on-tap="emailSupport">
-              <iron-icon icon="communication:contact-mail" item-icon></iron-icon>
-              Contact DIG Support
-            </paper-icon-item>
-          </div>
-        </iron-dropdown>
       </paper-toolbar>
 
       <!-- search fields dropdown panel -->
@@ -1436,12 +1228,6 @@ limitations under the License.
         <paper-header-panel drawer>
           <paper-toolbar class="drawer-header">
             <div class="layout vertical">
-              <!-- TODO
-              <elastic-sort-input class="layout horizontal" field="fields.posting_date.strict.key" selected="{{searchParameters.sort}}">
-              </elastic-sort-input>
-              <elastic-sort input-string="[[searchParameters.sort]]" sort="{{sort}}"></elastic-sort>
-              -->
-
               <div class="h-divider"></div>
 
               <template is="dom-if" if="[[!noSearchParameters(searchParameters.*)]]">
@@ -2925,76 +2711,6 @@ limitations under the License.
                   empty="No [[riskConfig.title]]">
                 </status-text>
               </iron-collapse>
-
-              <!-- TODO
-              <div class="h-divider"></div>
-
-              <div id="image" class="layout horizontal facet filter-header" title="Toggle [[imageConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(imageConfig.title, imageResultList)]]</span>
-                <iron-icon id="image-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="image-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="image"
-                field="fields.image.relaxed.key"
-                count="{{imageCount}}"
-                ejs-aggregation="{{imageAgg}}"
-                type="terms"
-                order="{{imageSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[imageResult]]"
-                data-in2="image"
-                data-out="{{imageResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[imageConfig.title]]"
-                list="{{imageSelectedList}}"
-                object="{{searchParameters.image}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{imageCount}}"
-                    items="[[imageResultList]]"
-                    image-style-class="[[getBlurStyleClass(blurImages)]]"
-                    error="[[imageError]]"
-                    loading="[[imageLoading]]"
-                    item-type="[[imageConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{imageSortOrder}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[imageResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{imageSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <iron-collapse id="image-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[imageResultList]]"
-                  selected-ids="{{imageSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[imageError]]" message="{{imageErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[imageResultList.length]]"
-                  error="[[imageErrorMessage]]"
-                  loading="[[imageLoading]]"
-                  empty="No [[imageConfig.title]]">
-                </status-text>
-              </iron-collapse>
-              -->
             </section>
 
             <section data-type="image"></section>
@@ -3072,8 +2788,6 @@ limitations under the License.
       app.searchParameters = DigBehaviors.StateBehavior.buildSearchState({});
 
       app.params = DigBehaviors.BrowserBehavior.getUrlParameters(window.location.search);
-
-      DigBehaviors.BrowserBehavior.removeStateParameter(window.history, window.location);
 
       app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
 
@@ -3422,68 +3136,12 @@ limitations under the License.
       };
       /* end search dropdown panel code */
 
-      app.openNewTab = function() {
-        window.open('.');
-      };
-
-      app.emailSupport = function() {
-        window.open('mailto:dig-support@nextcentury.com');
-      };
-
-      app.generateLink = function() {
-        this.$.menuDropdown.close();
-        this.$.stateManager.generateLink();
-      };
-
-      app.getBlurStyleClass = function(blurImages) {
-        return blurImages ? 'small-blur' : '';
-      };
-
       app.getElasticTypes = function() {
         return ['ads'];
       };
 
-      app.isSaveButtonDisabled = function(searchResults, searchError) {
-        return !(searchResults !== null && searchError === null);
-      };
-
       app.noSearchParameters = function() {
         return DigBehaviors.FilterBehavior.areAllDisabled(this.searchParameters, ['sort']);
-      };
-
-      app.openBatchPhoneSearchDialog = function() {
-        this.$.menuDropdown.close();
-        this.$.bulkSearchDialog.open();
-      };
-
-      app.openSaveSearchDialog = function() {
-        this.$.menuDropdown.close();
-        this.$.saveSearchDialog.open();
-      };
-
-      app.openSimilarImageSearchDialog = function() {
-        this.$.menuDropdown.close();
-        this.$.similarImageSearchDialog.open();
-      };
-
-      app.openEntityListDialog = function() {
-        this.$.menuDropdown.close();
-        this.$.entityListDialog.open();
-      };
-
-      app.showAll = function() {
-        this.$.menuDropdown.close();
-        app.set('searchParameters', DigBehaviors.StateBehavior.buildSearchState({}));
-        app.demandSearch = true;
-        app.toggleProcessRequest();
-      };
-
-      app.toggleMenu = function() {
-        if(this.$.menuDropdown.style.display === 'none') {
-          this.$.menuDropdown.open();
-        } else {
-          this.$.menuDropdown.close();
-        }
       };
 
       /**
