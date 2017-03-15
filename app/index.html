@@ -97,7 +97,7 @@ limitations under the License.
 
     <query-builder
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -162,7 +162,7 @@ limitations under the License.
     <query-builder
       ignore-type="website"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -204,7 +204,7 @@ limitations under the License.
     <query-builder
       ignore-type="country"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -246,7 +246,7 @@ limitations under the License.
     <query-builder
       ignore-type="region"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -286,9 +286,9 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="city"
+      ignore-type="author"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -310,27 +310,27 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{cityQuery}}">
+      query="{{authorQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[cityQuery]]"
+      query="[[authorQuery]]"
       page-size="0"
-      results="{{cityResult}}"
-      last-error="{{cityError}}"
-      aggregations="{{buildArray(cityAgg)}}"
+      results="{{authorResult}}"
+      last-error="{{authorError}}"
+      aggregations="{{buildArray(authorAgg)}}"
       filters="[]"
-      loading="{{cityLoading}}"
+      loading="{{authorLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
     <query-builder
       ignore-type="phone"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -372,7 +372,7 @@ limitations under the License.
     <query-builder
       ignore-type="email"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -414,7 +414,7 @@ limitations under the License.
     <query-builder
       ignore-type="social"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -456,7 +456,7 @@ limitations under the License.
     <query-builder
       ignore-type="services"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -498,7 +498,7 @@ limitations under the License.
     <query-builder
       ignore-type="price"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -540,7 +540,7 @@ limitations under the License.
     <query-builder
       ignore-type="name"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -582,7 +582,7 @@ limitations under the License.
     <query-builder
       ignore-type="gender"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -624,7 +624,7 @@ limitations under the License.
     <query-builder
       ignore-type="age"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -666,7 +666,7 @@ limitations under the License.
     <query-builder
       ignore-type="ethnicity"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -708,7 +708,7 @@ limitations under the License.
     <query-builder
       ignore-type="eyeColor"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -750,7 +750,7 @@ limitations under the License.
     <query-builder
       ignore-type="hairColor"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -792,7 +792,7 @@ limitations under the License.
     <query-builder
       ignore-type="height"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -834,7 +834,7 @@ limitations under the License.
     <query-builder
       ignore-type="weight"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -876,7 +876,7 @@ limitations under the License.
     <query-builder
       ignore-type="review"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -918,7 +918,7 @@ limitations under the License.
     <query-builder
       ignore-type="risk"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -960,7 +960,7 @@ limitations under the License.
     <query-builder
       ignore-type="image"
       age-field="[[ageConfig.queryField]]"
-      city-field="[[cityConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
@@ -1097,9 +1097,9 @@ limitations under the License.
 
               <div class="layout horizontal wrap">
                 <paper-input
-                  id$="input_[[cityConfig.key]]"
-                  label="[[cityConfig.title]]"
-                  value="{{cityConfig.value}}"
+                  id$="input_[[authorConfig.key]]"
+                  label="[[authorConfig.title]]"
+                  value="{{authorConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
@@ -1251,7 +1251,7 @@ limitations under the License.
                 <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.country}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.region}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.city}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.author}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.phone}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.email}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.social}}"></selected-facets-display>
@@ -1602,73 +1602,74 @@ limitations under the License.
 
               <div class="h-divider"></div>
 
-              <div id="city" class="layout horizontal facet filter-header" title="Toggle [[cityConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(cityConfig.title, cityResultList)]]</span>
-                <iron-icon id="city-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="city-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="author" class="layout horizontal facet filter-header" title="Toggle [[authorConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(authorConfig.title, authorResultList)]]</span>
+                <iron-icon id="author-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="author-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[cityConfig.key]]"
-                field="[[cityConfig.aggregationField]]"
-                count="{{cityCount}}"
-                ejs-aggregation="{{cityAgg}}"
+                name="[[authorConfig.key]]"
+                field="[[authorConfig.aggregationField]]"
+                count="{{authorCount}}"
+                ejs-aggregation="{{authorAgg}}"
                 type="terms"
-                order="{{citySortOrder}}">
+                order="{{authorSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[cityResult]]"
-                data-in2="[[cityConfig.key]]"
-                data-out="{{cityResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.cityList]]">
+                data-in1="[[authorResult]]"
+                data-in2="[[authorConfig.key]]"
+                data-out="{{authorResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[cityConfig.title]]"
-                list="{{citySelectedList}}"
-                object="{{searchParameters.city}}">
+                category="[[authorConfig.title]]"
+                list="{{authorSelectedList}}"
+                object="{{searchParameters.author}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{cityCount}}"
-                    items="[[cityResultList]]"
-                    error="[[cityError]]"
-                    loading="[[cityLoading]]"
-                    item-type="[[cityConfig.title]]"
-                    count-type="Ads"
-                    order-by="{{citySortOrder}}"
-                    selected-ids="{{citySelectedList}}">
+                    aggregation-count="{{authorCount}}"
+                    items="[[authorResultList]]"
+                    error="[[authorError]]"
+                    loading="[[authorLoading]]"
+                    item-type="[[authorConfig.title]]"
+                    count-type="Docs"
+                    order-by="{{authorSortOrder}}"
+                    selected-ids="{{authorSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[cityResultList.length]]">
+                <template is="dom-if" if="[[authorResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{citySortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{authorSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[cityResultList]]"
-                loading="[[cityLoading]]"
-                selected="{{citySelectedList}}">
+                list="[[authorResultList]]"
+                loading="[[authorLoading]]"
+                selected="{{authorSelectedList}}">
               </select-all>
 
-              <iron-collapse id="city-list" class="filter-list" opened>
+              <iron-collapse id="author-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
-                  items="[[cityResultList]]"
-                  selected-ids="{{citySelectedList}}">
+                  text-property="id"
+                  items="[[authorResultList]]"
+                  selected-ids="{{authorSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[cityError]]" message="{{cityErrorMessage}}"></elastic-error>
+                <elastic-error error="[[authorError]]" message="{{authorErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[cityResultList.length]]"
-                  error="[[cityErrorMessage]]"
-                  loading="[[cityLoading]]"
-                  empty="No [[cityConfig.title]]">
+                  count="[[authorResultList.length]]"
+                  error="[[authorErrorMessage]]"
+                  loading="[[authorLoading]]"
+                  empty="No [[authorConfig.title]]">
                 </status-text>
               </iron-collapse>
 
@@ -2793,16 +2794,16 @@ limitations under the License.
 
       app.ageConfig = {
         key: 'age',
-        title: 'Age of Provider',
-        queryField: 'fields.age.relaxed.name',
-        aggregationField: 'fields.age.strict.key',
+        title: 'Age',
+        queryField: 'fields.age.strict.name.raw',
+        aggregationField: 'fields.age.strict.name.raw',
         value: ''
       };
-      app.cityConfig = {
-        key: 'city',
-        title: 'City',
-        queryField: 'fields.city.relaxed.name',
-        aggregationField: 'fields.city.strict.key',
+      app.authorConfig = {
+        key: 'author',
+        title: 'Author',
+        queryField: 'fields.author.strict.name.raw',
+        aggregationField: 'fields.author.strict.name.raw',
         value: ''
       };
       app.countryConfig = {
@@ -2815,8 +2816,8 @@ limitations under the License.
       app.dateStartConfig = {
         key: 'dateStart',
         title: 'From',
-        queryField: 'fields.posting_date.strict.key',
-        aggregationField: 'fields.posting_date.strict.key',
+        queryField: 'fields.posting_date.strict.name',
+        aggregationField: 'fields.posting_date.strict.name',
         value: {},
         prefixLabel: 'From',
         dateIdentifier: 'start'
@@ -2824,8 +2825,8 @@ limitations under the License.
       app.dateEndConfig = {
         key: 'dateEnd',
         title: 'To',
-        queryField: 'fields.posting_date.strict.key',
-        aggregationField: 'fields.posting_date.strict.key',
+        queryField: 'fields.posting_date.strict.name',
+        aggregationField: 'fields.posting_date.strict.name',
         value: {},
         prefixLabel: 'To',
         dateIdentifier: 'end'
@@ -2968,7 +2969,7 @@ limitations under the License.
 
       app.searchFields = [
         app.ageConfig,
-        app.cityConfig,
+        app.authorConfig,
         //app.countryConfig,
         app.descriptionConfig,
         app.emailConfig,
@@ -3137,7 +3138,7 @@ limitations under the License.
       /* end search dropdown panel code */
 
       app.getElasticTypes = function() {
-        return ['ads'];
+        return ['doc'];
       };
 
       app.noSearchParameters = function() {

@@ -73,7 +73,7 @@ DigBehaviors.StateBehavior = {
   buildSearchState: function(config) {
     var state = {
       age: config.age || {},
-      city: config.city || {},
+      author: config.author || {},
       country: config.country || {},
       description: config.description || {},
       email: config.email || {},
