@@ -21,20 +21,13 @@ limitations under the License.
 
 <script src="../../scripts/cache-transform.js" type="text/javascript"></script>
 <script src="../../scripts/common-transforms.js" type="text/javascript"></script>
-<script src="../../scripts/entity-transform.js" type="text/javascript"></script>
 <script src="../../scripts/filter-agg-transform.js" type="text/javascript"></script>
-<script src="../../scripts/image-transform.js" type="text/javascript"></script>
 <script src="../../scripts/offer-transform.js" type="text/javascript"></script>
 <script src="../../scripts/search-transform.js" type="text/javascript"></script>
 
 <script>
 
   (function() {
-    /**
-     * This element is used to store configuration which is application specific
-     * and is not available via a REST call to the server.  The main purpose is
-     * to define each data transform for the json-transform element.
-     */
     Polymer({
       is: 'client-config',
       properties: {
@@ -46,7 +39,7 @@ limitations under the License.
       },
 
       ready: function() {
-        /* globals _, moment, DigBehaviors, cacheTransform, commonTransforms, entityTransform, filterAggTransform, imageTransform, offerTransform, searchTransform */
+        /* globals _, moment, DigBehaviors, cacheTransform, commonTransforms, filterAggTransform, offerTransform, searchTransform */
 
         var utils = commonTransforms(_, moment, DigBehaviors.TypeBehavior);
 
@@ -55,9 +48,7 @@ limitations under the License.
         };
 
         config.transforms.cache = cacheTransform(_);
-        config.transforms.entity = entityTransform(_);
         config.transforms.filterAggs = filterAggTransform(_, utils);
-        config.transforms.image = imageTransform(_, utils);
         config.transforms.offer = offerTransform(_, utils);
         config.transforms.search = searchTransform(_);
 
