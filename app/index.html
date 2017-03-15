@@ -96,7 +96,8 @@ limitations under the License.
     <query-builder demand
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -108,7 +109,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -161,7 +161,8 @@ limitations under the License.
       ignore-type="website"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -173,7 +174,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -200,10 +200,11 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="country"
+      ignore-type="companyName"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -215,7 +216,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -224,28 +224,29 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{countryQuery}}">
+      query="{{companyNameQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[countryQuery]]"
+      query="[[companyNameQuery]]"
       page-size="0"
-      results="{{countryResult}}"
-      last-error="{{countryError}}"
-      aggregations="{{buildArray(countryAgg)}}"
+      results="{{companyNameResult}}"
+      last-error="{{companyNameError}}"
+      aggregations="{{buildArray(companyNameAgg)}}"
       filters="[]"
-      loading="{{countryLoading}}"
+      loading="{{companyNameLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
     <query-builder
-      ignore-type="region"
+      ignore-type="companyType"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -257,7 +258,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -266,20 +266,20 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{regionQuery}}">
+      query="{{companyTypeQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[regionQuery]]"
+      query="[[companyTypeQuery]]"
       page-size="0"
-      results="{{regionResult}}"
-      last-error="{{regionError}}"
-      aggregations="{{buildArray(regionAgg)}}"
+      results="{{companyTypeResult}}"
+      last-error="{{companyTypeError}}"
+      aggregations="{{buildArray(companyTypeAgg)}}"
       filters="[]"
-      loading="{{regionLoading}}"
+      loading="{{companyTypeLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
@@ -287,7 +287,8 @@ limitations under the License.
       ignore-type="author"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -299,7 +300,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -329,7 +329,8 @@ limitations under the License.
       ignore-type="phone"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -341,7 +342,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -371,7 +371,8 @@ limitations under the License.
       ignore-type="email"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -383,7 +384,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -413,7 +413,8 @@ limitations under the License.
       ignore-type="social"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -425,7 +426,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -455,7 +455,8 @@ limitations under the License.
       ignore-type="services"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -467,7 +468,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -497,7 +497,8 @@ limitations under the License.
       ignore-type="price"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -509,7 +510,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -539,7 +539,8 @@ limitations under the License.
       ignore-type="name"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -551,7 +552,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -581,7 +581,8 @@ limitations under the License.
       ignore-type="gender"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -593,7 +594,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -623,7 +623,8 @@ limitations under the License.
       ignore-type="age"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -635,7 +636,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -665,7 +665,8 @@ limitations under the License.
       ignore-type="ethnicity"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -677,7 +678,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -707,7 +707,8 @@ limitations under the License.
       ignore-type="eyeColor"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -719,7 +720,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -749,7 +749,8 @@ limitations under the License.
       ignore-type="hairColor"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -761,7 +762,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -791,7 +791,8 @@ limitations under the License.
       ignore-type="height"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -803,7 +804,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -833,7 +833,8 @@ limitations under the License.
       ignore-type="weight"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -845,7 +846,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -875,7 +875,8 @@ limitations under the License.
       ignore-type="review"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -887,7 +888,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -917,7 +917,8 @@ limitations under the License.
       ignore-type="risk"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -929,7 +930,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -959,7 +959,8 @@ limitations under the License.
       ignore-type="image"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
-      country-field="[[countryConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
       email-field="[[emailConfig.queryField]]"
@@ -971,7 +972,6 @@ limitations under the License.
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
-      region-field="[[regionConfig.queryField]]"
       review-field="[[reviewConfig.queryField]]"
       risk-field="[[riskConfig.queryField]]"
       services-field="[[servicesConfig.queryField]]"
@@ -1101,19 +1101,17 @@ limitations under the License.
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[regionConfig.key]]"
-                  label="[[regionConfig.title]]"
-                  value="{{regionConfig.value}}"
+                  id$="input_[[companyNameConfig.key]]"
+                  label="[[companyNameConfig.title]]"
+                  value="{{companyNameConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
-                <!-- TODO Hiding country for now...
                 <paper-input
-                  id$="input_[[countryConfig.key]]"
-                  label="[[countryConfig.title]]"
-                  value="{{countryConfig.value}}"
+                  id$="input_[[companyTypeConfig.key]]"
+                  label="[[companyTypeConfig.title]]"
+                  value="{{companyTypeConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
-                -->
               </div>
 
               <div class="layout horizontal wrap">
@@ -1247,8 +1245,8 @@ limitations under the License.
                 <selected-facets-display facet-selection="{{searchParameters.website}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.country}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.region}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.companyName}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.companyType}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.author}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.phone}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.email}}"></selected-facets-display>
@@ -1673,155 +1671,153 @@ limitations under the License.
 
               <div class="h-divider"></div>
 
-              <div id="region" class="layout horizontal facet filter-header" title="Toggle [[regionConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(regionConfig.title, regionResultList)]]</span>
-                <iron-icon id="region-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="region-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="company-name" class="layout horizontal facet filter-header" title="Toggle [[companyNameConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(companyNameConfig.title, companyNameResultList)]]</span>
+                <iron-icon id="company-name-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="company-name-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[regionConfig.key]]"
-                field="[[regionConfig.aggregationField]]"
-                count="{{regionCount}}"
-                ejs-aggregation="{{regionAgg}}"
+                name="[[companyNameConfig.key]]"
+                field="[[companyNameConfig.aggregationField]]"
+                count="{{companyNameCount}}"
+                ejs-aggregation="{{companyNameAgg}}"
                 type="terms"
-                order="{{regionSortOrder}}">
+                order="{{companyNameSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[regionResult]]"
-                data-in2="[[regionConfig.key]]"
-                data-out="{{regionResultList}}"
+                data-in1="[[companyNameResult]]"
+                data-in2="[[companyNameConfig.key]]"
+                data-out="{{companyNameResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[regionConfig.title]]"
-                list="{{regionSelectedList}}"
-                object="{{searchParameters.region}}">
+                category="[[companyNameConfig.title]]"
+                list="{{companyNameSelectedList}}"
+                object="{{searchParameters.companyName}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{regionCount}}"
-                    items="[[regionResultList]]"
-                    error="[[regionError]]"
-                    loading="[[regionLoading]]"
-                    item-type="[[regionConfig.title]]"
+                    aggregation-count="{{companyNameCount}}"
+                    items="[[companyNameResultList]]"
+                    error="[[companyNameError]]"
+                    loading="[[companyNameLoading]]"
+                    item-type="[[companyNameConfig.title]]"
                     count-type="Ads"
                     text-property="id"
-                    order-by="{{regionSortOrder}}"
-                    selected-ids="{{regionSelectedList}}">
+                    order-by="{{companyNameSortOrder}}"
+                    selected-ids="{{companyNameSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[regionResultList.length]]">
+                <template is="dom-if" if="[[companyNameResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{regionSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{companyNameSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[regionResultList]]"
-                loading="[[regionLoading]]"
-                selected="{{regionSelectedList}}">
+                list="[[companyNameResultList]]"
+                loading="[[companyNameLoading]]"
+                selected="{{companyNameSelectedList}}">
               </select-all>
 
-              <iron-collapse id="region-list" class="filter-list" opened>
+              <iron-collapse id="company-name-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[regionResultList]]"
-                  selected-ids="{{regionSelectedList}}">
+                  items="[[companyNameResultList]]"
+                  selected-ids="{{companyNameSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[regionError]]" message="{{regionErrorMessage}}"></elastic-error>
+                <elastic-error error="[[companyNameError]]" message="{{companyNameErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[regionResultList.length]]"
-                  error="[[regionErrorMessage]]"
-                  loading="[[regionLoading]]"
-                  empty="No [[regionConfig.title]]">
+                  count="[[companyNameResultList.length]]"
+                  error="[[companyNameErrorMessage]]"
+                  loading="[[companyNameLoading]]"
+                  empty="No [[companyNameConfig.title]]">
                 </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
 
-              <!-- TODO Hiding country for now...
-              <div id="country" class="layout horizontal facet filter-header" title="Toggle [[countryConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(countryConfig.title, countryResultList)]]</span>
-                <iron-icon id="country-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="country-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="company-type" class="layout horizontal facet filter-header" title="Toggle [[companyTypeConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(companyTypeConfig.title, companyTypeResultList)]]</span>
+                <iron-icon id="company-type-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="company-type-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[countryConfig.key]]"
-                field="[[countryConfig.aggregationField]]"
-                count="{{countryCount}}"
-                ejs-aggregation="{{countryAgg}}"
+                name="[[companyTypeConfig.key]]"
+                field="[[companyTypeConfig.aggregationField]]"
+                count="{{companyTypeCount}}"
+                ejs-aggregation="{{companyTypeAgg}}"
                 type="terms"
-                order="{{countrySortOrder}}">
+                order="{{companyTypeSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[countryResult]]"
-                data-in2="[[countryConfig.key]]"
-                data-out="{{countryResultList}}"
+                data-in1="[[companyTypeResult]]"
+                data-in2="[[companyTypeConfig.key]]"
+                data-out="{{companyTypeResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[countryConfig.title]]"
-                list="{{countrySelectedList}}"
-                object="{{searchParameters.country}}">
+                category="[[companyTypeConfig.title]]"
+                list="{{companyTypeSelectedList}}"
+                object="{{searchParameters.companyType}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{countryCount}}"
-                    items="[[countryResultList]]"
-                    error="[[countryError]]"
-                    loading="[[countryLoading]]"
-                    item-type="[[countryConfig.title]]"
+                    aggregation-count="{{companyTypeCount}}"
+                    items="[[companyTypeResultList]]"
+                    error="[[companyTypeError]]"
+                    loading="[[companyTypeLoading]]"
+                    item-type="[[companyTypeConfig.title]]"
                     count-type="Ads"
                     text-property="id"
-                    order-by="{{countrySortOrder}}"
-                    selected-ids="{{countrySelectedList}}">
+                    order-by="{{companyTypeSortOrder}}"
+                    selected-ids="{{companyTypeSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[countryResultList.length]]">
+                <template is="dom-if" if="[[companyTypeResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{countrySortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{companyTypeSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[countryResultList]]"
-                loading="[[countryLoading]]"
-                selected="{{countrySelectedList}}">
+                list="[[companyTypeResultList]]"
+                loading="[[companyTypeLoading]]"
+                selected="{{companyTypeSelectedList}}">
               </select-all>
 
-              <iron-collapse id="country-list" class="filter-list" opened>
+              <iron-collapse id="company-type-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[countryResultList]]"
-                  selected-ids="{{countrySelectedList}}">
+                  items="[[companyTypeResultList]]"
+                  selected-ids="{{companyTypeSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[countryError]]" message="{{countryErrorMessage}}"></elastic-error>
+                <elastic-error error="[[companyTypeError]]" message="{{companyTypeErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[countryResultList.length]]"
-                  error="[[countryErrorMessage]]"
-                  loading="[[countryLoading]]"
-                  empty="No [[countryConfig.title]]">
+                  count="[[companyTypeResultList.length]]"
+                  error="[[companyTypeErrorMessage]]"
+                  loading="[[companyTypeLoading]]"
+                  empty="No [[companyTypeConfig.title]]">
                 </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
-              -->
 
               <div id="name" class="layout horizontal facet filter-header" title="Toggle [[nameConfig.title]]" on-tap="toggleList">
                 <span class="flex">[[getLabelAndCount(nameConfig.title, nameResultList)]]</span>
@@ -2800,15 +2796,22 @@ limitations under the License.
       app.authorConfig = {
         key: 'author',
         title: 'Author',
-        queryField: 'fields.author.strict.name.raw',
+        queryField: 'fields.author.strict.name',
         aggregationField: 'fields.author.strict.name.raw',
         value: ''
       };
-      app.countryConfig = {
-        key: 'country',
-        title: 'Country',
-        queryField: 'fields.country.relaxed.name',
-        aggregationField: 'fields.country.strict.key',
+      app.companyNameConfig = {
+        key: 'companyName',
+        title: 'Company',
+        queryField: 'fields.company.strict.name',
+        aggregationField: 'fields.company.strict.name.raw',
+        value: ''
+      };
+      app.companyTypeConfig = {
+        key: 'companyType',
+        title: 'Company Type',
+        queryField: 'fields.company_type.strict.name',
+        aggregationField: 'fields.company_type.strict.name.raw',
         value: ''
       };
       app.dateStartConfig = {
@@ -2906,13 +2909,6 @@ limitations under the License.
         aggregationField: 'fields.price.strict.key',
         value: ''
       };
-      app.regionConfig = {
-        key: 'region',
-        title: 'State/Region',
-        queryField: 'fields.state.relaxed.name',
-        aggregationField: 'fields.state.strict.key',
-        value: ''
-      };
       app.reviewConfig = {
         key: 'review',
         title: 'Review ID',
@@ -2968,7 +2964,8 @@ limitations under the License.
       app.searchFields = [
         app.ageConfig,
         app.authorConfig,
-        //app.countryConfig,
+        app.companyNameConfig,
+        app.companyTypeConfig,
         app.descriptionConfig,
         app.emailConfig,
         app.ethnicityConfig,
@@ -2979,7 +2976,6 @@ limitations under the License.
         app.nameConfig,
         app.phoneConfig,
         app.priceConfig,
-        app.regionConfig,
         app.reviewConfig,
         app.riskConfig,
         app.servicesConfig,

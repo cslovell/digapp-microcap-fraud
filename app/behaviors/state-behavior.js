@@ -74,7 +74,8 @@ DigBehaviors.StateBehavior = {
     var state = {
       age: config.age || {},
       author: config.author || {},
-      country: config.country || {},
+      companyName: config.companyName || {},
+      companyType: config.companyType || {},
       description: config.description || {},
       email: config.email || {},
       ethnicity: config.ethnicity || {},
@@ -89,7 +90,6 @@ DigBehaviors.StateBehavior = {
       // start and end dates will be keys within postingDate
       postingDate: config.postingDate || {},
       price: config.price || {},
-      region: config.region || {},
       review: config.review || {},
       risk: config.risk || {},
       services: config.services || {},
