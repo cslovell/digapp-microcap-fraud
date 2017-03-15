@@ -21,8 +21,8 @@ limitations under the License.
 
 <script src="../../scripts/cache-transform.js" type="text/javascript"></script>
 <script src="../../scripts/common-transforms.js" type="text/javascript"></script>
+<script src="../../scripts/doc-transform.js" type="text/javascript"></script>
 <script src="../../scripts/filter-agg-transform.js" type="text/javascript"></script>
-<script src="../../scripts/offer-transform.js" type="text/javascript"></script>
 <script src="../../scripts/search-transform.js" type="text/javascript"></script>
 
 <script>
@@ -39,7 +39,7 @@ limitations under the License.
       },
 
       ready: function() {
-        /* globals _, moment, DigBehaviors, cacheTransform, commonTransforms, filterAggTransform, offerTransform, searchTransform */
+        /* globals _, moment, DigBehaviors, cacheTransform, commonTransforms, docTransform, filterAggTransform, searchTransform */
 
         var utils = commonTransforms(_, moment, DigBehaviors.TypeBehavior);
 
@@ -48,8 +48,8 @@ limitations under the License.
         };
 
         config.transforms.cache = cacheTransform(_);
+        config.transforms.doc = docTransform(_, utils);
         config.transforms.filterAggs = filterAggTransform(_, utils);
-        config.transforms.offer = offerTransform(_, utils);
         config.transforms.search = searchTransform(_);
 
         this._setConfig(config);

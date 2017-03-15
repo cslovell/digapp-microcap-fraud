@@ -14,31 +14,10 @@
  * limitations under the License.
  */
 
-/**
- * transform elastic search offer query to display format.  See data-model.json
- */
-
-/* exported offerTransform */
+/* exported docTransform */
 /* jshint camelcase:false */
 
-var offerTransform = (function(_, commonTransforms) {
-
-  /**
-   * Returns the list of DIG image objects using the given images from the data.
-   */
-  /*
-  function getImages(images) {
-    return (_.isArray(images) ? images : [images]).map(function(image) {
-      return {
-        id: image.uri,
-        icon: commonTransforms.getIronIcon('image'),
-        link: commonTransforms.getLink(image.uri, 'image'),
-        source: _.isArray(image.url) ? image.url[0] : image.url,
-        styleClass: commonTransforms.getStyleClass('image')
-      };
-    });
-  }
-  */
+var docTransform = (function(_, commonTransforms) {
 
   function getDataFromRecord(record, path) {
     var strict = _.get(record, path + '.strict', []);
@@ -70,227 +49,27 @@ var offerTransform = (function(_, commonTransforms) {
     return commonTransforms.getDate(date) || 'No Date';
   }
 
-  function getEmailsFromList(list, confidence) {
-    return list.map(function(email) {
+  function getDataOfTypeFromList(list, type, confidence) {
+    return list.map(function(item) {
       /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = email.doc_count;
+      var count = item.doc_count;
       /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
       return {
         confidence: confidence,
         count: count,
-        id: email.key,
-        icon: commonTransforms.getIronIcon('email'),
-        link: commonTransforms.getLink(email.key, 'email'),
-        styleClass: commonTransforms.getStyleClass('email'),
-        text: decodeURIComponent(email.name || email.key),
-        type: 'email'
+        id: item.key,
+        icon: commonTransforms.getIronIcon(type),
+        link: commonTransforms.getLink(item.key, type),
+        styleClass: commonTransforms.getStyleClass(type),
+        text: item.name || item.key,
+        type: type
       };
     });
   }
 
-  function getEmailsFromRecord(record, path) {
-    var emails = getDataFromRecord(record, path);
-    return getEmailsFromList(emails.strict, 'strict').concat(getEmailsFromList(emails.relaxed, 'relaxed'));
-  }
-
-  function getHighRisk(record, path) {
-    var risks = getDataFromRecord(record, path);
-    return risks.strict.some(function(risk) {
-      return risk.name.toLowerCase() === 'yes';
-    });
-  }
-
-  function getPhonesFromList(list, confidence) {
-    return list.map(function(phone) {
-      var name = phone.name || phone.key;
-      /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = phone.doc_count;
-      /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-      return {
-        confidence: confidence,
-        count: count,
-        id: phone.key,
-        icon: commonTransforms.getIronIcon('phone'),
-        link: commonTransforms.getLink(phone.key, 'phone'),
-        styleClass: commonTransforms.getStyleClass('phone'),
-        text: commonTransforms.getFormattedPhone(name),
-        type: 'phone'
-      };
-    });
-  }
-
-  function getPhonesFromRecord(record, path) {
-    var phones = getDataFromRecord(record, path);
-    return getPhonesFromList(phones.strict, 'strict').concat(getPhonesFromList(phones.relaxed, 'relaxed'));
-  }
-
-  function getPricesFromRecord(record, path) {
-    var getPricesFromList = function(list, confidence) {
-      return list.map(function(price) {
-        /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-        var count = price.doc_count;
-        /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-        return {
-          confidence: confidence,
-          count: count,
-          id: price.key,
-          icon: commonTransforms.getIronIcon('money'),
-          styleClass: commonTransforms.getStyleClass('money'),
-          text: price.name,
-          type: 'money'
-        };
-      }).filter(function(price) {
-        return price.text !== '-per-min';
-      });
-    };
-
-    var prices = getDataFromRecord(record, path);
-    return getPricesFromList(prices.strict, 'strict').concat(getPricesFromList(prices.relaxed, 'relaxed'));
-  }
-
-  function getProviderAttributesFromList(list, confidence) {
-    return list.map(function(attribute) {
-      var text = attribute.name ? ('' + attribute.name).toLowerCase() : ('' + attribute.key).toLowerCase();
-      /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = attribute.doc_count;
-      /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-      return {
-        confidence: confidence,
-        count: count,
-        id: attribute.key,
-        icon: commonTransforms.getIronIcon('provider'),
-        styleClass: commonTransforms.getStyleClass('provider'),
-        text: text,
-        type: 'provider'
-      };
-    });
-  }
-
-  function getProviderAttributesFromRecord(record, path) {
-    var attributes = getDataFromRecord(record, path);
-    return getProviderAttributesFromList(attributes.strict, 'strict').concat(getProviderAttributesFromList(attributes.relaxed, 'relaxed'));
-  }
-
-  function getPublishersFromList(list) {
-    return list.map(function(publisher) {
-      /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = publisher.doc_count;
-      /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-      return {
-        count: count,
-        id: publisher.key,
-        icon: commonTransforms.getIronIcon('webpage'),
-        styleClass: commonTransforms.getStyleClass('webpage'),
-        text: publisher.key,
-        type: 'webpage'
-      };
-    });
-  }
-
-  function getReviewIdsFromList(list, confidence) {
-    return list.map(function(reviewId) {
-      var text = reviewId.name ? ('' + reviewId.name).toLowerCase() : ('' + reviewId.key).toLowerCase();
-      /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = reviewId.doc_count;
-      /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-      return {
-        confidence: confidence,
-        count: count,
-        id: reviewId.key,
-        icon: commonTransforms.getIronIcon('review'),
-        styleClass: commonTransforms.getStyleClass('review'),
-        text: text,
-        type: 'review'
-      };
-    });
-  }
-
-  function getReviewIdsFromRecord(record, path) {
-    var reviewIds = getDataFromRecord(record, path);
-    return getReviewIdsFromList(reviewIds.strict, 'strict').concat(getReviewIdsFromList(reviewIds.relaxed, 'relaxed'));
-  }
-
-  function getServicesFromRecord(record, path) {
-    var getServicesFromList = function(list, confidence) {
-      return list.map(function(service) {
-        var text = service.name ? ('' + service.name).toLowerCase() : ('' + service.key).toLowerCase();
-        /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-        var count = service.doc_count;
-        /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-        return {
-          confidence: confidence,
-          count: count,
-          id: service.key,
-          icon: commonTransforms.getIronIcon('service'),
-          styleClass: commonTransforms.getStyleClass('service'),
-          text: text,
-          type: 'service'
-        };
-      });
-    };
-
-    var services = getDataFromRecord(record, path);
-    return getServicesFromList(services.strict, 'strict').concat(getServicesFromList(services.relaxed, 'relaxed'));
-  }
-
-  function getSocialIdsFromList(list, confidence) {
-    return list.map(function(socialId) {
-      var id = socialId.key.indexOf(' ') ? socialId.key.substring(socialId.key.indexOf(' ') + 1) : socialId.key;
-      var text = socialId.name ? ('' + socialId.name).toLowerCase() : ('' + socialId.key).toLowerCase();
-      /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-      var count = socialId.doc_count;
-      /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-      return {
-        confidence: confidence,
-        count: count,
-        id: id,
-        icon: commonTransforms.getIronIcon('social'),
-        styleClass: commonTransforms.getStyleClass('social'),
-        text: text,
-        type: 'social'
-      };
-    });
-  }
-
-  function getSocialIdsFromRecord(record, path) {
-    var socialIds = getDataFromRecord(record, path);
-    return getSocialIdsFromList(socialIds.strict, 'strict').concat(getSocialIdsFromList(socialIds.relaxed, 'relaxed'));
-  }
-
-  function getUniqueLocation(location, confidence) {
-    var data = commonTransforms.getLocationDataFromId(location.key);
-
-    /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-    var count = location.doc_count;
-    /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-
-    return {
-      confidence: confidence,
-      count: count,
-      id: location.key,
-      latitude: data.latitude,
-      longitude: data.longitude,
-      icon: commonTransforms.getIronIcon('location'),
-      link: commonTransforms.getLink(location.key, 'location'),
-      styleClass: commonTransforms.getStyleClass('location'),
-      text: data.text,
-      textAndCount: data.text + (count ? (' (' + count + ')') : ''),
-      textAndCountry: data.text + (data.country ? (', ' + data.country) : ''),
-      type: 'location'
-    };
-  }
-
-  function getUniqueLocationsFromList(list, confidence) {
-    return list.map(function(location) {
-      return getUniqueLocation(location, confidence);
-    }).filter(function(location) {
-      return location.latitude && location.longitude && location.text;
-    });
-  }
-
-  function getUniqueLocationsFromRecord(record, path) {
-    var locations = getDataFromRecord(record, path);
-    return getUniqueLocationsFromList(locations.strict, 'strict').concat(getUniqueLocationsFromList(locations.relaxed, 'relaxed'));
+  function getDataOfTypeFromRecord(record, path, type) {
+    var data = getDataFromRecord(record, path);
+    return getDataOfTypeFromList(data.strict, type, 'strict').concat(getDataOfTypeFromList(data.relaxed, type, 'relaxed'));
   }
 
   function getHighlightedText(record, path1, path2) {
@@ -308,15 +87,7 @@ var offerTransform = (function(_, commonTransforms) {
   function addHighlights(data, record, paths) {
     if(record.highlight) {
       var cleanHighlight = function(text, path) {
-        var skipPathsForPartialMatches = ['tld', 'fields.email.strict.name', 'fields.email.relaxed.name'];
-        if(skipPathsForPartialMatches.indexOf(path) >= 0 && (!_.startsWith(text, '<em>') || !_.endsWith(text, '</em>'))) {
-          return text.toLowerCase();
-        }
-        var output = text;
-        if(path === 'fields.social_media_id.strict.name' || path === 'fields.social_media_id.relaxed.name') {
-          output = output.indexOf(' ') ? output.substring(output.indexOf(' ') + 1) : output;
-        }
-        return output.indexOf('<em>') >= 0 ? output.replace(/\<\/?em\>/g, '').toLowerCase() : '';
+        return text.indexOf('<em>') >= 0 ? text.replace(/\<\/?em\>/g, '').toLowerCase() : '';
       };
 
       var highlights = {};
@@ -343,7 +114,7 @@ var offerTransform = (function(_, commonTransforms) {
     return data;
   }
 
-  function getOfferObject(record) {
+  function getDocObject(record) {
     var id = _.get(record, '_source.doc_id');
     var url = _.get(record, '_source.url');
 
@@ -354,101 +125,86 @@ var offerTransform = (function(_, commonTransforms) {
     var rank = _.get(record, '_score');
     var domain = _.get(record, '_source.tld');
 
-    var offer = {
+    var doc = {
       id: id,
       url: url,
       rank: rank ? rank.toFixed(2) : rank,
       domain: domain || 'No Domain',
-      type: 'offer',
-      icon: commonTransforms.getIronIcon('offer'),
-      link: commonTransforms.getLink(id, 'offer'),
-      styleClass: commonTransforms.getStyleClass('offer'),
-      highRisk: getHighRisk(record, '_source.fields.risk'),
+      type: 'doc',
+      icon: commonTransforms.getIronIcon('doc'),
+      link: commonTransforms.getLink(id, 'doc'),
+      styleClass: commonTransforms.getStyleClass('doc'),
       title: getSingleItemFromRecord(record, '_source.fields.title') || 'No Title',
-      description: getSingleItemFromRecord(record, '_source.fields.description') || 'No Description',
-      locations: getUniqueLocationsFromRecord(record, '_source.fields.city'),
-      phones: getPhonesFromRecord(record, '_source.fields.phone'),
-      emails: getEmailsFromRecord(record, '_source.fields.email'),
-      socialIds: getSocialIdsFromRecord(record, '_source.fields.social_media_id'),
-      reviewIds: getReviewIdsFromRecord(record, '_source.fields.review_id'),
-      services: getServicesFromRecord(record, '_source.fields.service'),
-      prices: getPricesFromRecord(record, '_source.fields.price'),
-      names: getProviderAttributesFromRecord(record, '_source.fields.name'),
-      genders: getProviderAttributesFromRecord(record, '_source.fields.gender'),
-      ages: getProviderAttributesFromRecord(record, '_source.fields.age'),
-      ethnicities: getProviderAttributesFromRecord(record, '_source.fields.ethnicity'),
-      eyeColors: getProviderAttributesFromRecord(record, '_source.fields.eye_color'),
-      hairColors: getProviderAttributesFromRecord(record, '_source.fields.hair_color'),
-      heights: getProviderAttributesFromRecord(record, '_source.fields.height'),
-      weights: getProviderAttributesFromRecord(record, '_source.fields.weight'),
+      content: getSingleItemFromRecord(record, '_source.fields.content') || 'No Content',
+      objectIds: getDataOfTypeFromRecord(record, '_source.fields.object_id', 'object_id'),
+      tickerSymbols: getDataOfTypeFromRecord(record, '_source.fields.ticker_symbol', 'ticker_symbol'),
+      postTypes: getDataOfTypeFromRecord(record, '_source.fields.type', 'post_type'),
+      postIds: getDataOfTypeFromRecord(record, '_source.fields.post_id', 'post_id'),
+      authors: getDataOfTypeFromRecord(record, '_source.fields.author', 'author'),
+      authorProfiles: getDataOfTypeFromRecord(record, '_source.fields.author_profile', 'author_profile'),
+      companies: getDataOfTypeFromRecord(record, '_source.fields.company', 'company'),
+      companyTypes: getDataOfTypeFromRecord(record, '_source.fields.company_type', 'company_type'),
+      disclaimers: getDataOfTypeFromRecord(record, '_source.fields.disclaimer', 'disclaimer'),
+      forumNames: getDataOfTypeFromRecord(record, '_source.fields.forum_name', 'forum_name'),
+      ages: getDataOfTypeFromRecord(record, '_source.fields.age', 'age'),
+      followedBy: getDataOfTypeFromRecord(record, '_source.fields.followed_by', 'followed_by'),
+      locations: getDataOfTypeFromRecord(record, '_source.fields.location', 'location'),
+      numberOfPosts: getDataOfTypeFromRecord(record, '_source.fields.num_posts', 'number_of_posts'),
+      stocksOwned: getDataOfTypeFromRecord(record, '_source.fields.stocks_owned', 'stocks_owned'),
+      moderators: getDataOfTypeFromRecord(record, '_source.fields.moderator', 'moderator'),
+      websites: getDataOfTypeFromList([{
+        key: domain
+      }], 'website'),
       date: {
         icon: commonTransforms.getIronIcon('date'),
         styleClass: commonTransforms.getStyleClass('date'),
         text: getDate(record, '_source.fields.posting_date'),
         type: 'date'
       },
-      publishers: getPublishersFromList([{
-        key: domain
-      }]),
-      webpages: [{
-        icon: commonTransforms.getIronIcon('webpage'),
-        link: url,
-        styleClass: commonTransforms.getStyleClass('webpage'),
-        text: url,
-        type: 'webpage'
-      }],
-      caches: [{
-        icon: commonTransforms.getIronIcon('cache'),
-        link: commonTransforms.getLink(id, 'cache'),
-        styleClass: commonTransforms.getStyleClass('cache'),
-        text: 'Open Cached Webpage',
-        type: 'cache'
-      }],
+      dateProfileCreated: {
+        icon: commonTransforms.getIronIcon('creation_date'),
+        styleClass: commonTransforms.getStyleClass('creation_date'),
+        text: getDate(record, '_source.fields.date_profile_created'),
+        type: 'creation_date'
+      },
       highlightedText: getHighlightedText(record, 'fields.title.strict.name', 'fields.title.relaxed.name'),
       details: []
     };
 
-    offer.locations = addHighlights(offer.locations, record, [
-        'fields.city.strict.name',
-        'fields.city.relaxed.name',
-        'fields.state.strict.name',
-        'fields.state.relaxed.name',
-        'fields.country.strict.name',
-        'fields.country.relaxed.name'
-    ]);
-    offer.phones = addHighlights(offer.phones, record, ['fields.phone.strict.name', 'fields.phone.relaxed.name']);
-    offer.emails = addHighlights(offer.emails, record, ['fields.email.strict.name', 'fields.email.relaxed.name']);
-    offer.socialIds = addHighlights(offer.socialIds, record, ['fields.social_media_id.strict.name', 'fields.social_media_id.relaxed.name']);
-    offer.reviewIds = addHighlights(offer.reviewIds, record, ['fields.review_id.strict.name', 'fields.review_id.relaxed.name']);
-    offer.services = addHighlights(offer.services, record, ['fields.service.strict.name', 'fields.service.relaxed.name']);
-    offer.prices = addHighlights(offer.prices, record, ['fields.price.strict.name', 'fields.price.relaxed.name']);
-    offer.names = addHighlights(offer.names, record, ['fields.name.strict.name', 'fields.name.relaxed.name']);
-    offer.genders = addHighlights(offer.genders, record, ['fields.gender.strict.name', 'fields.gender.relaxed.name']);
-    offer.ages = addHighlights(offer.ages, record, ['fields.age.strict.name', 'fields.age.relaxed.name']);
-    offer.ethnicities = addHighlights(offer.ethnicities, record, ['fields.ethnicity.strict.name', 'fields.ethnicity.relaxed.name']);
-    offer.eyeColors = addHighlights(offer.eyeColors, record, ['fields.eye_color.strict.name', 'fields.eye_color.relaxed.name']);
-    offer.hairColors = addHighlights(offer.hairColors, record, ['fields.hair_color.strict.name', 'fields.hair_color.relaxed.name']);
-    offer.heights = addHighlights(offer.heights, record, ['fields.height.strict.name', 'fields.height.relaxed.name']);
-    offer.weights = addHighlights(offer.weights, record, ['fields.weight.strict.name', 'fields.weight.relaxed.name']);
-    offer.publishers = addHighlights(offer.publishers, record, ['tld']);
+    doc.objectIds = addHighlights(doc.objectIds, record, ['fields.object_id.strict.name']);
+    doc.tickerSymbols = addHighlights(doc.tickerSymbols, record, ['fields.ticker_symbol.strict.name']);
+    doc.postTypes = addHighlights(doc.postTypes, record, ['fields.type.strict.name']);
+    doc.postIds = addHighlights(doc.postIds, record, ['fields.post_id.strict.name']);
+    doc.authors = addHighlights(doc.authors, record, ['fields.author.strict.name']);
+    doc.authorProfiles = addHighlights(doc.authorProfiles, record, ['fields.author_profile.strict.name']);
+    doc.companies = addHighlights(doc.companyTypes, record, ['fields.company.strict.name']);
+    doc.companyTypes = addHighlights(doc.companyTypes, record, ['fields.company_type.strict.name']);
+    doc.disclaimers = addHighlights(doc.disclaimers, record, ['fields.disclaimer.strict.name']);
+    doc.forumNames = addHighlights(doc.forumNames, record, ['fields.forum_name.strict.name']);
+    doc.ages = addHighlights(doc.ages, record, ['fields.age.strict.name']);
+    doc.followedBy = addHighlights(doc.followedBy, record, ['fields.followed_by.strict.name']);
+    doc.locations = addHighlights(doc.locations, record, ['fields.location.strict.name']);
+    doc.numberOfPosts = addHighlights(doc.numberOfPosts, record, ['fields.num_posts.strict.name']);
+    doc.stocksOwned = addHighlights(doc.stocksOwned, record, ['fields.stocks_owned.strict.name']);
+    doc.moderators = addHighlights(doc.moderators, record, ['fields.moderator.strict.name']);
 
-    offer.details.push({
+    doc.details.push({
       name: 'Url',
       link: url || null,
       text: url || 'Unavailable'
     });
-    offer.details.push({
-      name: 'Description',
-      highlightedText: getHighlightedText(record, 'fields.description.strict.name', 'fields.description.relaxed.name'),
-      text: offer.description
+    doc.details.push({
+      name: 'Content',
+      highlightedText: getHighlightedText(record, 'fields.content.strict.name', 'fields.content.relaxed.name'),
+      text: doc.content
     });
-    offer.details.push({
+    doc.details.push({
       name: 'Cached Webpage',
       link: id ? commonTransforms.getLink(id, 'cache') : null,
       text: id ? 'Open' : 'Unavailable'
     });
 
-    return offer;
+    return doc;
   }
 
   function offsetDatesInObjects(dateObjects) {
@@ -623,23 +379,25 @@ var offerTransform = (function(_, commonTransforms) {
   }
 
   return {
-    offer: function(data) {
+    doc: function(data) {
       if(data && data.hits.hits.length > 0) {
-        return getOfferObject(data.hits.hits[0]);
+        return getDocObject(data.hits.hits[0]);
       }
       return {};
     },
 
-    offers: function(data) {
-      var offers = {data: [], count: 0};
-      if(data && data.hits.hits.length > 0) {
-        _.each(data.hits.hits, function(record) {
-          var offer = getOfferObject(record);
-          offers.data.push(offer);
+    docs: function(data) {
+      var docs = {
+        data: [],
+        count: 0
+      };
+      if(data && data.hits.hits.length) {
+        docs.data = data.hits.hits.map(function(record) {
+          return getDocObject(record);
         });
-        offers.count = data.hits.total;
+        docs.count = data.hits.total;
       }
-      return offers;
+      return docs;
     },
 
     removeDescriptorFromOffers: function(descriptorId, offers) {
@@ -866,6 +624,7 @@ var offerTransform = (function(_, commonTransforms) {
     },
 
     createExportDataForCsv: function(results) {
+      /*
       var linkPrefix = window.location.hostname + ':' + window.location.port;
       var data = [[
         'ad url',
@@ -916,6 +675,8 @@ var offerTransform = (function(_, commonTransforms) {
         ]);
       });
       return data;
+      */
+      return [];
     },
 
     createExportDataForPdf: function(results) {
@@ -923,6 +684,7 @@ var offerTransform = (function(_, commonTransforms) {
       var data = [];
       var nextId = 1;
 
+      /*
       results.forEach(function(result) {
         var locations = result.locations.map(function(location) {
           return location.textAndCountry;
@@ -999,6 +761,7 @@ var offerTransform = (function(_, commonTransforms) {
 
         data.push(item);
       });
+      */
 
       return data;
     },

@@ -26,21 +26,11 @@ DigBehaviors.TypeBehavior = {
    * Returns the link for the given type and id.
    */
   getPageLink: function(id, type) {
-    if(!id || !type || !(type === 'cache' || type === 'email' || type === 'image' || type === 'offer' || type === 'phone' || type === 'provider' || type === 'seller' || type === 'location')) {
+    if(!id || !type || !(type === 'cache' || type === 'doc')) {
       return undefined;
     }
 
-    var linkId = id;
-    if(linkId.startsWith('http://dig.isi.edu/ht/data/')) {
-      linkId = decodeURIComponent(linkId.substring(linkId.lastIndexOf('/') + 1));
-    }
-    if(type === 'email') {
-      linkId = encodeURIComponent(linkId);
-    }
-    if(type === 'image') {
-      return '/' + type + '.html?url=' + linkId;
-    }
-    return '/' + type + '.html?id=' + linkId;
+    return '/' + type + '.html?id=' + id;
   },
 
   /**
@@ -48,43 +38,26 @@ DigBehaviors.TypeBehavior = {
    */
   getTypeIcon: function(type) {
     switch(type) {
+      case 'age': return 'icons:schedule';
+      case 'author': return 'icons:account-circle';
+      case 'author_profile': return 'icons:info';
       case 'cache': return 'icons:cached';
+      case 'creation_date': return 'social:cake';
+      case 'company': return 'icons:work';
+      case 'company_type': return 'icons:work';
       case 'date': return 'icons:date-range';
-      case 'email': return 'communication:email';
-      case 'image': return 'image:photo';
-      case 'location': return 'communication:location-on';
-      case 'money': return 'editor:attach-money';
-      case 'offer': return 'maps:local-offer';
-      case 'phone': return 'communication:phone';
-      case 'provider': return 'icons:account-circle';
-      case 'review': return 'icons:thumbs-up-down';
-      case 'seller': return 'icons:group-work';
-      case 'service': return 'icons:work';
-      case 'social': return 'social:public';
-      case 'webpage': return 'av:web';
-    }
-    return '';
-  },
-
-  /**
-   * Returns the name for the given type.
-   */
-  getTypeName: function(type) {
-    switch(type) {
-      case 'cache': return 'Cached Webpage';
-      case 'date': return 'Date';
-      case 'email': return 'Email Address';
-      case 'image': return 'Image';
-      case 'location': return 'Location';
-      case 'money': return 'Price';
-      case 'offer': return 'Ad';
-      case 'phone': return 'Telephone Number';
-      case 'provider': return 'Provider';
-      case 'review': return 'Review ID';
-      case 'seller': return 'Seller';
-      case 'service': return 'Service Provided';
-      case 'social': return 'Social Media ID';
-      case 'webpage': return 'Website';
+      case 'disclaimer': return 'icons:error';
+      case 'followed_by': return 'social:group';
+      case 'forum_name': return 'icons:account-circle';
+      case 'location': return 'social:location-city';
+      case 'moderator': return 'social:school';
+      case 'number_of_posts': return 'communication:chat';
+      case 'object_id': return 'social:person';
+      case 'post_id': return 'social:person';
+      case 'post_type': return 'icons:description';
+      case 'stocks_owned': return 'editor:show-chart';
+      case 'ticker_symbol': return 'social:public';
+      case 'website': return 'av:web';
     }
     return '';
   },

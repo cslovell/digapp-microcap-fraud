@@ -59,8 +59,6 @@ limitations under the License.
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
 
-  <script src="scripts/google-analytics.js"></script>
-  
   <!-- will be replaced with elements/elements.vulcanized.html -->
   <link rel="import" href="elements/elements.html">
   <!-- endreplace-->
@@ -95,7 +93,7 @@ limitations under the License.
       client="{{esclient}}">
     </elastic-client>
 
-    <query-builder
+    <query-builder demand
       age-field="[[ageConfig.queryField]]"
       city-field="[[cityConfig.queryField]]"
       country-field="[[countryConfig.queryField]]"
@@ -155,7 +153,7 @@ limitations under the License.
     <json-transform
       data-in="{{searchResults}}"
       data-out="{{records}}"
-      transform-function="[[clientConfig.transforms.offer.offers]]">
+      transform-function="[[clientConfig.transforms.doc.docs]]">
     </json-transform>
 
     <!-- Facets -->
@@ -1274,8 +1272,8 @@ limitations under the License.
             </div>
           </paper-toolbar>
 
-          <iron-pages attr-for-selected="data-type" selected="ads">
-            <section data-type="ads">
+          <iron-pages attr-for-selected="data-type" selected="doc">
+            <section data-type="doc">
               <div class="layout horizontal facet filter-header" title="Toggle All Facets" on-tap="toggleAllFacetLists">
                 <span class="flex">Facets</span>
                 <span>[[getToggleAllFacetsText(facetListsExpanded)]]</span>
@@ -2734,8 +2732,8 @@ limitations under the License.
             <export-button
               data="[[shownRecords]]"
               download-image-url="[[config.downloadImageUrl]]"
-              csv-transform-function="[[clientConfig.transforms.offer.createExportDataForCsv]]"
-              pdf-transform-function="[[clientConfig.transforms.offer.createExportDataForPdf]]">
+              csv-transform-function="[[clientConfig.transforms.doc.createExportDataForCsv]]"
+              pdf-transform-function="[[clientConfig.transforms.doc.createExportDataForPdf]]">
             </export-button>
           </div>
 
@@ -3137,7 +3135,7 @@ limitations under the License.
       /* end search dropdown panel code */
 
       app.getElasticTypes = function() {
-        return ['ads'];
+        return ['doc'];
       };
 
       app.noSearchParameters = function() {

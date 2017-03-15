@@ -43,7 +43,6 @@ limitations under the License.
           class="item-with-border"
           item="[[item]]"
           item-highlighted-text-property="[[itemHighlightedTextProperty]]"
-          item-high-risk-property="[[itemHighRiskProperty]]"
           item-icon-property="[[itemIconProperty]]"
           item-icon-style-class-property="[[itemIconStyleClassProperty]]"
           item-link-property="[[itemLinkProperty]]"
@@ -61,21 +60,8 @@ limitations under the License.
           detail-highlighted-text-property="[[detailHighlightedTextProperty]]"
           detail-link-property="[[detailLinkProperty]]"
           detail-text-property="[[detailTextProperty]]"
-          images="{{item.images}}"
-          on-images-changed="_notifyResultChange"
-          image-aggregation-field="[[imageAggregationField]]"
-          image-aggregation-name="[[imageAggregationName]]"
-          image-index-name="[[imageIndexName]]"
-          image-index-type="[[imageIndexType]]"
-          image-query-field="[[imageQueryField]]"
-          image-transform-function="[[imageTransformFunction]]"
-          image-link-property="[[imageLinkProperty]]"
-          image-source-property="[[imageSourceProperty]]"
           client="[[client]]"
-          annotation-manager="[[annotationManager]]"
           new-tab="[[newTab]]"
-          blur="[[blur]]"
-          notification-query-date="[[notificationQueryDate]]"
           modal-icon-last>
         </single-record>
       </template>
@@ -96,14 +82,6 @@ limitations under the License.
         itemHighlightedTextProperty: {
           type: String,
           value: 'highlightedText'
-        },
-
-        /**
-         * The property for the high risk in the item.
-         */
-        itemHighRiskProperty: {
-          type: String,
-          value: 'highRisk'
         },
 
         /**
@@ -243,54 +221,6 @@ limitations under the License.
         },
 
         /**
-         * The property for the list of image objects in the item.
-         */
-        itemImageProperty: {
-          type: String,
-          value: 'images'
-        },
-
-        /**
-         * The property for the link in the images in the item.
-         */
-        imageLinkProperty: {
-          type: String,
-          value: 'link'
-        },
-
-        /**
-         * The property for the source in the images in the item.
-         */
-        imageSourceProperty: {
-          type: String,
-          value: 'source'
-        },
-
-        imageAggregationField: {
-          type: String
-        },
-
-        imageAggregationName: {
-          type: String
-        },
-
-        imageIndexName: {
-          type: String
-        },
-
-        imageIndexType: {
-          type: String
-        },
-
-        imageQueryField: {
-          type: String
-        },
-
-        imageTransformFunction: {
-          type: Object
-        },
-
-        /**
          * an instance of elasticsearch.Client which is connected to
          * an elasticsearch server
          */
@@ -346,13 +276,6 @@ limitations under the License.
         },
 
         /**
-         * The annotation manager.
-         */
-        annotationManager: {
-          type: Object
-        },
-
-        /**
          * Whether to open a link in a new tab.
          */
         newTab: {
@@ -378,24 +301,7 @@ limitations under the License.
           value: 'No Records',
           computed: '_computeTitle(type, shownResults.length, totalResults)',
           notify: true
-        },
-
-        /**
-         * Whether to blur the images.
-         */
-        blur: {
-          type: Boolean,
-          notify: true
-        },
-
-        /**
-         * Whether a notification query is being viewed and the notification date associated with that query.
-         */
-        notificationQueryDate: {
-          type: Object,
-          notify: true
         }
-
       },
 
       _computeLoadType: function(type) {
@@ -420,12 +326,6 @@ limitations under the License.
 
       _getList: function(item, property) {
         return (item ? item[property] : undefined) || [];
-      },
-
-      _notifyResultChange: function(event) {
-        if(event.model.index) {
-          this.notifyPath('shownResults.' + event.model.index, this.shownResults[event.model.index]);
-        }
       }
     });
   })();
