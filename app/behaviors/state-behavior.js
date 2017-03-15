@@ -41,12 +41,7 @@ DigBehaviors.StateBehavior = {
       forum: config.email || [],
       image: config.image || [],
       location: config.location || [],
-      name: config.name || [],
-      phone: config.phone || [],
-      price: config.price || [],
-      publisher: config.publisher || [],
-      services: config.services || [],
-      social: config.social || [],
+      moderator: config.moderator || [],
       weight: config.weight || []
     };
 
@@ -75,15 +70,9 @@ DigBehaviors.StateBehavior = {
       forum: config.forum || {},
       image: config.image || {},
       location: config.location || {},
-      name: config.name || {},
-      phone: config.phone || {},
+      moderator: config.moderator || {},
       // start and end dates will be keys within postingDate
       postingDate: config.postingDate || {},
-      price: config.price || {},
-      review: config.review || {},
-      risk: config.risk || {},
-      services: config.services || {},
-      social: config.social || {},
       title: config.title || {},
       website: config.website || {},
       weight: config.weight || {},
