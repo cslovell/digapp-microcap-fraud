@@ -100,12 +100,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -165,12 +161,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -207,12 +199,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -249,12 +237,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -291,12 +275,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -333,12 +313,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -368,19 +344,15 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="email"
+      ignore-type="forum"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
       company-name-field="[[companyNameConfig.queryField]]"
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -392,20 +364,20 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{emailQuery}}">
+      query="{{forumQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[emailQuery]]"
+      query="[[forumQuery]]"
       page-size="0"
-      results="{{emailResult}}"
-      last-error="{{emailError}}"
-      aggregations="{{buildArray(emailAgg)}}"
+      results="{{forumResult}}"
+      last-error="{{forumError}}"
+      aggregations="{{buildArray(forumAgg)}}"
       filters="[]"
-      loading="{{emailLoading}}"
+      loading="{{forumLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
@@ -417,12 +389,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -459,12 +427,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -501,12 +465,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -543,12 +503,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -578,48 +534,6 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="gender"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
-      name-field="[[nameConfig.queryField]]"
-      phone-field="[[phoneConfig.queryField]]"
-      price-field="[[priceConfig.queryField]]"
-      review-field="[[reviewConfig.queryField]]"
-      risk-field="[[riskConfig.queryField]]"
-      services-field="[[servicesConfig.queryField]]"
-      social-field="[[socialConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{genderQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[genderQuery]]"
-      page-size="0"
-      results="{{genderResult}}"
-      last-error="{{genderError}}"
-      aggregations="{{buildArray(genderAgg)}}"
-      filters="[]"
-      loading="{{genderLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
       ignore-type="age"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
@@ -627,12 +541,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -662,19 +572,15 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="ethnicity"
+      ignore-type="location"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
       company-name-field="[[companyNameConfig.queryField]]"
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -686,146 +592,20 @@ limitations under the License.
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{ethnicityQuery}}">
+      query="{{locationQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[ethnicityQuery]]"
+      query="[[locationQuery]]"
       page-size="0"
-      results="{{ethnicityResult}}"
-      last-error="{{ethnicityError}}"
-      aggregations="{{buildArray(ethnicityAgg)}}"
+      results="{{locationResult}}"
+      last-error="{{locationError}}"
+      aggregations="{{buildArray(locationAgg)}}"
       filters="[]"
-      loading="{{ethnicityLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="eyeColor"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
-      name-field="[[nameConfig.queryField]]"
-      phone-field="[[phoneConfig.queryField]]"
-      price-field="[[priceConfig.queryField]]"
-      review-field="[[reviewConfig.queryField]]"
-      risk-field="[[riskConfig.queryField]]"
-      services-field="[[servicesConfig.queryField]]"
-      social-field="[[socialConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{eyeColorQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[eyeColorQuery]]"
-      page-size="0"
-      results="{{eyeColorResult}}"
-      last-error="{{eyeColorError}}"
-      aggregations="{{buildArray(eyeColorAgg)}}"
-      filters="[]"
-      loading="{{eyeColorLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="hairColor"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
-      name-field="[[nameConfig.queryField]]"
-      phone-field="[[phoneConfig.queryField]]"
-      price-field="[[priceConfig.queryField]]"
-      review-field="[[reviewConfig.queryField]]"
-      risk-field="[[riskConfig.queryField]]"
-      services-field="[[servicesConfig.queryField]]"
-      social-field="[[socialConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{hairColorQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[hairColorQuery]]"
-      page-size="0"
-      results="{{hairColorResult}}"
-      last-error="{{hairColorError}}"
-      aggregations="{{buildArray(hairColorAgg)}}"
-      filters="[]"
-      loading="{{hairColorLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="height"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
-      name-field="[[nameConfig.queryField]]"
-      phone-field="[[phoneConfig.queryField]]"
-      price-field="[[priceConfig.queryField]]"
-      review-field="[[reviewConfig.queryField]]"
-      risk-field="[[riskConfig.queryField]]"
-      services-field="[[servicesConfig.queryField]]"
-      social-field="[[socialConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{heightQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[heightQuery]]"
-      page-size="0"
-      results="{{heightResult}}"
-      last-error="{{heightError}}"
-      aggregations="{{buildArray(heightAgg)}}"
-      filters="[]"
-      loading="{{heightLoading}}"
+      loading="{{locationLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
@@ -837,12 +617,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -879,12 +655,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -921,12 +693,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -963,12 +731,8 @@ limitations under the License.
       company-type-field="[[companyTypeConfig.queryField]]"
       date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      email-field="[[emailConfig.queryField]]"
-      ethnicity-field="[[ethnicityConfig.queryField]]"
-      eye-field="[[eyeColorConfig.queryField]]"
-      gender-field="[[genderConfig.queryField]]"
-      hair-field="[[hairColorConfig.queryField]]"
-      height-field="[[heightConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
       name-field="[[nameConfig.queryField]]"
       phone-field="[[phoneConfig.queryField]]"
       price-field="[[priceConfig.queryField]]"
@@ -1074,9 +838,9 @@ limitations under the License.
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[emailConfig.key]]"
-                  label="[[emailConfig.title]]"
-                  value="{{emailConfig.value}}"
+                  id$="input_[[forumConfig.key]]"
+                  label="[[forumConfig.title]]"
+                  value="{{forumConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
@@ -1128,27 +892,9 @@ limitations under the License.
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[ethnicityConfig.key]]"
-                  label="[[ethnicityConfig.title]]"
-                  value="{{ethnicityConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[eyeColorConfig.key]]"
-                  label="[[eyeColorConfig.title]]"
-                  value="{{eyeColorConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[hairColorConfig.key]]"
-                  label="[[hairColorConfig.title]]"
-                  value="{{hairColorConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[heightConfig.key]]"
-                  label="[[heightConfig.title]]"
-                  value="{{heightConfig.value}}"
+                  id$="input_[[locationConfig.key]]"
+                  label="[[locationConfig.title]]"
+                  value="{{locationConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
@@ -1249,17 +995,13 @@ limitations under the License.
                 <selected-facets-display facet-selection="{{searchParameters.companyType}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.author}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.phone}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.email}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.forum}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.social}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.services}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.price}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.name}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.gender}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.age}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.ethnicity}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.eyeColor}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.hairColor}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.height}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.location}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.weight}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.review}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.risk}}"></selected-facets-display>
@@ -1378,75 +1120,75 @@ limitations under the License.
 
               <div class="h-divider"></div>
 
-              <div id="email" class="layout horizontal facet filter-header" title="Toggle [[emailConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(emailConfig.title, emailResultList)]]</span>
-                <iron-icon id="email-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="email-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="forum" class="layout horizontal facet filter-header" title="Toggle [[forumConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(forumConfig.title, forumResultList)]]</span>
+                <iron-icon id="forum-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="forum-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[emailConfig.key]]"
-                field="[[emailConfig.aggregationField]]"
-                count="{{emailCount}}"
-                ejs-aggregation="{{emailAgg}}"
+                name="[[forumConfig.key]]"
+                field="[[forumConfig.aggregationField]]"
+                count="{{forumCount}}"
+                ejs-aggregation="{{forumAgg}}"
                 type="terms"
-                order="{{emailSortOrder}}">
+                order="{{forumSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[emailResult]]"
-                data-in2="[[emailConfig.key]]"
-                data-out="{{emailResultList}}"
+                data-in1="[[forumResult]]"
+                data-in2="[[forumConfig.key]]"
+                data-out="{{forumResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[emailConfig.title]]"
-                list="{{emailSelectedList}}"
-                object="{{searchParameters.email}}">
+                category="[[forumConfig.title]]"
+                list="{{forumSelectedList}}"
+                object="{{searchParameters.forum}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{emailCount}}"
-                    items="[[emailResultList]]"
-                    error="[[emailError]]"
-                    loading="[[emailLoading]]"
-                    item-type="[[emailConfig.title]]"
+                    aggregation-count="{{forumCount}}"
+                    items="[[forumResultList]]"
+                    error="[[forumError]]"
+                    loading="[[forumLoading]]"
+                    item-type="[[forumConfig.title]]"
                     count-type="Ads"
                     text-property="id"
-                    order-by="{{emailSortOrder}}"
-                    selected-ids="{{emailSelectedList}}">
+                    order-by="{{forumSortOrder}}"
+                    selected-ids="{{forumSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[emailResultList.length]]">
+                <template is="dom-if" if="[[forumResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{emailSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{forumSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[emailResultList]]"
-                loading="[[emailLoading]]"
-                selected="{{emailSelectedList}}">
+                list="[[forumResultList]]"
+                loading="[[forumLoading]]"
+                selected="{{forumSelectedList}}">
               </select-all>
 
-              <iron-collapse id="email-list" class="filter-list" opened>
+              <iron-collapse id="forum-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[emailResultList]]"
-                  selected-ids="{{emailSelectedList}}">
+                  items="[[forumResultList]]"
+                  selected-ids="{{forumSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[emailError]]" message="{{emailErrorMessage}}"></elastic-error>
+                <elastic-error error="[[forumError]]" message="{{forumErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[emailResultList.length]]"
-                  error="[[emailErrorMessage]]"
-                  loading="[[emailLoading]]"
-                  empty="No [[emailConfig.title]]">
+                  count="[[forumResultList.length]]"
+                  error="[[forumErrorMessage]]"
+                  loading="[[forumLoading]]"
+                  empty="No [[forumConfig.title]]">
                 </status-text>
               </iron-collapse>
 
@@ -1893,82 +1635,6 @@ limitations under the License.
 
               <div class="h-divider"></div>
 
-              <!-- TODO Hiding gender for now...
-              <div id="gender" class="layout horizontal facet filter-header" title="Toggle [[genderConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(genderConfig.title, genderResultList)]]</span>
-                <iron-icon id="gender-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="gender-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[genderConfig.key]]"
-                field="[[genderConfig.aggregationField]]"
-                count="{{genderCount}}"
-                ejs-aggregation="{{genderAgg}}"
-                type="terms"
-                order="{{genderSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[genderResult]]"
-                data-in2="[[genderConfig.key]]"
-                data-out="{{genderResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[genderConfig.title]]"
-                list="{{genderSelectedList}}"
-                object="{{searchParameters.gender}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{genderCount}}"
-                    items="[[genderResultList]]"
-                    error="[[genderError]]"
-                    loading="[[genderLoading]]"
-                    item-type="[[genderConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{genderSortOrder}}"
-                    selected-ids="{{genderSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[genderResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{genderSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[genderResultList]]"
-                loading="[[genderLoading]]"
-                selected="{{genderSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="gender-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[genderResultList]]"
-                  selected-ids="{{genderSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[genderError]]" message="{{genderErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[genderResultList.length]]"
-                  error="[[genderErrorMessage]]"
-                  loading="[[genderLoading]]"
-                  empty="No [[genderConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-              -->
-
               <div id="age" class="layout horizontal facet filter-header" title="Toggle [[ageConfig.title]]" on-tap="toggleList">
                 <span class="flex">[[getLabelAndCount(ageConfig.title, ageResultList)]]</span>
                 <iron-icon id="age-icon-opened" icon="icons:expand-less"></iron-icon>
@@ -2043,297 +1709,75 @@ limitations under the License.
 
               <div class="h-divider"></div>
 
-              <div id="ethnicity" class="layout horizontal facet filter-header" title="Toggle [[ethnicityConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(ethnicityConfig.title, ethnicityResultList)]]</span>
-                <iron-icon id="ethnicity-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="ethnicity-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="location" class="layout horizontal facet filter-header" title="Toggle [[locationConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(locationConfig.title, locationResultList)]]</span>
+                <iron-icon id="location-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="location-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[ethnicityConfig.key]]"
-                field="[[ethnicityConfig.aggregationField]]"
-                count="{{ethnicityCount}}"
-                ejs-aggregation="{{ethnicityAgg}}"
+                name="[[locationConfig.key]]"
+                field="[[locationConfig.aggregationField]]"
+                count="{{locationCount}}"
+                ejs-aggregation="{{locationAgg}}"
                 type="terms"
-                order="{{ethnicitySortOrder}}">
+                order="{{locationSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[ethnicityResult]]"
-                data-in2="[[ethnicityConfig.key]]"
-                data-out="{{ethnicityResultList}}"
+                data-in1="[[locationResult]]"
+                data-in2="[[locationConfig.key]]"
+                data-out="{{locationResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[ethnicityConfig.title]]"
-                list="{{ethnicitySelectedList}}"
-                object="{{searchParameters.ethnicity}}">
+                category="[[locationConfig.title]]"
+                list="{{locationSelectedList}}"
+                object="{{searchParameters.location}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{ethnicityCount}}"
-                    items="[[ethnicityResultList]]"
-                    error="[[ethnicityError]]"
-                    loading="[[ethnicityLoading]]"
-                    item-type="[[ethnicityConfig.title]]"
+                    aggregation-count="{{locationCount}}"
+                    items="[[locationResultList]]"
+                    error="[[locationError]]"
+                    loading="[[locationLoading]]"
+                    item-type="[[locationConfig.title]]"
                     count-type="Ads"
                     text-property="id"
-                    order-by="{{ethnicitySortOrder}}"
-                    selected-ids="{{ethnicitySelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[ethnicityResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{ethnicitySortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[ethnicityResultList]]"
-                loading="[[ethnicityLoading]]"
-                selected="{{ethnicitySelectedList}}">
-              </select-all>
-
-              <iron-collapse id="ethnicity-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[ethnicityResultList]]"
-                  selected-ids="{{ethnicitySelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[ethnicityError]]" message="{{ethnicityErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[ethnicityResultList.length]]"
-                  error="[[ethnicityErrorMessage]]"
-                  loading="[[ethnicityLoading]]"
-                  empty="No [[ethnicityConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="eye-color" class="layout horizontal facet filter-header" title="Toggle [[eyeColorConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(eyeColorConfig.title, eyeColorResultList)]]</span>
-                <iron-icon id="eye-color-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="eye-color-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[eyeColorConfig.key]]"
-                field="[[eyeColorConfig.aggregationField]]"
-                count="{{eyeColorCount}}"
-                ejs-aggregation="{{eyeColorAgg}}"
-                type="terms"
-                order="{{eyeColorSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[eyeColorResult]]"
-                data-in2="[[eyeColorConfig.key]]"
-                data-out="{{eyeColorResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[eyeColorConfig.title]]"
-                list="{{eyeColorSelectedList}}"
-                object="{{searchParameters.eyeColor}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{eyeColorCount}}"
-                    items="[[eyeColorResultList]]"
-                    error="[[eyeColorError]]"
-                    loading="[[eyeColorLoading]]"
-                    item-type="[[eyeColorConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{eyeColorSortOrder}}"
-                    selected-ids="{{eyeColorSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[eyeColorResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{eyeColorSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[eyeColorResultList]]"
-                loading="[[eyeColorLoading]]"
-                selected="{{eyeColorSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="eye-color-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[eyeColorResultList]]"
-                  selected-ids="{{eyeColorSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[eyeColorError]]" message="{{eyeColorErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[eyeColorResultList.length]]"
-                  error="[[eyeColorErrorMessage]]"
-                  loading="[[eyeColorLoading]]"
-                  empty="No [[eyeColorConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="hair-color" class="layout horizontal facet filter-header" title="Toggle [[hairColorConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(hairColorConfig.title, hairColorResultList)]]</span>
-                <iron-icon id="hair-color-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="hair-color-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[hairColorConfig.key]]"
-                field="[[hairColorConfig.aggregationField]]"
-                count="{{hairColorCount}}"
-                ejs-aggregation="{{hairColorAgg}}"
-                type="terms"
-                order="{{hairColorSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[hairColorResult]]"
-                data-in2="[[hairColorConfig.key]]"
-                data-out="{{hairColorResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[hairColorConfig.title]]"
-                list="{{hairColorSelectedList}}"
-                object="{{searchParameters.hairColor}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{hairColorCount}}"
-                    items="[[hairColorResultList]]"
-                    error="[[hairColorError]]"
-                    loading="[[hairColorLoading]]"
-                    item-type="[[hairColorConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{hairColorSortOrder}}"
-                    selected-ids="{{hairColorSelectedList}}">
+                    order-by="{{locationSortOrder}}"
+                    selected-ids="{{locationSelectedList}}">
                   </aggregation-popup>
                 </div>
                 <div class="self-end">
-                  <template is="dom-if" if="[[hairColorResultList.length]]">
-                    <aggregation-sort order-by="{{hairColorSortOrder}}"></aggregation-sort>
+                  <template is="dom-if" if="[[locationResultList.length]]">
+                    <aggregation-sort order-by="{{locationSortOrder}}"></aggregation-sort>
                   </template>
                 </div>
               </div>
 
               <select-all
-                list="[[hairColorResultList]]"
-                loading="[[hairColorLoading]]"
-                selected="{{hairColorSelectedList}}">
+                list="[[locationResultList]]"
+                loading="[[locationLoading]]"
+                selected="{{locationSelectedList}}">
               </select-all>
 
-              <iron-collapse id="hair-color-list" class="filter-list" opened>
+              <iron-collapse id="location-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[hairColorResultList]]"
-                  selected-ids="{{hairColorSelectedList}}">
+                  items="[[locationResultList]]"
+                  selected-ids="{{locationSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[hairColorError]]" message="{{hairColorErrorMessage}}"></elastic-error>
+                <elastic-error error="[[locationError]]" message="{{locationErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[hairColorResultList.length]]"
-                  error="[[hairColorErrorMessage]]"
-                  loading="[[hairColorLoading]]"
-                  empty="No [[hairColorConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="height" class="layout horizontal facet filter-header" title="Toggle [[heightConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(heightConfig.title, heightResultList)]]</span>
-                <iron-icon id="height-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="height-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[heightConfig.key]]"
-                field="[[heightConfig.aggregationField]]"
-                count="{{heightCount}}"
-                ejs-aggregation="{{heightAgg}}"
-                type="terms"
-                order="{{heightSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[heightResult]]"
-                data-in2="[[heightConfig.key]]"
-                data-out="{{heightResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[heightConfig.title]]"
-                list="{{heightSelectedList}}"
-                object="{{searchParameters.height}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{heightCount}}"
-                    items="[[heightResultList]]"
-                    error="[[heightError]]"
-                    loading="[[heightLoading]]"
-                    item-type="[[heightConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{heightSortOrder}}"
-                    selected-ids="{{heightSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[heightResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{heightSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[heightResultList]]"
-                loading="[[heightLoading]]"
-                selected="{{heightSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="height-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[heightResultList]]"
-                  selected-ids="{{heightSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[heightError]]" message="{{heightErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[heightResultList.length]]"
-                  error="[[heightErrorMessage]]"
-                  loading="[[heightLoading]]"
-                  empty="No [[heightConfig.title]]">
+                  count="[[locationResultList.length]]"
+                  error="[[locationErrorMessage]]"
+                  loading="[[locationLoading]]"
+                  empty="No [[locationConfig.title]]">
                 </status-text>
               </iron-collapse>
 
@@ -2839,53 +2283,18 @@ limitations under the License.
         aggregationField: 'fields.description.relaxed.name',
         value: ''
       };
-      app.emailConfig = {
-        key: 'email',
-        title: 'Email Address',
-        queryField: 'fields.email.relaxed.name',
-        aggregationField: 'fields.email.strict.key',
+      app.forumConfig = {
+        key: 'forum',
+        title: 'Forum',
+        queryField: 'fields.forum_name.strict.name',
+        aggregationField: 'fields.forum_name.strict.name.raw',
         value: ''
       };
-      app.ethnicityConfig = {
-        key: 'ethnicity',
-        title: 'Ethnicity of Provider',
-        queryField: 'fields.ethnicity.relaxed.name',
-        aggregationField: 'fields.ethnicity.strict.key',
-        value: ''
-      };
-      app.eyeColorConfig = {
-        key: 'eyeColor',
-        title: 'Eye Color of Provider',
-        queryField: 'fields.eye_color.relaxed.name',
-        aggregationField: 'fields.eye_color.strict.key',
-        value: ''
-      };
-      app.genderConfig = {
-        key: 'gender',
-        title: 'Gender of Provider',
-        queryField: 'fields.gender.relaxed.name',
-        aggregationField: 'fields.gender.strict.key',
-        value: ''
-      };
-      app.hairColorConfig = {
-        key: 'hairColor',
-        title: 'Hair Color of Provider',
-        queryField: 'fields.hair_color.relaxed.name',
-        aggregationField: 'fields.hair_color.strict.key',
-        value: ''
-      };
-      app.heightConfig = {
-        key: 'height',
-        title: 'Height (cm) of Provider',
-        queryField: 'fields.height.relaxed.name',
-        aggregationField: 'fields.height.strict.key',
-        value: ''
-      };
-      app.imageConfig = {
-        key: 'image',
-        title: 'Image',
-        queryField: 'fields.image.relaxed.name',
-        aggregationField: 'fields.image.strict.key',
+      app.locationConfig = {
+        key: 'location',
+        title: 'Location',
+        queryField: 'fields.location.strict.name',
+        aggregationField: 'fields.location.strict.name.raw',
         value: ''
       };
       app.nameConfig = {
@@ -2967,12 +2376,8 @@ limitations under the License.
         app.companyNameConfig,
         app.companyTypeConfig,
         app.descriptionConfig,
-        app.emailConfig,
-        app.ethnicityConfig,
-        app.eyeColorConfig,
-        //app.genderConfig,
-        app.hairColorConfig,
-        app.heightConfig,
+        app.forumConfig,
+        app.locationConfig,
         app.nameConfig,
         app.phoneConfig,
         app.priceConfig,
