@@ -44,7 +44,7 @@ var filterAggTransform = (function(_, commonTransforms) {
     filterList: function(data, property) {
       if(data && data.aggregations && data.aggregations[property] && data.aggregations[property][property] && data.aggregations[property][property].buckets) {
         return data.aggregations[property][property].buckets.map(function(bucket) {
-          var id = ('' + bucket.key).toLowerCase();
+          var id = ('' + bucket.key);
           /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
           return {
             count: bucket.doc_count,
