@@ -103,7 +103,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -158,7 +160,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -180,6 +184,40 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
+      ignore-type="postType"
+      age-field="[[ageConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{postTypeQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[postTypeQuery]]"
+      page-size="0"
+      results="{{postTypeResult}}"
+      last-error="{{postTypeError}}"
+      aggregations="{{buildArray(postTypeAgg)}}"
+      filters="[]"
+      loading="{{postTypeLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
       ignore-type="companyName"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
@@ -190,7 +228,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -222,7 +262,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -254,7 +296,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -286,7 +330,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -318,7 +364,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -350,7 +398,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -382,7 +432,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -404,6 +456,39 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
+      ignore-type="tickerSymbol"
+      age-field="[[ageConfig.queryField]]"
+      author-field="[[authorConfig.queryField]]"
+      company-name-field="[[companyNameConfig.queryField]]"
+      company-type-field="[[companyTypeConfig.queryField]]"
+      date-field="[[dateStartConfig.queryField]]"
+      description-field="[[descriptionConfig.queryField]]"
+      forum-field="[[forumConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      weight-field="[[weightConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{tickerSymbolQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[tickerSymbolQuery]]"
+      page-size="0"
+      results="{{tickerSymbolResult}}"
+      last-error="{{tickerSymbolError}}"
+      aggregations="{{buildArray(tickerSymbolAgg)}}"
+      filters="[]"
+      loading="{{tickerSymbolLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder
       ignore-type="weight"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
@@ -414,7 +499,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -446,7 +533,9 @@ limitations under the License.
       forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
       moderator-field="[[moderatorConfig.queryField]]"
+      post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
+      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
       weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
@@ -536,14 +625,23 @@ limitations under the License.
 
               <div class="layout horizontal wrap">
                 <paper-input
+                  id$="input_[[tickerSymbolConfig.key]]"
+                  label="[[tickerSymbolConfig.title]]"
+                  value="{{tickerSymbolConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
+                  id$="input_[[postTypeConfig.key]]"
+                  label="[[postTypeConfig.title]]"
+                  value="{{postTypeConfig.value}}"
+                  on-keydown="checkSearchFieldInputKey">
+                </paper-input>
+                <paper-input
                   id$="input_[[forumConfig.key]]"
                   label="[[forumConfig.title]]"
                   value="{{forumConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
-              </div>
-
-              <div class="layout horizontal wrap">
                 <paper-input
                   id$="input_[[authorConfig.key]]"
                   label="[[authorConfig.title]]"
@@ -647,6 +745,8 @@ limitations under the License.
                 <!-- facetSelections are represented. -->
                 <selected-facets-display facet-selection="{{searchParameters.postingDate}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.website}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.postType}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.tickerSymbol}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.companyName}}"></selected-facets-display>
@@ -696,6 +796,154 @@ limitations under the License.
                   prefix-label="[[dateEndConfig.prefixLabel]]"
                   date-identifier="[[dateEndConfig.dateIdentifier]]">
                 </date-picker-display>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="ticker-symbol" class="layout horizontal facet filter-header" title="Toggle [[tickerSymbolConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(tickerSymbolConfig.title, tickerSymbolResultList)]]</span>
+                <iron-icon id="ticker-symbol-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="ticker-symbol-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[tickerSymbolConfig.key]]"
+                field="[[tickerSymbolConfig.aggregationField]]"
+                count="{{tickerSymbolCount}}"
+                ejs-aggregation="{{tickerSymbolAgg}}"
+                type="terms"
+                order="{{tickerSymbolSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[tickerSymbolResult]]"
+                data-in2="[[tickerSymbolConfig.key]]"
+                data-out="{{tickerSymbolResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[tickerSymbolConfig.title]]"
+                list="{{tickerSymbolSelectedList}}"
+                object="{{searchParameters.tickerSymbol}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{tickerSymbolCount}}"
+                    items="[[tickerSymbolResultList]]"
+                    error="[[tickerSymbolError]]"
+                    loading="[[tickerSymbolLoading]]"
+                    item-type="[[tickerSymbolConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{tickerSymbolSortOrder}}"
+                    selected-ids="{{tickerSymbolSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[tickerSymbolResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{tickerSymbolSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[tickerSymbolResultList]]"
+                loading="[[tickerSymbolLoading]]"
+                selected="{{tickerSymbolSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="ticker-symbol-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[tickerSymbolResultList]]"
+                  selected-ids="{{tickerSymbolSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[tickerSymbolError]]" message="{{tickerSymbolErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[tickerSymbolResultList.length]]"
+                  error="[[tickerSymbolErrorMessage]]"
+                  loading="[[tickerSymbolLoading]]"
+                  empty="No [[tickerSymbolConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="post-type" class="layout horizontal facet filter-header" title="Toggle [[postTypeConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(postTypeConfig.title, postTypeResultList)]]</span>
+                <iron-icon id="post-type-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="post-type-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[postTypeConfig.key]]"
+                field="[[postTypeConfig.aggregationField]]"
+                count="{{postTypeCount}}"
+                ejs-aggregation="{{postTypeAgg}}"
+                type="terms"
+                order="{{postTypeSortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[postTypeResult]]"
+                data-in2="[[postTypeConfig.key]]"
+                data-out="{{postTypeResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[postTypeConfig.title]]"
+                list="{{postTypeSelectedList}}"
+                object="{{searchParameters.postType}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{postTypeCount}}"
+                    items="[[postTypeResultList]]"
+                    error="[[postTypeError]]"
+                    loading="[[postTypeLoading]]"
+                    item-type="[[postTypeConfig.title]]"
+                    count-type="Ads"
+                    text-property="id"
+                    order-by="{{postTypeSortOrder}}"
+                    selected-ids="{{postTypeSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[postTypeResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{postTypeSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[postTypeResultList]]"
+                loading="[[postTypeLoading]]"
+                selected="{{postTypeSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="post-type-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[postTypeResultList]]"
+                  selected-ids="{{postTypeSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[postTypeError]]" message="{{postTypeErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[postTypeResultList.length]]"
+                  error="[[postTypeErrorMessage]]"
+                  loading="[[postTypeLoading]]"
+                  empty="No [[postTypeConfig.title]]">
+                </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
@@ -1491,8 +1739,8 @@ limitations under the License.
       app.descriptionConfig = {
         key: 'description',
         title: 'Page',
-        queryField: 'fields.description.relaxed.name',
-        aggregationField: 'fields.description.relaxed.name',
+        queryField: 'fields.content.strict.name',
+        aggregationField: 'fields.content.strict.name.raw',
         value: ''
       };
       app.forumConfig = {
@@ -1516,11 +1764,25 @@ limitations under the License.
         aggregationField: 'fields.moderator.strict.name.raw',
         value: ''
       };
+      app.postTypeConfig = {
+        key: 'postType',
+        title: 'Post Type',
+        queryField: 'fields.type.strict.name',
+        aggregationField: 'fields.type.strict.name.raw',
+        value: ''
+      };
+      app.tickerSymbolConfig = {
+        key: 'tickerSymbol',
+        title: 'Ticker Symbol',
+        queryField: 'fields.ticker_symbol.strict.name',
+        aggregationField: 'fields.ticker_symbol.strict.name.raw',
+        value: ''
+      };
       app.titleConfig = {
         key: 'title',
         title: 'Title',
         queryField: 'fields.title.strict.name',
-        aggregationField: 'fields.title.strict.name',
+        aggregationField: 'fields.title.strict.name.raw',
         value: ''
       };
       app.websiteConfig = {
@@ -1549,6 +1811,8 @@ limitations under the License.
         app.forumConfig,
         app.locationConfig,
         app.moderatorConfig,
+        app.postTypeConfig,
+        app.tickerSymbolConfig,
         app.titleConfig,
         app.websiteConfig,
         app.weightConfig

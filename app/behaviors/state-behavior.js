@@ -73,6 +73,8 @@ DigBehaviors.StateBehavior = {
       moderator: config.moderator || {},
       // start and end dates will be keys within postingDate
       postingDate: config.postingDate || {},
+      postType: config.postType || {},
+      tickerSymbol: config.tickerSymbol || {},
       title: config.title || {},
       website: config.website || {},
       weight: config.weight || {},

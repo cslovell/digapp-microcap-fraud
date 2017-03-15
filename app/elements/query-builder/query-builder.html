@@ -73,6 +73,14 @@ limitations under the License.
           type: String
         },
 
+        postTypeField: {
+          type: String
+        },
+
+        tickerSymbolField: {
+          type: String
+        },
+
         titleField: {
           type: String
         },
@@ -225,6 +233,10 @@ limitations under the License.
             return this.imageField;
           case 'moderator':
             return this.moderatorField;
+          case 'postType':
+            return this.postTypeField;
+          case 'tickerSymbol':
+            return this.tickerSymbolField;
           case 'title':
             return this.titleField;
           case 'website':
