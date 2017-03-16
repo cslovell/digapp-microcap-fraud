@@ -47,6 +47,7 @@ DigBehaviors.TypeBehavior = {
       case 'company_type': return 'icons:work';
       case 'date': return 'icons:date-range';
       case 'disclaimer': return 'icons:error';
+      case 'doc': return 'icons:description';
       case 'followed_by': return 'social:group';
       case 'forum_name': return 'icons:account-circle';
       case 'location': return 'social:location-city';

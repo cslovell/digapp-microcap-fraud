@@ -1,0 +1,286 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit" />
+  <title>DIG</title>
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#2E3AA1">
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+
+  <link rel="import" href="styles/entity-view-styles.html">
+  <link rel="import" href="styles/icon-styles.html">
+  <style is="custom-style" include="entity-view-styles"></style>
+  <style is="custom-style" include="icon-styles"></style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+  <span id="browser-sync-binding"></span>
+  <template is="dom-bind" id="app">
+
+    <!-- exposes clientConfig object which is a container for data
+      transform functions -->
+    <client-config config="{{clientConfig}}"></client-config>
+
+    <!--get app configuration from server -->
+    <iron-ajax
+      id="ajax"
+      auto
+      url="/config"
+      handle-as="json"
+      last-response="{{config}}">
+    </iron-ajax>
+
+    <!--initialize new elastic client connection to server
+      esclient can be used throughout the application lifecycle -->
+    <elastic-client
+      config="[[config.elasticConfig]]"
+      client="{{esclient}}">
+    </elastic-client>
+
+    <elastic-client-query-builder
+      type="term"
+      fields='"doc_id.raw"'
+      values="[[params.id]]"
+      ejs-query="{{docQuery}}">
+    </elastic-client-query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types='["doc"]'
+      query="[[docQuery]]"
+      page-size="1"
+      aggregations="[]"
+      filters="[]"
+      results="{{docResults}}"
+      last-error="{{error}}"
+      source-include='["doc_id", "fields", "tld", "url"]'>
+    </elastic-client-search>
+
+    <json-transform
+      data-in="[[docResults]]"
+      data-out="{{doc}}"
+      transform-function="[[clientConfig.transforms.doc.doc]]">
+    </json-transform>
+
+    <!-- More Ads Like This -->
+
+    <elastic-client-filter-builder
+      not
+      type="term"
+      field="doc_id.raw"
+      values="[[doc.id]]"
+      ejs-filter="{{notThisAdFilter}}">
+    </elastic-client-filter-builder>
+
+    <elastic-client-query-builder
+      type="mlt"
+      mlt-config='{"minTermFreq":1,"minDocFreq":1,"maxQueryTerms":100,"minimumShouldMatch":"75%"}'
+      fields='["_all"]'
+      values="[[buildMoreLikeThisValue(doc.title, doc.content, doc.disclaimers)]]"
+      ejs-query="{{similarDocQuery}}">
+    </elastic-client-query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types='["doc"]'
+      query="[[similarDocQuery]]"
+      aggregations="[]"
+      filters="[[buildArray(notThisAdFilter)]]"
+      results="{{similarDocResults}}"
+      page="{{similarDocPage}}"
+      page-size="20"
+      loading="{{similarDocLoading}}"
+      last-error="{{similarDocError}}"
+      source-include='["doc_id", "fields", "tld", "url"]'>
+    </elastic-client-search>
+
+    <json-transform
+      data-in="[[similarDocResults]]"
+      data-out="{{similarDocs}}"
+      transform-function="[[clientConfig.transforms.doc.docs]]">
+    </json-transform>
+
+    <!-- Main Content -->
+    <div class="entity">
+      <paper-header-panel class="flex" mode="waterfall-tall">
+
+        <!-- Entity header -->
+        <section class="paper-header layout horizontal">
+
+          <!-- Entity title -->
+          <div class="layout horizontal center flex">
+            <iron-icon class="iron-icon-huge entity-doc-font" icon="icons:description"></iron-icon>
+            <section>
+              <div class="paper-font-headline">
+                Document: <span>[[doc.title]]</span>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <!-- Entity body -->
+        <div class="entity-page">
+
+          <div class="content">
+
+            <!-- Left pane -->
+            <div class="flex layout vertical">
+
+              <paper-material>
+                <section class="what">
+                  <template is="dom-repeat" items="[[doc.descriptors]]" as="descriptor">
+                    <div class="what-section">
+                      <div class="flex">
+                        <div class="desc-header layout horizontal center">
+                          [[descriptor.name]]:
+                        </div>
+                        <icon-label-grid
+                          icon-style-class-property="styleClass"
+                          data="[[descriptor.data]]">
+                        </icon-label-grid>
+                      </div>
+                    </div>
+                    <hr>
+                  </template>
+
+                  <template is="dom-repeat" items="[[doc.details]]" as="detail">
+                    <div class="what-section">
+                      <div class="flex-12">
+                        <div class="desc-header">[[detail.name]]:</div>
+                        <template is="dom-if" if="[[detail.link]]">
+                          <a target="_blank" href$="[[detail.link]]">[[detail.text]]</a>
+                        </template>
+                        <template is="dom-if" if="[[!detail.link]]">
+                          <div class="desc-body">[[detail.text]]</div>
+                        </template>
+                      </div>
+                    </div>
+                    <hr>
+                  </template>
+                </section>
+              </paper-material>
+            </div>
+
+            <!-- Right Pane -->
+            <div class="flex layout vertical">
+
+              <!-- More Ads Like This Ad -->
+              <paper-material>
+                <section>
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-doc-font" icon="icons:description"></iron-icon>
+                    <div class="flex">{{similarDocTitle}}</div>
+
+                    <export-button
+                      data="[[shownSimilarDocs]]"
+                      type="Ad"
+                      csv-transform-function="[[clientConfig.transforms.doc.createExportDataForCsv]]"
+                      pdf-transform-function="[[clientConfig.transforms.doc.createExportDataForPdf]]">
+                    </export-button>
+                  </div>
+
+                  <template is="dom-if" if="[[similarDocError]]">
+                    <elastic-error error="[[similarDocError]]" message="{{similarDocErrorMessage}}"></elastic-error>
+                    <div>[[similarDocErrorMessage]]</div>
+                  </template>
+
+                  <records-list
+                    client="[[esclient]]"
+                    item-name-property="title"
+                    query-results="[[similarDocs.data]]"
+                    total-results="[[similarDocs.count]]"
+                    shown-results="{{shownSimilarDocs}}"
+                    page="{{similarDocPage}}"
+                    page-size="20"
+                    loading="[[similarDocLoading]]"
+                    type="Similar Ad"
+                    records-list-title="{{similarDocTitle}}">
+                  </records-list>
+                </section>
+              </paper-material>
+            </div>
+
+          </div>
+        </div>
+      </paper-header-panel>
+    </div>
+  </template>
+
+  <!-- Need to include dependencies here for IE -->
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="behaviors/array-behavior.js"></script>
+  <script src="behaviors/browser-behavior.js"></script>
+
+  <script>
+  (function(document) {
+    /* globals DigBehaviors */
+    var app = document.querySelector('#app');
+
+    app.params = DigBehaviors.BrowserBehavior.getUrlParameters(window.location.search);
+
+    app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
+
+    app.buildMoreLikeThisValue = function(title, content, disclaimer) {
+      return title + ' ' + content + ' ' + disclaimer;
+    };
+  })(document);
+  </script>
+</body>
+
+</html>
