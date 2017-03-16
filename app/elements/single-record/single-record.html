@@ -76,7 +76,8 @@ limitations under the License.
         };
       }
 
-      .single-record-text {
+      .descriptors > div {
+        width: 50%;
         min-height: 25px;
         line-height: 25px;
         overflow: hidden;
@@ -148,136 +149,29 @@ limitations under the License.
           </div>
         </div>
 
-        <div class="horizontal layout wrap single-record-text">
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Post Types:</strong>
-            </div>
-            <template is="dom-if" if="[[!item.postTypes.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.postTypes]]" as="postType">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(postType, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(postType, descriptorTextProperty)]]"
-                  icon="[[_getProperty(postType, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(postType, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(postType, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(postType, descriptorTextProperty)]]">
-                </icon-label>
+        <div class="layout horizontal descriptors wrap">
+          <template is="dom-repeat" items="[[item.descriptors]]" as="descriptor">
+            <div class="vertical layout">
+              <div class="text">
+                <strong>[[descriptor.name]]:</strong>
               </div>
-            </template>
-          </div>
-
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Ticker Symbols:</strong>
+              <template is="dom-if" if="[[!descriptor.data.length]]">
+                <div class="padded" secondary>None</div>
+              </template>
+              <template is="dom-repeat" items="[[descriptor.data]]" as="descriptorItem">
+                <div secondary>
+                  <icon-label class$="[[_isHighlighted(descriptorItem, descriptorHighlightProperty)]]"
+                    title="[[_getDescriptorTitle(descriptorItem, descriptorLinkProperty, descriptorTextProperty)]]"
+                    icon="[[_getProperty(descriptorItem, descriptorIconProperty)]]"
+                    icon-style-class="[[_getProperty(descriptorItem, descriptorIconStyleClassProperty)]]"
+                    link="[[_getProperty(descriptorItem, descriptorLinkProperty)]]"
+                    target="[[_getTarget(newTab)]]"
+                    text="[[_getProperty(descriptorItem, descriptorTextProperty)]]">
+                  </icon-label>
+                </div>
+              </template>
             </div>
-            <template is="dom-if" if="[[!item.tickerSymbols.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.tickerSymbols]]" as="tickerSymbol">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(tickerSymbol, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(tickerSymbol, descriptorTextProperty)]]"
-                  icon="[[_getProperty(tickerSymbol, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(tickerSymbol, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(tickerSymbol, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(tickerSymbol, descriptorTextProperty)]]">
-                </icon-label>
-              </div>
-            </template>
-          </div>
-        </div>
-
-        <div class="horizontal layout wrap single-record-text">
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Authors:</strong>
-            </div>
-            <template is="dom-if" if="[[!item.authors.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.authors]]" as="author">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(author, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(author, descriptorTextProperty)]]"
-                  icon="[[_getProperty(author, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(author, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(author, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(author, descriptorTextProperty)]]">
-                </icon-label>
-              </div>
-            </template>
-          </div>
-
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Forum Names:</strong>
-            </div>
-            <template is="dom-if" if="[[!item.forumNames.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.forumNames]]" as="forumName">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(forumName, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(forumName, descriptorTextProperty)]]"
-                  icon="[[_getProperty(forumName, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(forumName, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(forumName, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(forumName, descriptorTextProperty)]]">
-                </icon-label>
-              </div>
-            </template>
-          </div>
-        </div>
-
-        <div class="horizontal layout wrap single-record-text">
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Companies:</strong>
-            </div>
-            <template is="dom-if" if="[[!item.companies.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.companies]]" as="company">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(company, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(company, descriptorTextProperty)]]"
-                  icon="[[_getProperty(company, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(company, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(company, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(company, descriptorTextProperty)]]">
-                </icon-label>
-              </div>
-            </template>
-          </div>
-
-          <div class="vertical layout flex-1">
-            <div class="text">
-              <strong>Company Types:</strong>
-            </div>
-            <template is="dom-if" if="[[!item.companyTypes.length]]">
-              <div class="padded" secondary>None</div>
-            </template>
-            <template is="dom-repeat" items="[[item.companyTypes]]" as="companyType">
-              <div secondary>
-                <icon-label class$="[[_isHighlighted(companyType, descriptorHighlightProperty)]]"
-                  title="Open [[_getProperty(companyType, descriptorTextProperty)]]"
-                  icon="[[_getProperty(companyType, descriptorIconProperty)]]"
-                  icon-style-class="[[_getProperty(companyType, descriptorIconStyleClassProperty)]]"
-                  link="[[_getProperty(companyType, descriptorLinkProperty)]]"
-                  target="[[_getTarget(newTab)]]"
-                  text="[[_getProperty(companyType, descriptorTextProperty)]]">
-                </icon-label>
-              </div>
-            </template>
-          </div>
+          </template>
         </div>
       </div>
 
@@ -311,277 +205,6 @@ limitations under the License.
                 </template>
               </div>
             </template>
-
-            <!-- TODO Generalize -->
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Post Date:</strong>
-                </div>
-                <div secondary>
-                  <icon-label class$="[[_isHighlighted(item.date, descriptorHighlightProperty)]]"
-                    title="[[_getProperty(item.date, descriptorTextProperty)]]"
-                    icon="[[_getProperty(item.date, descriptorIconProperty)]]"
-                    icon-style-class="[[_getProperty(item.date, descriptorIconStyleClassProperty)]]"
-                    link="[[_getProperty(item.date, descriptorLinkProperty)]]"
-                    target="[[_getTarget(newTab)]]"
-                    text="[[_getProperty(item.date, descriptorTextProperty)]]">
-                  </icon-label>
-                </div>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Profile Creation Date:</strong>
-                </div>
-                <div secondary>
-                  <icon-label class$="[[_isHighlighted(item.dateProfileCreated, descriptorHighlightProperty)]]"
-                    title="[[_getProperty(item.dateProfileCreated, descriptorTextProperty)]]"
-                    icon="[[_getProperty(item.dateProfileCreated, descriptorIconProperty)]]"
-                    icon-style-class="[[_getProperty(item.dateProfileCreated, descriptorIconStyleClassProperty)]]"
-                    link="[[_getProperty(item.dateProfileCreated, descriptorLinkProperty)]]"
-                    target="[[_getTarget(newTab)]]"
-                    text="[[_getProperty(item.dateProfileCreated, descriptorTextProperty)]]">
-                  </icon-label>
-                </div>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Locations:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.locations.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.locations]]" as="location">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(location, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(location, descriptorTextProperty)]]"
-                      icon="[[_getProperty(location, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(location, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(location, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(location, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Websites:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.websites.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.websites]]" as="website">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(website, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(website, descriptorTextProperty)]]"
-                      icon="[[_getProperty(website, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(website, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(website, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(website, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Object IDs:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.objectIds.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.objectIds]]" as="objectId">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(objectId, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(objectId, descriptorTextProperty)]]"
-                      icon="[[_getProperty(objectId, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(objectId, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(objectId, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(objectId, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Post IDs:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.postIds.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.postIds]]" as="postId">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(postId, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(postId, descriptorTextProperty)]]"
-                      icon="[[_getProperty(postId, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(postId, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(postId, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(postId, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Author Profiles:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.authorProfiles.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.authorProfiles]]" as="authorProfile">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(authorProfile, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(authorProfile, descriptorTextProperty)]]"
-                      icon="[[_getProperty(authorProfile, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(authorProfile, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(authorProfile, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(authorProfile, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Ages:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.ages.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.ages]]" as="age">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(age, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(age, descriptorTextProperty)]]"
-                      icon="[[_getProperty(age, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(age, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(age, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(age, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Followed By:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.followedBy.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.followedBy]]" as="followedBy">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(followedBy, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(followedBy, descriptorTextProperty)]]"
-                      icon="[[_getProperty(followedBy, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(followedBy, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(followedBy, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(followedBy, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Number of Posts:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.numberOfPosts.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.numberOfPosts]]" as="number">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(number, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(number, descriptorTextProperty)]]"
-                      icon="[[_getProperty(number, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(number, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(number, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(number, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Stocks Owned:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.stocksOwned.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.stocksOwned]]" as="stocksOwned">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(stocksOwned, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(stocksOwned, descriptorTextProperty)]]"
-                      icon="[[_getProperty(stocksOwned, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(stocksOwned, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(stocksOwned, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(stocksOwned, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Moderators:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.moderators.length]]">
-                  <div class="padded" secondary>None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.moderators]]" as="moderator">
-                  <div secondary>
-                    <icon-label class$="[[_isHighlighted(moderator, descriptorHighlightProperty)]]"
-                      title="Open [[_getProperty(moderator, descriptorTextProperty)]]"
-                      icon="[[_getProperty(moderator, descriptorIconProperty)]]"
-                      icon-style-class="[[_getProperty(moderator, descriptorIconStyleClassProperty)]]"
-                      link="[[_getProperty(moderator, descriptorLinkProperty)]]"
-                      target="[[_getTarget(newTab)]]"
-                      text="[[_getProperty(moderator, descriptorTextProperty)]]">
-                    </icon-label>
-                  </div>
-                </template>
-              </div>
-            </div>
-
-            <div class="horizontal layout wrap single-record-text">
-              <div class="vertical layout flex-1">
-                <div class="text">
-                  <strong>Disclaimers:</strong>
-                </div>
-                <template is="dom-if" if="[[!item.disclaimers.length]]">
-                  <div class="padded">None</div>
-                </template>
-                <template is="dom-repeat" items="[[item.disclaimers]]" as="disclaimer">
-                  <div>
-                    [[_getProperty(disclaimer, descriptorTextProperty)]]
-                  </div>
-                </template>
-              </div>
-            </div>
 
             <button-link
               link="[[_getProperty(item, itemLinkProperty)]]"
@@ -891,6 +514,13 @@ limitations under the License.
 
       _getSingleProperty: function(item, property) {
         return item && item.length ? item[0][property] : undefined;
+      },
+
+      _getDescriptorTitle: function(item, linkProperty, textProperty) {
+        if(item && item[linkProperty]) {
+          return 'Open ' + item[textProperty];
+        }
+        return item ? item[textProperty] : '';
       },
 
       _isHighlighted: function(item, property) {

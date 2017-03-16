@@ -41,7 +41,11 @@ var docTransform = (function(_, commonTransforms) {
 
   function getSingleItemFromRecord(record, path) {
     var items = getDataFromRecord(record, path);
-    return items.strict.length ? items.strict[0].name : (items.relaxed.length ? items.relaxed[0].name : undefined);
+    return items.strict.length ? items.strict.map(function(item) {
+      return item.name;
+    }).join('\n') : (items.relaxed.length ? items.relaxed.map(function(item) {
+      return item.name;
+    }).join('\n') : undefined);
   }
 
   function getDate(record, path) {
@@ -136,7 +140,7 @@ var docTransform = (function(_, commonTransforms) {
       styleClass: commonTransforms.getStyleClass('doc'),
       title: getSingleItemFromRecord(record, '_source.fields.title') || 'No Title',
       content: getSingleItemFromRecord(record, '_source.fields.content') || 'No Content',
-      objectIds: getDataOfTypeFromRecord(record, '_source.fields.object_id', 'object_id'),
+      disclaimers: getSingleItemFromRecord(record, '_source.fields.disclaimer') || 'No Disclaimer',
       tickerSymbols: getDataOfTypeFromRecord(record, '_source.fields.ticker_symbol', 'ticker_symbol'),
       postTypes: getDataOfTypeFromRecord(record, '_source.fields.type', 'post_type'),
       postIds: getDataOfTypeFromRecord(record, '_source.fields.post_id', 'post_id'),
@@ -144,7 +148,6 @@ var docTransform = (function(_, commonTransforms) {
       authorProfiles: getDataOfTypeFromRecord(record, '_source.fields.author_profile', 'author_profile'),
       companies: getDataOfTypeFromRecord(record, '_source.fields.company', 'company'),
       companyTypes: getDataOfTypeFromRecord(record, '_source.fields.company_type', 'company_type'),
-      disclaimers: getDataOfTypeFromRecord(record, '_source.fields.disclaimer', 'disclaimer'),
       forumNames: getDataOfTypeFromRecord(record, '_source.fields.forum_name', 'forum_name'),
       ages: getDataOfTypeFromRecord(record, '_source.fields.age', 'age'),
       followedBy: getDataOfTypeFromRecord(record, '_source.fields.followed_by', 'followed_by'),
@@ -168,10 +171,10 @@ var docTransform = (function(_, commonTransforms) {
         type: 'creation_date'
       },
       highlightedText: getHighlightedText(record, 'fields.title.strict.name', 'fields.title.relaxed.name'),
+      descriptors: [],
       details: []
     };
 
-    doc.objectIds = addHighlights(doc.objectIds, record, ['fields.object_id.strict.name']);
     doc.tickerSymbols = addHighlights(doc.tickerSymbols, record, ['fields.ticker_symbol.strict.name']);
     doc.postTypes = addHighlights(doc.postTypes, record, ['fields.type.strict.name']);
     doc.postIds = addHighlights(doc.postIds, record, ['fields.post_id.strict.name']);
@@ -179,7 +182,6 @@ var docTransform = (function(_, commonTransforms) {
     doc.authorProfiles = addHighlights(doc.authorProfiles, record, ['fields.author_profile.strict.name']);
     doc.companies = addHighlights(doc.companyTypes, record, ['fields.company.strict.name']);
     doc.companyTypes = addHighlights(doc.companyTypes, record, ['fields.company_type.strict.name']);
-    doc.disclaimers = addHighlights(doc.disclaimers, record, ['fields.disclaimer.strict.name']);
     doc.forumNames = addHighlights(doc.forumNames, record, ['fields.forum_name.strict.name']);
     doc.ages = addHighlights(doc.ages, record, ['fields.age.strict.name']);
     doc.followedBy = addHighlights(doc.followedBy, record, ['fields.followed_by.strict.name']);
@@ -187,6 +189,75 @@ var docTransform = (function(_, commonTransforms) {
     doc.numberOfPosts = addHighlights(doc.numberOfPosts, record, ['fields.num_posts.strict.name']);
     doc.stocksOwned = addHighlights(doc.stocksOwned, record, ['fields.stocks_owned.strict.name']);
     doc.moderators = addHighlights(doc.moderators, record, ['fields.moderator.strict.name']);
+
+    doc.descriptors.push({
+      name: 'Ticker Symbols',
+      data: doc.tickerSymbols
+    });
+    doc.descriptors.push({
+      name: 'Post Types',
+      data: doc.postTypes
+    });
+    doc.descriptors.push({
+      name: 'Authors',
+      data: doc.authors
+    });
+    doc.descriptors.push({
+      name: 'Forum Names',
+      data: doc.forumNames
+    });
+    doc.descriptors.push({
+      name: 'Companies',
+      data: doc.companies
+    });
+    doc.descriptors.push({
+      name: 'Company Types',
+      data: doc.companyTypes
+    });
+    doc.descriptors.push({
+      name: 'Post Date',
+      data: [doc.date]
+    });
+    doc.descriptors.push({
+      name: 'Profile Creation Date',
+      data: [doc.dateProfileCreated]
+    });
+    doc.descriptors.push({
+      name: 'Locations',
+      data: doc.locations
+    });
+    doc.descriptors.push({
+      name: 'Websites',
+      data: doc.websites
+    });
+    doc.descriptors.push({
+      name: 'Author Profiles',
+      data: doc.authorProfiles
+    });
+    doc.descriptors.push({
+      name: 'Ages',
+      data: doc.ages
+    });
+    doc.descriptors.push({
+      name: 'Followed By',
+      data: doc.followedBy
+    });
+    doc.descriptors.push({
+      name: 'Moderators',
+      data: doc.moderators
+    });
+    doc.descriptors.push({
+      name: 'Stocks Owned',
+      data: doc.stocksOwned
+    });
+    doc.descriptors.push({
+      name: 'Number of Posts',
+      data: doc.numberOfPosts
+    });
+    doc.descriptors.push({
+      name: 'Post IDs',
+      data: doc.postIds
+    });
 
     doc.details.push({
       name: 'Url',
@@ -197,6 +268,11 @@ var docTransform = (function(_, commonTransforms) {
       name: 'Content',
       highlightedText: getHighlightedText(record, 'fields.content.strict.name', 'fields.content.relaxed.name'),
       text: doc.content
+    });
+    doc.details.push({
+      name: 'Disclaimers',
+      highlightedText: getHighlightedText(record, 'fields.disclaimer.strict.name', 'fields.disclaimer.relaxed.name'),
+      text: doc.disclaimers
     });
     doc.details.push({
       name: 'Cached Webpage',
