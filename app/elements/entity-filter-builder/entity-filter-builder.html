@@ -75,36 +75,18 @@ limitations under the License.
 
       _getFilterField: function(name) {
         switch(name) {
-          case 'age':
-            return 'fields.age.relaxed.key';
-          case 'email':
-            return 'fields.email.relaxed.key';
-          case 'ethnicity':
-            return 'fields.ethnicity.relaxed.key';
-          case 'eyeColor':
-            return 'fields.eye_color.relaxed.key';
-          case 'gender':
-            return 'fields.gender.relaxed.key';
-          case 'hairColor':
-            return 'fields.hair_color.relaxed.key';
-          case 'height':
-            return 'fields.height.relaxed.key';
           case 'location':
-            return 'fields.city.relaxed.key';
-          case 'name':
-            return 'fields.name.relaxed.key';
-          case 'phone':
-            return 'fields.phone.relaxed.key';
-          case 'price':
-            return 'fields.price.relaxed.key';
-          case 'publisher':
-            return 'tld';
-          case 'services':
-            return 'fields.service.relaxed.key';
-          case 'social':
-            return 'fields.social_media_id.relaxed.key';
-          case 'weight':
-            return 'fields.weight.relaxed.key';
+            return 'fields.location.strict.key';
+          case 'money':
+            return 'fields.money.strict.key';
+          case 'org':
+            return 'fields.org.strict.key';
+          case 'person':
+            return 'fields.person.strict.key';
+          case 'product':
+            return 'fields.product.strict.key';
+          case 'ticker':
+            return 'fields.ticker.strict.key';
         }
         return undefined;
       }
