@@ -76,6 +76,7 @@ DigBehaviors.StateBehavior = {
       postType: config.postType || {},
       tickerSymbol: config.tickerSymbol || {},
       title: config.title || {},
+      url: config.url || {},
       website: config.website || {},
       weight: config.weight || {},
       sort: config.sort || ''

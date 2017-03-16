@@ -85,11 +85,11 @@ limitations under the License.
           type: String
         },
 
-        websiteField: {
+        urlField: {
           type: String
         },
 
-        weightField: {
+        websiteField: {
           type: String
         },
 
@@ -239,10 +239,10 @@ limitations under the License.
             return this.tickerSymbolField;
           case 'title':
             return this.titleField;
+          case 'url':
+            return this.urlField;
           case 'website':
             return this.websiteField;
-          case 'weight':
-            return this.weightField;
         }
         return undefined;
       }

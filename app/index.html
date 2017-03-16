@@ -106,8 +106,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{wholeQuery}}">
     </query-builder>
@@ -163,8 +163,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{websiteQuery}}">
     </query-builder>
@@ -197,8 +197,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{postTypeQuery}}">
     </query-builder>
@@ -231,8 +231,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{companyNameQuery}}">
     </query-builder>
@@ -265,8 +265,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{companyTypeQuery}}">
     </query-builder>
@@ -299,8 +299,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{authorQuery}}">
     </query-builder>
@@ -333,8 +333,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{forumQuery}}">
     </query-builder>
@@ -367,8 +367,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{moderatorQuery}}">
     </query-builder>
@@ -401,8 +401,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{ageQuery}}">
     </query-builder>
@@ -435,8 +435,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{locationQuery}}">
     </query-builder>
@@ -469,7 +469,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
+      website-field="[[websiteConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{tickerSymbolQuery}}">
     </query-builder>
@@ -489,7 +490,7 @@ limitations under the License.
     </elastic-client-search>
 
     <query-builder
-      ignore-type="weight"
+      ignore-type="url"
       age-field="[[ageConfig.queryField]]"
       author-field="[[authorConfig.queryField]]"
       company-name-field="[[companyNameConfig.queryField]]"
@@ -502,23 +503,23 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{weightQuery}}">
+      query="{{urlQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[weightQuery]]"
+      query="[[urlQuery]]"
       page-size="0"
-      results="{{weightResult}}"
-      last-error="{{weightError}}"
-      aggregations="{{buildArray(weightAgg)}}"
+      results="{{urlResult}}"
+      last-error="{{urlError}}"
+      aggregations="{{buildArray(urlAgg)}}"
       filters="[]"
-      loading="{{weightLoading}}"
+      loading="{{urlLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
@@ -536,8 +537,8 @@ limitations under the License.
       post-type-field="[[postTypeConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
       ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       website-field="[[websiteConfig.queryField]]"
-      weight-field="[[weightConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{imageQuery}}">
     </query-builder>
@@ -593,9 +594,7 @@ limitations under the License.
             <div class="layout vertical right-space search-labels">
               <div class="name instructions">Instructions:</div>
               <div class="name date">Dates:</div>
-              <div class="name rows-2">Identifiers:</div>
-              <div class="name rows-1">Location:</div>
-              <div class="name rows-3">Provider:</div>
+              <div class="name rows-2">Fields:</div>
             </div>
 
             <div class="layout vertical">
@@ -660,9 +659,6 @@ limitations under the License.
                   value="{{companyTypeConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
-              </div>
-
-              <div class="layout horizontal wrap">
                 <paper-input
                   id$="input_[[moderatorConfig.key]]"
                   label="[[moderatorConfig.title]]"
@@ -681,15 +677,12 @@ limitations under the License.
                   value="{{locationConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
-                <paper-input
-                  id$="input_[[weightConfig.key]]"
-                  label="[[weightConfig.title]]"
-                  value="{{weightConfig.value}}"
+                <!--<paper-input
+                  id$="input_[[urlConfig.key]]"
+                  label="[[urlConfig.title]]"
+                  value="{{urlConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-              </div>
-
-              <div class="layout horizontal wrap">
+                </paper-input>-->
                 <paper-input
                   id$="input_[[websiteConfig.key]]"
                   label="[[websiteConfig.title]]"
@@ -748,6 +741,7 @@ limitations under the License.
                 <selected-facets-display facet-selection="{{searchParameters.postType}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.tickerSymbol}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.url}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.companyName}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.companyType}}"></selected-facets-display>
@@ -1463,79 +1457,79 @@ limitations under the License.
                 </status-text>
               </iron-collapse>
 
-              <div class="h-divider"></div>
+              <!--<div class="h-divider"></div>
 
-              <div id="weight" class="layout horizontal facet filter-header" title="Toggle [[weightConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(weightConfig.title, weightResultList)]]</span>
-                <iron-icon id="weight-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="weight-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="url" class="layout horizontal facet filter-header" title="Toggle [[urlConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(urlConfig.title, urlResultList)]]</span>
+                <iron-icon id="url-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="url-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[weightConfig.key]]"
-                field="[[weightConfig.aggregationField]]"
-                count="{{weightCount}}"
-                ejs-aggregation="{{weightAgg}}"
+                name="[[urlConfig.key]]"
+                field="[[urlConfig.aggregationField]]"
+                count="{{urlCount}}"
+                ejs-aggregation="{{urlAgg}}"
                 type="terms"
-                order="{{weightSortOrder}}">
+                order="{{urlSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[weightResult]]"
-                data-in2="[[weightConfig.key]]"
-                data-out="{{weightResultList}}"
+                data-in1="[[urlResult]]"
+                data-in2="[[urlConfig.key]]"
+                data-out="{{urlResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[weightConfig.title]]"
-                list="{{weightSelectedList}}"
-                object="{{searchParameters.weight}}">
+                category="[[urlConfig.title]]"
+                list="{{urlSelectedList}}"
+                object="{{searchParameters.url}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{weightCount}}"
-                    items="[[weightResultList]]"
-                    error="[[weightError]]"
-                    loading="[[weightLoading]]"
-                    item-type="[[weightConfig.title]]"
+                    aggregation-count="{{urlCount}}"
+                    items="[[urlResultList]]"
+                    error="[[urlError]]"
+                    loading="[[urlLoading]]"
+                    item-type="[[urlConfig.title]]"
                     count-type="Ads"
                     text-property="id"
-                    order-by="{{weightSortOrder}}"
-                    selected-ids="{{weightSelectedList}}">
+                    order-by="{{urlSortOrder}}"
+                    selected-ids="{{urlSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[weightResultList.length]]">
+                <template is="dom-if" if="[[urlResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{weightSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{urlSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[weightResultList]]"
-                loading="[[weightLoading]]"
-                selected="{{weightSelectedList}}">
+                list="[[urlResultList]]"
+                loading="[[urlLoading]]"
+                selected="{{urlSelectedList}}">
               </select-all>
 
-              <iron-collapse id="weight-list" class="filter-list" opened>
+              <iron-collapse id="url-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[weightResultList]]"
-                  selected-ids="{{weightSelectedList}}">
+                  items="[[urlResultList]]"
+                  selected-ids="{{urlSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[weightError]]" message="{{weightErrorMessage}}"></elastic-error>
+                <elastic-error error="[[urlError]]" message="{{urlErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[weightResultList.length]]"
-                  error="[[weightErrorMessage]]"
-                  loading="[[weightLoading]]"
-                  empty="No [[weightConfig.title]]">
+                  count="[[urlResultList.length]]"
+                  error="[[urlErrorMessage]]"
+                  loading="[[urlLoading]]"
+                  empty="No [[urlConfig.title]]">
                 </status-text>
-              </iron-collapse>
+              </iron-collapse>-->
 
               <div class="h-divider"></div>
 
@@ -1785,18 +1779,18 @@ limitations under the License.
         aggregationField: 'fields.title.strict.name.raw',
         value: ''
       };
+      app.urlConfig = {
+        key: 'url',
+        title: 'Url',
+        queryField: 'fields.url.strict.name',
+        aggregationField: 'fields.url.strict.name.raw',
+        value: ''
+      };
       app.websiteConfig = {
         key: 'website',
         title: 'Website',
         queryField: 'tld',
         aggregationField: 'tld.raw',
-        value: ''
-      };
-      app.weightConfig = {
-        key: 'weight',
-        title: 'Weight (kg) of Provider',
-        queryField: 'fields.weight.relaxed.name',
-        aggregationField: 'fields.weight.strict.key',
         value: ''
       };
 
@@ -1814,8 +1808,8 @@ limitations under the License.
         app.postTypeConfig,
         app.tickerSymbolConfig,
         app.titleConfig,
-        app.websiteConfig,
-        app.weightConfig
+        //app.urlConfig,
+        app.websiteConfig
       ];
 
       app.updateSearchParameterAndNotify = function(type, term, title, enabled) {
