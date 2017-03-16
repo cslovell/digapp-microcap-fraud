@@ -522,50 +522,6 @@ var docTransform = (function(_, commonTransforms) {
       return docs;
     },
 
-    removeDescriptorFromOffers: function(descriptorId, offers) {
-      var filterFunction = function(descriptor) {
-        return descriptor.id !== descriptorId;
-      };
-
-      return offers.map(function(offer) {
-        offer.emails = offer.emails.filter(filterFunction);
-        offer.phones = offer.phones.filter(filterFunction);
-        offer.prices = offer.prices.filter(filterFunction);
-        offer.locations = offer.locations.filter(filterFunction);
-        return offer;
-      });
-    },
-
-    removeNoteFromLocationTimeline: function(noteItemId, oldTimeline) {
-      var newTimeline = oldTimeline.map(function(date) {
-        date.locations = date.locations.map(function(location) {
-          location.notes = location.notes.map(function(note) {
-            var previousLength = note.data.length;
-            note.data = note.data.filter(function(item) {
-              return item.id !== noteItemId;
-            });
-            if(note.data.length < previousLength) {
-              note.name = 'Other ' + note.name;
-            }
-            return note;
-          });
-          // Remove any notes that no longer have any data.
-          location.notes = location.notes.filter(function(note) {
-            return note.data.length;
-          });
-          return location;
-        });
-        return date;
-      });
-
-      // Sort newest first.
-      newTimeline.sort(function(a, b) {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      });
-
-      return newTimeline;
-    },
-
     locationTimeline: function(data, onlyId) {
       return {
         dates: (data && data.aggregations) ? createLocationTimeline(data.aggregations.dates.dates.buckets, onlyId) : undefined
@@ -737,89 +693,53 @@ var docTransform = (function(_, commonTransforms) {
       };
     },
 
-    offerLocationsTitle: function(data) {
-      return getTitle(data.length, 'Location');
-    },
-
-    offerLocations: function(data) {
-      var locations = [];
-      if(data && data.aggregations && data.aggregations.location && data.aggregations.location.location) {
-        locations = getUniqueLocationsFromList(data.aggregations.location.location.buckets || []);
-      }
-      return {
-        title: getTitle(locations.length, 'Location'),
-        location: locations
-      };
-    },
-
-    locationPageMap: function(locationId, data) {
-      if(!locationId || !data || !data.length) {
-        // need to return undefined here so that we wait until all data is ready before displaying points on the map
-        return undefined;
-      }
-
-      return data.map(function(location) {
-        if(location.id === locationId) {
-          location.iconId = 'mainLocation';
-        }
-        return location;
-      });
-    },
-
     createExportDataForCsv: function(results) {
-      /*
       var linkPrefix = window.location.hostname + ':' + window.location.port;
       var data = [[
-        'ad url',
+        'document url',
         'dig url',
         'title',
-        'high risk',
-        'date',
+        'tickers',
+        'products',
+        'people',
+        'organizations',
+        'money',
         'locations',
-        'telephone numbers',
-        'email addresses',
-        'social media ids',
-        'review ids',
-        'images',
-        'description'
+        'content'
       ]];
       results.forEach(function(result) {
-        var locations = result.locations.map(function(location) {
-          return location.textAndCountry;
+        var locations = result.locations.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
-        var phones = result.phones.map(function(phone) {
-          return phone.text;
+        var moneys = result.moneys.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
-        var emails = result.emails.map(function(email) {
-          return email.text;
+        var orgs = result.orgs.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
-        var socialIds = result.socialIds.map(function(socialId) {
-          return socialId.text;
+        var persons = result.persons.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
-        var reviewIds = result.reviewIds.map(function(reviewId) {
-          return reviewId.text;
+        var products = result.products.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
-        var images = (result.images || []).map(function(image) {
-          return image.source;
+        var tickers = result.tickers.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
         }).join('; ');
         data.push([
           result.url,
           linkPrefix + result.link,
           result.title,
-          result.highRisk ? 'yes' : 'no',
-          result.date.text,
+          tickers,
+          products,
+          persons,
+          orgs,
+          moneys,
           locations,
-          phones,
-          emails,
-          socialIds,
-          reviewIds,
-          images,
-          result.description.replace(/\n/g, ' ')
+          result.content.replace(/\n/g, ' ').replace(/,/g, '')
         ]);
       });
       return data;
-      */
-      return [];
     },
 
     createExportDataForPdf: function(results) {
@@ -827,32 +747,28 @@ var docTransform = (function(_, commonTransforms) {
       var data = [];
       var nextId = 1;
 
-      /*
       results.forEach(function(result) {
-        var locations = result.locations.map(function(location) {
-          return location.textAndCountry;
-        }).join(', ');
-        var phones = result.phones.map(function(phone) {
-          return phone.text;
-        }).join(', ');
-        var emails = result.emails.map(function(email) {
-          return email.text;
-        }).join(', ');
-        var socialIds = result.socialIds.map(function(socialId) {
-          return socialId.text;
-        }).join(', ');
-        var reviewIds = result.reviewIds.map(function(reviewId) {
-          return reviewId.text;
-        }).join(', ');
+        var locations = result.locations.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
+        var moneys = result.moneys.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
+        var orgs = result.orgs.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
+        var persons = result.persons.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
+        var products = result.products.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
+        var tickers = result.tickers.map(function(item) {
+          return item.text.replace(/\n/g, ' ').replace(/,/g, '');
+        }).join('; ');
 
         var item = {
-          images: (result.images || []).map(function(image) {
-            return {
-              id: 'image' + nextId++,
-              source: encodeURIComponent(image.source.replace('https://s3.amazonaws.com/', '')),
-              text: image.source
-            };
-          }),
+          images: [],
           paragraphs: []
         };
 
@@ -862,36 +778,32 @@ var docTransform = (function(_, commonTransforms) {
           value: ''
         });
         item.paragraphs.push({
-          label: 'High Risk:  ',
-          value: result.highRisk ? 'Yes' : 'No'
+          label: 'Tickers:  ',
+          value: tickers
         });
         item.paragraphs.push({
-          label: 'Posting Date:  ',
-          value: result.date.text
+          label: 'Products:  ',
+          value: products
+        });
+        item.paragraphs.push({
+          label: 'People:  ',
+          value: persons
+        });
+        item.paragraphs.push({
+          label: 'Organizations:  ',
+          value: orgs
+        });
+        item.paragraphs.push({
+          label: 'Money:  ',
+          value: moneys
         });
         item.paragraphs.push({
           label: 'Locations:  ',
           value: locations
         });
         item.paragraphs.push({
-          label: 'Telephone Numbers:  ',
-          value: phones
-        });
-        item.paragraphs.push({
-          label: 'Email Addresses:  ',
-          value: emails
-        });
-        item.paragraphs.push({
-          label: 'Social Media IDs:  ',
-          value: socialIds
-        });
-        item.paragraphs.push({
-          label: 'Review IDs:  ',
-          value: reviewIds
-        });
-        item.paragraphs.push({
-          label: 'Description:  ',
-          value: result.description.replace(/\n/g, ' ')
+          label: 'Content:  ',
+          value: result.content.replace(/\n/g, ' ').replace(/,/g, '')
         });
         item.paragraphs.push({
           label: 'URL:  ',
@@ -904,35 +816,8 @@ var docTransform = (function(_, commonTransforms) {
 
         data.push(item);
       });
-      */
 
       return data;
-    },
-
-    revisions: function(data) {
-      if(data && data.aggregations) {
-        /* jscs:disable requireCamelCaseOrUpperCaseIdentifiers */
-        var total = data.aggregations.revisions.doc_count;
-        var revisions = _.map(data.aggregations.revisions.revisions.buckets, function(bucket) {
-          return {
-            date: commonTransforms.getDate(bucket.key_as_string),
-            list: [{
-              count: bucket.doc_count,
-              label: 'Revision on ' + commonTransforms.getDate(bucket.key_as_string)
-            }]
-          };
-        });
-        /* jscs:enable requireCamelCaseOrUpperCaseIdentifiers */
-        return (total < 2 ? [] : revisions);
-      }
-      return [];
-    },
-
-    /**
-     * Returns the formatted telephone number.
-     */
-    formattedTelephoneNumber: function(number) {
-      return commonTransforms.getFormattedPhone(number);
     }
   };
 });
