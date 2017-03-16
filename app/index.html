@@ -392,7 +392,7 @@ limitations under the License.
             </div>
 
             <div class="layout vertical">
-              <div class="text">
+              <div class="text" style="margin-left: 10px;">
                 Enter words or phrases as search terms in one or more of the text fields below.
                 Click the Search button or press ENTER when finished.
                 Use commas to separate search terms.
@@ -1355,9 +1355,11 @@ limitations under the License.
       app.handleSearch = function() {
         app.updateSearchParametersFromFields();
 
+        /*
         if(app.noSearchParameters()) {
           return;
         }
+        */
 
         app.toggleSearchFieldsDialog();
       };
