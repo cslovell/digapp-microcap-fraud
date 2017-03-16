@@ -93,7 +93,7 @@ limitations under the License.
 
     <elastic-client-query-builder
       type="term"
-      fields='"doc_id.raw"'
+      fields='"_id"'
       values="[[params.id]]"
       ejs-query="{{docQuery}}">
     </elastic-client-query-builder>
@@ -101,14 +101,14 @@ limitations under the License.
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
-      elastic-types='["doc"]'
+      elastic-types='["microcap"]'
       query="[[docQuery]]"
       page-size="1"
       aggregations="[]"
       filters="[]"
       results="{{docResults}}"
       last-error="{{error}}"
-      source-include='["doc_id", "fields", "tld", "url"]'>
+      source-include='["doc_id", "fields", "url"]'>
     </elastic-client-search>
 
     <json-transform
@@ -122,7 +122,7 @@ limitations under the License.
     <elastic-client-filter-builder
       not
       type="term"
-      field="doc_id.raw"
+      field="_id"
       values="[[doc.id]]"
       ejs-filter="{{notThisAdFilter}}">
     </elastic-client-filter-builder>
@@ -131,14 +131,14 @@ limitations under the License.
       type="mlt"
       mlt-config='{"minTermFreq":1,"minDocFreq":1,"maxQueryTerms":100,"minimumShouldMatch":"75%"}'
       fields='["_all"]'
-      values="[[buildMoreLikeThisValue(doc.title, doc.content, doc.disclaimers)]]"
+      values="[[buildMoreLikeThisValue(doc.title, doc.content)]]"
       ejs-query="{{similarDocQuery}}">
     </elastic-client-query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
-      elastic-types='["doc"]'
+      elastic-types='["microcap"]'
       query="[[similarDocQuery]]"
       aggregations="[]"
       filters="[[buildArray(notThisAdFilter)]]"
@@ -147,7 +147,7 @@ limitations under the License.
       page-size="20"
       loading="{{similarDocLoading}}"
       last-error="{{similarDocError}}"
-      source-include='["doc_id", "fields", "tld", "url"]'>
+      source-include='["doc_id", "fields", "url"]'>
     </elastic-client-search>
 
     <json-transform
@@ -229,7 +229,7 @@ limitations under the License.
 
                     <export-button
                       data="[[shownSimilarDocs]]"
-                      type="Ad"
+                      type="Document"
                       csv-transform-function="[[clientConfig.transforms.doc.createExportDataForCsv]]"
                       pdf-transform-function="[[clientConfig.transforms.doc.createExportDataForPdf]]">
                     </export-button>
@@ -249,7 +249,7 @@ limitations under the License.
                     page="{{similarDocPage}}"
                     page-size="20"
                     loading="[[similarDocLoading]]"
-                    type="Similar Ad"
+                    type="Similar Document"
                     records-list-title="{{similarDocTitle}}">
                   </records-list>
                 </section>
@@ -276,8 +276,8 @@ limitations under the License.
 
     app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
 
-    app.buildMoreLikeThisValue = function(title, content, disclaimer) {
-      return title + ' ' + content + ' ' + disclaimer;
+    app.buildMoreLikeThisValue = function(title, content) {
+      return title + ' ' + content;
     };
   })(document);
   </script>

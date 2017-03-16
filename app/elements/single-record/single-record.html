@@ -62,6 +62,10 @@ limitations under the License.
         padding: 0 5px;
       }
 
+      .head .vertical-text {
+        margin-left: 0;
+      }
+
       .descriptor {
         vertical-align: middle;
         margin-right: 20px;
@@ -151,26 +155,28 @@ limitations under the License.
 
         <div class="layout horizontal descriptors wrap">
           <template is="dom-repeat" items="[[item.descriptors]]" as="descriptor">
-            <div class="vertical layout">
-              <div class="text">
-                <strong>[[descriptor.name]]:</strong>
-              </div>
-              <template is="dom-if" if="[[!descriptor.data.length]]">
-                <div class="padded" secondary>None</div>
-              </template>
-              <template is="dom-repeat" items="[[descriptor.data]]" as="descriptorItem">
-                <div secondary>
-                  <icon-label class$="[[_isHighlighted(descriptorItem, descriptorHighlightProperty)]]"
-                    title="[[_getDescriptorTitle(descriptorItem, descriptorLinkProperty, descriptorTextProperty)]]"
-                    icon="[[_getProperty(descriptorItem, descriptorIconProperty)]]"
-                    icon-style-class="[[_getProperty(descriptorItem, descriptorIconStyleClassProperty)]]"
-                    link="[[_getProperty(descriptorItem, descriptorLinkProperty)]]"
-                    target="[[_getTarget(newTab)]]"
-                    text="[[_getProperty(descriptorItem, descriptorTextProperty)]]">
-                  </icon-label>
+            <template is="dom-if" if="[[descriptor.data.length]]">
+              <div class="vertical layout">
+                <div class="text">
+                  <strong>[[descriptor.name]]:</strong>
                 </div>
-              </template>
-            </div>
+                <template is="dom-if" if="[[!descriptor.data.length]]">
+                  <div class="padded" secondary>None</div>
+                </template>
+                <template is="dom-repeat" items="[[descriptor.data]]" as="descriptorItem">
+                  <div secondary>
+                    <icon-label class$="[[_isHighlighted(descriptorItem, descriptorHighlightProperty)]]"
+                      title="[[_getDescriptorTitle(descriptorItem, descriptorLinkProperty, descriptorTextProperty)]]"
+                      icon="[[_getProperty(descriptorItem, descriptorIconProperty)]]"
+                      icon-style-class="[[_getProperty(descriptorItem, descriptorIconStyleClassProperty)]]"
+                      link="[[_getProperty(descriptorItem, descriptorLinkProperty)]]"
+                      target="[[_getTarget(newTab)]]"
+                      text="[[_getProperty(descriptorItem, descriptorTextProperty)]]">
+                    </icon-label>
+                  </div>
+                </template>
+              </div>
+            </template>
           </template>
         </div>
       </div>

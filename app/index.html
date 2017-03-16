@@ -94,20 +94,15 @@ limitations under the License.
     </elastic-client>
 
     <query-builder demand
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{wholeQuery}}">
     </query-builder>
@@ -149,294 +144,17 @@ limitations under the License.
     </json-transform>
 
     <!-- Facets -->
-    <query-builder
-      ignore-type="website"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{websiteQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[websiteQuery]]"
-      page-size="0"
-      results="{{websiteResult}}"
-      last-error="{{websiteError}}"
-      aggregations="{{buildArray(websiteAgg)}}"
-      filters="[]"
-      loading="{{websiteLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="postType"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{postTypeQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[postTypeQuery]]"
-      page-size="0"
-      results="{{postTypeResult}}"
-      last-error="{{postTypeError}}"
-      aggregations="{{buildArray(postTypeAgg)}}"
-      filters="[]"
-      loading="{{postTypeLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="companyName"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{companyNameQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[companyNameQuery]]"
-      page-size="0"
-      results="{{companyNameResult}}"
-      last-error="{{companyNameError}}"
-      aggregations="{{buildArray(companyNameAgg)}}"
-      filters="[]"
-      loading="{{companyNameLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="companyType"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{companyTypeQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[companyTypeQuery]]"
-      page-size="0"
-      results="{{companyTypeResult}}"
-      last-error="{{companyTypeError}}"
-      aggregations="{{buildArray(companyTypeAgg)}}"
-      filters="[]"
-      loading="{{companyTypeLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="author"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{authorQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[authorQuery]]"
-      page-size="0"
-      results="{{authorResult}}"
-      last-error="{{authorError}}"
-      aggregations="{{buildArray(authorAgg)}}"
-      filters="[]"
-      loading="{{authorLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="forum"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{forumQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[forumQuery]]"
-      page-size="0"
-      results="{{forumResult}}"
-      last-error="{{forumError}}"
-      aggregations="{{buildArray(forumAgg)}}"
-      filters="[]"
-      loading="{{forumLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="moderator"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{moderatorQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[moderatorQuery]]"
-      page-size="0"
-      results="{{moderatorResult}}"
-      last-error="{{moderatorError}}"
-      aggregations="{{buildArray(moderatorAgg)}}"
-      filters="[]"
-      loading="{{moderatorLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
-      ignore-type="age"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{ageQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[ageQuery]]"
-      page-size="0"
-      results="{{ageResult}}"
-      last-error="{{ageError}}"
-      aggregations="{{buildArray(ageAgg)}}"
-      filters="[]"
-      loading="{{ageLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
-
-    <query-builder
+    <query-builder demand
       ignore-type="location"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
       description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{locationQuery}}">
     </query-builder>
@@ -455,56 +173,163 @@ limitations under the License.
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
-    <query-builder
-      ignore-type="tickerSymbol"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
+    <query-builder demand
+      ignore-type="money"
       description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
       search-parameters="[[searchParameters]]"
-      query="{{tickerSymbolQuery}}">
+      query="{{moneyQuery}}">
     </query-builder>
 
     <elastic-client-search
       client="[[esclient]]"
       index="[[config.elasticIndex]]"
       elastic-types="[[getElasticTypes()]]"
-      query="[[tickerSymbolQuery]]"
+      query="[[moneyQuery]]"
       page-size="0"
-      results="{{tickerSymbolResult}}"
-      last-error="{{tickerSymbolError}}"
-      aggregations="{{buildArray(tickerSymbolAgg)}}"
+      results="{{moneyResult}}"
+      last-error="{{moneyError}}"
+      aggregations="{{buildArray(moneyAgg)}}"
       filters="[]"
-      loading="{{tickerSymbolLoading}}"
+      loading="{{moneyLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
 
-    <query-builder
-      ignore-type="url"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
+    <query-builder demand
+      ignore-type="org"
       description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
       title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
       url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{orgQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[orgQuery]]"
+      page-size="0"
+      results="{{orgResult}}"
+      last-error="{{orgError}}"
+      aggregations="{{buildArray(orgAgg)}}"
+      filters="[]"
+      loading="{{orgLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder demand
+      ignore-type="person"
+      description-field="[[descriptionConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{personQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[personQuery]]"
+      page-size="0"
+      results="{{personResult}}"
+      last-error="{{personError}}"
+      aggregations="{{buildArray(personAgg)}}"
+      filters="[]"
+      loading="{{personLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder demand
+      ignore-type="product"
+      description-field="[[descriptionConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{productQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[productQuery]]"
+      page-size="0"
+      results="{{productResult}}"
+      last-error="{{productError}}"
+      aggregations="{{buildArray(productAgg)}}"
+      filters="[]"
+      loading="{{productLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <query-builder demand
+      ignore-type="ticker"
+      description-field="[[descriptionConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
+      search-parameters="[[searchParameters]]"
+      query="{{tickerQuery}}">
+    </query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types="[[getElasticTypes()]]"
+      query="[[tickerQuery]]"
+      page-size="0"
+      results="{{tickerResult}}"
+      last-error="{{tickerError}}"
+      aggregations="{{buildArray(tickerAgg)}}"
+      filters="[]"
+      loading="{{tickerLoading}}"
+      properties-ready="{{processRequest}}">
+    </elastic-client-search>
+
+    <!--
+    <query-builder demand
+      ignore-type="url"
+      description-field="[[descriptionConfig.queryField]]"
+      location-field="[[locationConfig.queryField]]"
+      money-field="[[moneyConfig.queryField]]"
+      org-field="[[orgConfig.queryField]]"
+      person-field="[[personConfig.queryField]]"
+      product-field="[[productConfig.queryField]]"
+      ticker-field="[[tickerConfig.queryField]]"
+      title-field="[[titleConfig.queryField]]"
+      url-field="[[urlConfig.queryField]]"
       search-parameters="[[searchParameters]]"
       query="{{urlQuery}}">
     </query-builder>
@@ -522,40 +347,7 @@ limitations under the License.
       loading="{{urlLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
-
-    <query-builder
-      ignore-type="image"
-      age-field="[[ageConfig.queryField]]"
-      author-field="[[authorConfig.queryField]]"
-      company-name-field="[[companyNameConfig.queryField]]"
-      company-type-field="[[companyTypeConfig.queryField]]"
-      date-field="[[dateStartConfig.queryField]]"
-      description-field="[[descriptionConfig.queryField]]"
-      forum-field="[[forumConfig.queryField]]"
-      location-field="[[locationConfig.queryField]]"
-      moderator-field="[[moderatorConfig.queryField]]"
-      post-type-field="[[postTypeConfig.queryField]]"
-      title-field="[[titleConfig.queryField]]"
-      ticker-symbol-field="[[tickerSymbolConfig.queryField]]"
-      url-field="[[urlConfig.queryField]]"
-      website-field="[[websiteConfig.queryField]]"
-      search-parameters="[[searchParameters]]"
-      query="{{imageQuery}}">
-    </query-builder>
-
-    <elastic-client-search
-      client="[[esclient]]"
-      index="[[config.elasticIndex]]"
-      elastic-types="[[getElasticTypes()]]"
-      query="[[imageQuery]]"
-      page-size="0"
-      results="{{imageResult}}"
-      last-error="{{imageError}}"
-      aggregations="{{buildArray(imageAgg)}}"
-      filters="[]"
-      loading="{{imageLoading}}"
-      properties-ready="{{processRequest}}">
-    </elastic-client-search>
+    -->
     <!-- End Facets -->
 
     <paper-header-panel class="flex" mode="waterfall">
@@ -593,7 +385,9 @@ limitations under the License.
           <div class="layout horizontal">
             <div class="layout vertical right-space search-labels">
               <div class="name instructions">Instructions:</div>
+              <!--
               <div class="name date">Dates:</div>
+              -->
               <div class="name rows-2">Fields:</div>
             </div>
 
@@ -605,6 +399,7 @@ limitations under the License.
                 Example:  <strong>New York, Washington</strong>
               </div>
 
+              <!--
               <div class="layout horizontal date-fields-container">
                 <date-picker-display
                   facet-selection="{{dateStartConfig.value}}"
@@ -621,54 +416,37 @@ limitations under the License.
                   title="{{dateEndConfig.title}}">
                 </date-picker-display>
               </div>
+              -->
 
-              <div class="layout horizontal wrap">
+              <div class="layout horizontal wrap" style="padding-top: 15px;">
                 <paper-input
-                  id$="input_[[tickerSymbolConfig.key]]"
-                  label="[[tickerSymbolConfig.title]]"
-                  value="{{tickerSymbolConfig.value}}"
+                  id$="input_[[tickerConfig.key]]"
+                  label="[[tickerConfig.title]]"
+                  value="{{tickerConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[postTypeConfig.key]]"
-                  label="[[postTypeConfig.title]]"
-                  value="{{postTypeConfig.value}}"
+                  id$="input_[[productConfig.key]]"
+                  label="[[productConfig.title]]"
+                  value="{{productConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[forumConfig.key]]"
-                  label="[[forumConfig.title]]"
-                  value="{{forumConfig.value}}"
+                  id$="input_[[personConfig.key]]"
+                  label="[[personConfig.title]]"
+                  value="{{personConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[authorConfig.key]]"
-                  label="[[authorConfig.title]]"
-                  value="{{authorConfig.value}}"
+                  id$="input_[[orgConfig.key]]"
+                  label="[[orgConfig.title]]"
+                  value="{{orgConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
-                  id$="input_[[companyNameConfig.key]]"
-                  label="[[companyNameConfig.title]]"
-                  value="{{companyNameConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[companyTypeConfig.key]]"
-                  label="[[companyTypeConfig.title]]"
-                  value="{{companyTypeConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[moderatorConfig.key]]"
-                  label="[[moderatorConfig.title]]"
-                  value="{{moderatorConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
-                <paper-input
-                  id$="input_[[ageConfig.key]]"
-                  label="[[ageConfig.title]]"
-                  value="{{ageConfig.value}}"
+                  id$="input_[[moneyConfig.key]]"
+                  label="[[moneyConfig.title]]"
+                  value="{{moneyConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>
                 <paper-input
@@ -683,12 +461,6 @@ limitations under the License.
                   value="{{urlConfig.value}}"
                   on-keydown="checkSearchFieldInputKey">
                 </paper-input>-->
-                <paper-input
-                  id$="input_[[websiteConfig.key]]"
-                  label="[[websiteConfig.title]]"
-                  value="{{websiteConfig.value}}"
-                  on-keydown="checkSearchFieldInputKey">
-                </paper-input>
                 <paper-input
                   id$="input_[[titleConfig.key]]"
                   label="[[titleConfig.title]]"
@@ -737,35 +509,30 @@ limitations under the License.
                 <!-- Nesting keys for start and end dates under postingDate to be consistent with how other -->
                 <!-- facetSelections are represented. -->
                 <selected-facets-display facet-selection="{{searchParameters.postingDate}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.website}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.postType}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.tickerSymbol}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.url}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.companyName}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.companyType}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.author}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.forum}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.moderator}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.age}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.ticker}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.product}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.person}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.org}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.money}}"></selected-facets-display>
                 <selected-facets-display facet-selection="{{searchParameters.location}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.weight}}"></selected-facets-display>
-                <selected-facets-display facet-selection="{{searchParameters.image}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.title}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.description}}"></selected-facets-display>
+                <selected-facets-display facet-selection="{{searchParameters.url}}"></selected-facets-display>
               </div>
 
               <div class="h-divider"></div>
             </div>
           </paper-toolbar>
 
-          <iron-pages attr-for-selected="data-type" selected="doc">
-            <section data-type="doc">
+          <iron-pages attr-for-selected="data-type" selected="microcap">
+            <section data-type="microcap">
               <div class="layout horizontal facet filter-header" title="Toggle All Facets" on-tap="toggleAllFacetLists">
                 <span class="flex">Facets</span>
                 <span>[[getToggleAllFacetsText(facetListsExpanded)]]</span>
                 <iron-icon icon="[[getToggleAllFacetsIcon(facetListsExpanded)]]"</iron-icon>
               </div>
 
+              <!--
               <div class="h-divider"></div>
 
               <div id="date" class="layout horizontal facet filter-header" title="Toggle Dates" on-tap="toggleList">
@@ -791,62 +558,63 @@ limitations under the License.
                   date-identifier="[[dateEndConfig.dateIdentifier]]">
                 </date-picker-display>
               </iron-collapse>
+              -->
 
               <div class="h-divider"></div>
 
-              <div id="ticker-symbol" class="layout horizontal facet filter-header" title="Toggle [[tickerSymbolConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(tickerSymbolConfig.title, tickerSymbolResultList)]]</span>
+              <div id="ticker-symbol" class="layout horizontal facet filter-header" title="Toggle [[tickerConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(tickerConfig.title, tickerResultList)]]</span>
                 <iron-icon id="ticker-symbol-icon-opened" icon="icons:expand-less"></iron-icon>
                 <iron-icon id="ticker-symbol-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[tickerSymbolConfig.key]]"
-                field="[[tickerSymbolConfig.aggregationField]]"
-                count="{{tickerSymbolCount}}"
-                ejs-aggregation="{{tickerSymbolAgg}}"
+                name="[[tickerConfig.key]]"
+                field="[[tickerConfig.aggregationField]]"
+                count="{{tickerCount}}"
+                ejs-aggregation="{{tickerAgg}}"
                 type="terms"
-                order="{{tickerSymbolSortOrder}}">
+                order="{{tickerSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[tickerSymbolResult]]"
-                data-in2="[[tickerSymbolConfig.key]]"
-                data-out="{{tickerSymbolResultList}}"
+                data-in1="[[tickerResult]]"
+                data-in2="[[tickerConfig.key]]"
+                data-out="{{tickerResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[tickerSymbolConfig.title]]"
-                list="{{tickerSymbolSelectedList}}"
-                object="{{searchParameters.tickerSymbol}}">
+                category="[[tickerConfig.title]]"
+                list="{{tickerSelectedList}}"
+                object="{{searchParameters.ticker}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{tickerSymbolCount}}"
-                    items="[[tickerSymbolResultList]]"
-                    error="[[tickerSymbolError]]"
-                    loading="[[tickerSymbolLoading]]"
-                    item-type="[[tickerSymbolConfig.title]]"
-                    count-type="Ads"
+                    aggregation-count="{{tickerCount}}"
+                    items="[[tickerResultList]]"
+                    error="[[tickerError]]"
+                    loading="[[tickerLoading]]"
+                    item-type="[[tickerConfig.title]]"
+                    count-type="Documents"
                     text-property="id"
-                    order-by="{{tickerSymbolSortOrder}}"
-                    selected-ids="{{tickerSymbolSelectedList}}">
+                    order-by="{{tickerSortOrder}}"
+                    selected-ids="{{tickerSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[tickerSymbolResultList.length]]">
+                <template is="dom-if" if="[[tickerResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{tickerSymbolSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{tickerSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[tickerSymbolResultList]]"
-                loading="[[tickerSymbolLoading]]"
-                selected="{{tickerSymbolSelectedList}}">
+                list="[[tickerResultList]]"
+                loading="[[tickerLoading]]"
+                selected="{{tickerSelectedList}}">
               </select-all>
 
               <iron-collapse id="ticker-symbol-list" class="filter-list" opened>
@@ -854,532 +622,310 @@ limitations under the License.
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[tickerSymbolResultList]]"
-                  selected-ids="{{tickerSymbolSelectedList}}">
+                  items="[[tickerResultList]]"
+                  selected-ids="{{tickerSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[tickerSymbolError]]" message="{{tickerSymbolErrorMessage}}"></elastic-error>
+                <elastic-error error="[[tickerError]]" message="{{tickerErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[tickerSymbolResultList.length]]"
-                  error="[[tickerSymbolErrorMessage]]"
-                  loading="[[tickerSymbolLoading]]"
-                  empty="No [[tickerSymbolConfig.title]]">
+                  count="[[tickerResultList.length]]"
+                  error="[[tickerErrorMessage]]"
+                  loading="[[tickerLoading]]"
+                  empty="No [[tickerConfig.title]]">
                 </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
 
-              <div id="post-type" class="layout horizontal facet filter-header" title="Toggle [[postTypeConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(postTypeConfig.title, postTypeResultList)]]</span>
-                <iron-icon id="post-type-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="post-type-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="product" class="layout horizontal facet filter-header" title="Toggle [[productConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(productConfig.title, productResultList)]]</span>
+                <iron-icon id="product-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="product-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[postTypeConfig.key]]"
-                field="[[postTypeConfig.aggregationField]]"
-                count="{{postTypeCount}}"
-                ejs-aggregation="{{postTypeAgg}}"
+                name="[[productConfig.key]]"
+                field="[[productConfig.aggregationField]]"
+                count="{{productCount}}"
+                ejs-aggregation="{{productAgg}}"
                 type="terms"
-                order="{{postTypeSortOrder}}">
+                order="{{productSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[postTypeResult]]"
-                data-in2="[[postTypeConfig.key]]"
-                data-out="{{postTypeResultList}}"
+                data-in1="[[productResult]]"
+                data-in2="[[productConfig.key]]"
+                data-out="{{productResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[postTypeConfig.title]]"
-                list="{{postTypeSelectedList}}"
-                object="{{searchParameters.postType}}">
+                category="[[productConfig.title]]"
+                list="{{productSelectedList}}"
+                object="{{searchParameters.product}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{postTypeCount}}"
-                    items="[[postTypeResultList]]"
-                    error="[[postTypeError]]"
-                    loading="[[postTypeLoading]]"
-                    item-type="[[postTypeConfig.title]]"
-                    count-type="Ads"
+                    aggregation-count="{{productCount}}"
+                    items="[[productResultList]]"
+                    error="[[productError]]"
+                    loading="[[productLoading]]"
+                    item-type="[[productConfig.title]]"
+                    count-type="Documents"
                     text-property="id"
-                    order-by="{{postTypeSortOrder}}"
-                    selected-ids="{{postTypeSelectedList}}">
+                    order-by="{{productSortOrder}}"
+                    selected-ids="{{productSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[postTypeResultList.length]]">
+                <template is="dom-if" if="[[productResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{postTypeSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{productSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[postTypeResultList]]"
-                loading="[[postTypeLoading]]"
-                selected="{{postTypeSelectedList}}">
+                list="[[productResultList]]"
+                loading="[[productLoading]]"
+                selected="{{productSelectedList}}">
               </select-all>
 
-              <iron-collapse id="post-type-list" class="filter-list" opened>
+              <iron-collapse id="product-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[postTypeResultList]]"
-                  selected-ids="{{postTypeSelectedList}}">
+                  items="[[productResultList]]"
+                  selected-ids="{{productSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[postTypeError]]" message="{{postTypeErrorMessage}}"></elastic-error>
+                <elastic-error error="[[productError]]" message="{{productErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[postTypeResultList.length]]"
-                  error="[[postTypeErrorMessage]]"
-                  loading="[[postTypeLoading]]"
-                  empty="No [[postTypeConfig.title]]">
+                  count="[[productResultList.length]]"
+                  error="[[productErrorMessage]]"
+                  loading="[[productLoading]]"
+                  empty="No [[productConfig.title]]">
                 </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
 
-              <div id="forum" class="layout horizontal facet filter-header" title="Toggle [[forumConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(forumConfig.title, forumResultList)]]</span>
-                <iron-icon id="forum-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="forum-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="person" class="layout horizontal facet filter-header" title="Toggle [[personConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(personConfig.title, personResultList)]]</span>
+                <iron-icon id="person-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="person-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[forumConfig.key]]"
-                field="[[forumConfig.aggregationField]]"
-                count="{{forumCount}}"
-                ejs-aggregation="{{forumAgg}}"
+                name="[[personConfig.key]]"
+                field="[[personConfig.aggregationField]]"
+                count="{{personCount}}"
+                ejs-aggregation="{{personAgg}}"
                 type="terms"
-                order="{{forumSortOrder}}">
+                order="{{personSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[forumResult]]"
-                data-in2="[[forumConfig.key]]"
-                data-out="{{forumResultList}}"
+                data-in1="[[personResult]]"
+                data-in2="[[personConfig.key]]"
+                data-out="{{personResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[forumConfig.title]]"
-                list="{{forumSelectedList}}"
-                object="{{searchParameters.forum}}">
+                category="[[personConfig.title]]"
+                list="{{personSelectedList}}"
+                object="{{searchParameters.person}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{forumCount}}"
-                    items="[[forumResultList]]"
-                    error="[[forumError]]"
-                    loading="[[forumLoading]]"
-                    item-type="[[forumConfig.title]]"
-                    count-type="Ads"
+                    aggregation-count="{{personCount}}"
+                    items="[[personResultList]]"
+                    error="[[personError]]"
+                    loading="[[personLoading]]"
+                    item-type="[[personConfig.title]]"
+                    count-type="Documents"
                     text-property="id"
-                    order-by="{{forumSortOrder}}"
-                    selected-ids="{{forumSelectedList}}">
+                    order-by="{{personSortOrder}}"
+                    selected-ids="{{personSelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[forumResultList.length]]">
+                <template is="dom-if" if="[[personResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{forumSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{personSortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[forumResultList]]"
-                loading="[[forumLoading]]"
-                selected="{{forumSelectedList}}">
+                list="[[personResultList]]"
+                loading="[[personLoading]]"
+                selected="{{personSelectedList}}">
               </select-all>
 
-              <iron-collapse id="forum-list" class="filter-list" opened>
+              <iron-collapse id="person-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[forumResultList]]"
-                  selected-ids="{{forumSelectedList}}">
+                  items="[[personResultList]]"
+                  selected-ids="{{personSelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[forumError]]" message="{{forumErrorMessage}}"></elastic-error>
+                <elastic-error error="[[personError]]" message="{{personErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[forumResultList.length]]"
-                  error="[[forumErrorMessage]]"
-                  loading="[[forumLoading]]"
-                  empty="No [[forumConfig.title]]">
+                  count="[[personResultList.length]]"
+                  error="[[personErrorMessage]]"
+                  loading="[[personLoading]]"
+                  empty="No [[personConfig.title]]">
                 </status-text>
               </iron-collapse>
 
               <div class="h-divider"></div>
 
-              <div id="author" class="layout horizontal facet filter-header" title="Toggle [[authorConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(authorConfig.title, authorResultList)]]</span>
-                <iron-icon id="author-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="author-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              <div id="org" class="layout horizontal facet filter-header" title="Toggle [[orgConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(orgConfig.title, orgResultList)]]</span>
+                <iron-icon id="org-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="org-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
               </div>
 
               <elastic-client-aggregation-builder
-                name="[[authorConfig.key]]"
-                field="[[authorConfig.aggregationField]]"
-                count="{{authorCount}}"
-                ejs-aggregation="{{authorAgg}}"
+                name="[[orgConfig.key]]"
+                field="[[orgConfig.aggregationField]]"
+                count="{{orgCount}}"
+                ejs-aggregation="{{orgAgg}}"
                 type="terms"
-                order="{{authorSortOrder}}">
+                order="{{orgSortOrder}}">
               </elastic-client-aggregation-builder>
 
               <json-combine
-                data-in1="[[authorResult]]"
-                data-in2="[[authorConfig.key]]"
-                data-out="{{authorResultList}}"
+                data-in1="[[orgResult]]"
+                data-in2="[[orgConfig.key]]"
+                data-out="{{orgResultList}}"
                 combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
               </json-combine>
 
               <terms-transformer
-                category="[[authorConfig.title]]"
-                list="{{authorSelectedList}}"
-                object="{{searchParameters.author}}">
+                category="[[orgConfig.title]]"
+                list="{{orgSelectedList}}"
+                object="{{searchParameters.org}}">
               </terms-transformer>
 
               <div class="horizontal layout">
                 <div class="flex self-start">
                   <aggregation-popup
-                    aggregation-count="{{authorCount}}"
-                    items="[[authorResultList]]"
-                    error="[[authorError]]"
-                    loading="[[authorLoading]]"
-                    item-type="[[authorConfig.title]]"
+                    aggregation-count="{{orgCount}}"
+                    items="[[orgResultList]]"
+                    error="[[orgError]]"
+                    loading="[[orgLoading]]"
+                    item-type="[[orgConfig.title]]"
+                    count-type="Documents"
+                    text-property="id"
+                    order-by="{{orgSortOrder}}"
+                    selected-ids="{{orgSelectedList}}">
+                  </aggregation-popup>
+                </div>
+                <template is="dom-if" if="[[orgResultList.length]]">
+                  <div class="self-end">
+                    <aggregation-sort order-by="{{orgSortOrder}}"></aggregation-sort>
+                  </div>
+                </template>
+              </div>
+
+              <select-all
+                list="[[orgResultList]]"
+                loading="[[orgLoading]]"
+                selected="{{orgSelectedList}}">
+              </select-all>
+
+              <iron-collapse id="org-list" class="filter-list" opened>
+                <feature-aggregation show-checkboxes
+                  checkbox-name="Search"
+                  hide-no-data-text hide-show-more small
+                  text-property="id"
+                  items="[[orgResultList]]"
+                  selected-ids="{{orgSelectedList}}">
+                </feature-aggregation>
+                <elastic-error error="[[orgError]]" message="{{orgErrorMessage}}"></elastic-error>
+                <status-text
+                  count="[[orgResultList.length]]"
+                  error="[[orgErrorMessage]]"
+                  loading="[[orgLoading]]"
+                  empty="No [[orgConfig.title]]">
+                </status-text>
+              </iron-collapse>
+
+              <div class="h-divider"></div>
+
+              <div id="money" class="layout horizontal facet filter-header" title="Toggle [[moneyConfig.title]]" on-tap="toggleList">
+                <span class="flex">[[getLabelAndCount(moneyConfig.title, moneyResultList)]]</span>
+                <iron-icon id="money-icon-opened" icon="icons:expand-less"></iron-icon>
+                <iron-icon id="money-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
+              </div>
+
+              <elastic-client-aggregation-builder
+                name="[[moneyConfig.key]]"
+                field="[[moneyConfig.aggregationField]]"
+                count="{{moneyCount}}"
+                ejs-aggregation="{{moneyAgg}}"
+                type="terms"
+                order="{{moneySortOrder}}">
+              </elastic-client-aggregation-builder>
+
+              <json-combine
+                data-in1="[[moneyResult]]"
+                data-in2="[[moneyConfig.key]]"
+                data-out="{{moneyResultList}}"
+                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
+              </json-combine>
+
+              <terms-transformer
+                category="[[moneyConfig.title]]"
+                list="{{moneySelectedList}}"
+                object="{{searchParameters.money}}">
+              </terms-transformer>
+
+              <div class="horizontal layout">
+                <div class="flex self-start">
+                  <aggregation-popup
+                    aggregation-count="{{moneyCount}}"
+                    items="[[moneyResultList]]"
+                    error="[[moneyError]]"
+                    loading="[[moneyLoading]]"
+                    item-type="[[moneyConfig.title]]"
                     count-type="Docs"
-                    order-by="{{authorSortOrder}}"
-                    selected-ids="{{authorSelectedList}}">
+                    order-by="{{moneySortOrder}}"
+                    selected-ids="{{moneySelectedList}}">
                   </aggregation-popup>
                 </div>
-                <template is="dom-if" if="[[authorResultList.length]]">
+                <template is="dom-if" if="[[moneyResultList.length]]">
                   <div class="self-end">
-                    <aggregation-sort order-by="{{authorSortOrder}}"></aggregation-sort>
+                    <aggregation-sort order-by="{{moneySortOrder}}"></aggregation-sort>
                   </div>
                 </template>
               </div>
 
               <select-all
-                list="[[authorResultList]]"
-                loading="[[authorLoading]]"
-                selected="{{authorSelectedList}}">
+                list="[[moneyResultList]]"
+                loading="[[moneyLoading]]"
+                selected="{{moneySelectedList}}">
               </select-all>
 
-              <iron-collapse id="author-list" class="filter-list" opened>
+              <iron-collapse id="money-list" class="filter-list" opened>
                 <feature-aggregation show-checkboxes
                   checkbox-name="Search"
                   hide-no-data-text hide-show-more small
                   text-property="id"
-                  items="[[authorResultList]]"
-                  selected-ids="{{authorSelectedList}}">
+                  items="[[moneyResultList]]"
+                  selected-ids="{{moneySelectedList}}">
                 </feature-aggregation>
-                <elastic-error error="[[authorError]]" message="{{authorErrorMessage}}"></elastic-error>
+                <elastic-error error="[[moneyError]]" message="{{moneyErrorMessage}}"></elastic-error>
                 <status-text
-                  count="[[authorResultList.length]]"
-                  error="[[authorErrorMessage]]"
-                  loading="[[authorLoading]]"
-                  empty="No [[authorConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="company-name" class="layout horizontal facet filter-header" title="Toggle [[companyNameConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(companyNameConfig.title, companyNameResultList)]]</span>
-                <iron-icon id="company-name-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="company-name-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[companyNameConfig.key]]"
-                field="[[companyNameConfig.aggregationField]]"
-                count="{{companyNameCount}}"
-                ejs-aggregation="{{companyNameAgg}}"
-                type="terms"
-                order="{{companyNameSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[companyNameResult]]"
-                data-in2="[[companyNameConfig.key]]"
-                data-out="{{companyNameResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[companyNameConfig.title]]"
-                list="{{companyNameSelectedList}}"
-                object="{{searchParameters.companyName}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{companyNameCount}}"
-                    items="[[companyNameResultList]]"
-                    error="[[companyNameError]]"
-                    loading="[[companyNameLoading]]"
-                    item-type="[[companyNameConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{companyNameSortOrder}}"
-                    selected-ids="{{companyNameSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[companyNameResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{companyNameSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[companyNameResultList]]"
-                loading="[[companyNameLoading]]"
-                selected="{{companyNameSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="company-name-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[companyNameResultList]]"
-                  selected-ids="{{companyNameSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[companyNameError]]" message="{{companyNameErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[companyNameResultList.length]]"
-                  error="[[companyNameErrorMessage]]"
-                  loading="[[companyNameLoading]]"
-                  empty="No [[companyNameConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="company-type" class="layout horizontal facet filter-header" title="Toggle [[companyTypeConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(companyTypeConfig.title, companyTypeResultList)]]</span>
-                <iron-icon id="company-type-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="company-type-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[companyTypeConfig.key]]"
-                field="[[companyTypeConfig.aggregationField]]"
-                count="{{companyTypeCount}}"
-                ejs-aggregation="{{companyTypeAgg}}"
-                type="terms"
-                order="{{companyTypeSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[companyTypeResult]]"
-                data-in2="[[companyTypeConfig.key]]"
-                data-out="{{companyTypeResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[companyTypeConfig.title]]"
-                list="{{companyTypeSelectedList}}"
-                object="{{searchParameters.companyType}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{companyTypeCount}}"
-                    items="[[companyTypeResultList]]"
-                    error="[[companyTypeError]]"
-                    loading="[[companyTypeLoading]]"
-                    item-type="[[companyTypeConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{companyTypeSortOrder}}"
-                    selected-ids="{{companyTypeSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[companyTypeResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{companyTypeSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[companyTypeResultList]]"
-                loading="[[companyTypeLoading]]"
-                selected="{{companyTypeSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="company-type-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[companyTypeResultList]]"
-                  selected-ids="{{companyTypeSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[companyTypeError]]" message="{{companyTypeErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[companyTypeResultList.length]]"
-                  error="[[companyTypeErrorMessage]]"
-                  loading="[[companyTypeLoading]]"
-                  empty="No [[companyTypeConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="moderator" class="layout horizontal facet filter-header" title="Toggle [[moderatorConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(moderatorConfig.title, moderatorResultList)]]</span>
-                <iron-icon id="moderator-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="moderator-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[moderatorConfig.key]]"
-                field="[[moderatorConfig.aggregationField]]"
-                count="{{moderatorCount}}"
-                ejs-aggregation="{{moderatorAgg}}"
-                type="terms"
-                order="{{moderatorSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[moderatorResult]]"
-                data-in2="[[moderatorConfig.key]]"
-                data-out="{{moderatorResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[moderatorConfig.title]]"
-                list="{{moderatorSelectedList}}"
-                object="{{searchParameters.moderator}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{moderatorCount}}"
-                    items="[[moderatorResultList]]"
-                    error="[[moderatorError]]"
-                    loading="[[moderatorLoading]]"
-                    item-type="[[moderatorConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{moderatorSortOrder}}"
-                    selected-ids="{{moderatorSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[moderatorResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{moderatorSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[moderatorResultList]]"
-                loading="[[moderatorLoading]]"
-                selected="{{moderatorSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="moderator-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[moderatorResultList]]"
-                  selected-ids="{{moderatorSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[moderatorError]]" message="{{moderatorErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[moderatorResultList.length]]"
-                  error="[[moderatorErrorMessage]]"
-                  loading="[[moderatorLoading]]"
-                  empty="No [[moderatorConfig.title]]">
-                </status-text>
-              </iron-collapse>
-
-              <div class="h-divider"></div>
-
-              <div id="age" class="layout horizontal facet filter-header" title="Toggle [[ageConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(ageConfig.title, ageResultList)]]</span>
-                <iron-icon id="age-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="age-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[ageConfig.key]]"
-                field="[[ageConfig.aggregationField]]"
-                count="{{ageCount}}"
-                ejs-aggregation="{{ageAgg}}"
-                type="terms"
-                order="{{ageSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[ageResult]]"
-                data-in2="[[ageConfig.key]]"
-                data-out="{{ageResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[ageConfig.title]]"
-                list="{{ageSelectedList}}"
-                object="{{searchParameters.age}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{ageCount}}"
-                    items="[[ageResultList]]"
-                    error="[[ageError]]"
-                    loading="[[ageLoading]]"
-                    item-type="[[ageConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{ageSortOrder}}"
-                    selected-ids="{{ageSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[ageResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{ageSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[ageResultList]]"
-                loading="[[ageLoading]]"
-                selected="{{ageSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="age-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[ageResultList]]"
-                  selected-ids="{{ageSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[ageError]]" message="{{ageErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[ageResultList.length]]"
-                  error="[[ageErrorMessage]]"
-                  loading="[[ageLoading]]"
-                  empty="No [[ageConfig.title]]">
+                  count="[[moneyResultList.length]]"
+                  error="[[moneyErrorMessage]]"
+                  loading="[[moneyLoading]]"
+                  empty="No [[moneyConfig.title]]">
                 </status-text>
               </iron-collapse>
 
@@ -1421,7 +967,7 @@ limitations under the License.
                     error="[[locationError]]"
                     loading="[[locationLoading]]"
                     item-type="[[locationConfig.title]]"
-                    count-type="Ads"
+                    count-type="Documents"
                     text-property="id"
                     order-by="{{locationSortOrder}}"
                     selected-ids="{{locationSelectedList}}">
@@ -1495,7 +1041,7 @@ limitations under the License.
                     error="[[urlError]]"
                     loading="[[urlLoading]]"
                     item-type="[[urlConfig.title]]"
-                    count-type="Ads"
+                    count-type="Documents"
                     text-property="id"
                     order-by="{{urlSortOrder}}"
                     selected-ids="{{urlSelectedList}}">
@@ -1530,80 +1076,6 @@ limitations under the License.
                   empty="No [[urlConfig.title]]">
                 </status-text>
               </iron-collapse>-->
-
-              <div class="h-divider"></div>
-
-              <div id="website" class="layout horizontal facet filter-header" title="Toggle [[websiteConfig.title]]" on-tap="toggleList">
-                <span class="flex">[[getLabelAndCount(websiteConfig.title, websiteResultList)]]</span>
-                <iron-icon id="website-icon-opened" icon="icons:expand-less"></iron-icon>
-                <iron-icon id="website-icon-closed" icon="icons:expand-more" style="display: none;"></iron-icon>
-              </div>
-
-              <elastic-client-aggregation-builder
-                name="[[websiteConfig.key]]"
-                field="[[websiteConfig.aggregationField]]"
-                count="{{websiteCount}}"
-                ejs-aggregation="{{websiteAgg}}"
-                type="terms"
-                order="{{websiteSortOrder}}">
-              </elastic-client-aggregation-builder>
-
-              <json-combine
-                data-in1="[[websiteResult]]"
-                data-in2="[[websiteConfig.key]]"
-                data-out="{{websiteResultList}}"
-                combine-function="[[clientConfig.transforms.filterAggs.filterList]]">
-              </json-combine>
-
-              <terms-transformer
-                category="[[websiteConfig.title]]"
-                list="{{websiteSelectedList}}"
-                object="{{searchParameters.website}}">
-              </terms-transformer>
-
-              <div class="horizontal layout">
-                <div class="flex self-start">
-                  <aggregation-popup
-                    aggregation-count="{{websiteCount}}"
-                    items="[[websiteResultList]]"
-                    error="[[websiteError]]"
-                    loading="[[websiteLoading]]"
-                    item-type="[[websiteConfig.title]]"
-                    count-type="Ads"
-                    text-property="id"
-                    order-by="{{websiteSortOrder}}"
-                    selected-ids="{{websiteSelectedList}}">
-                  </aggregation-popup>
-                </div>
-                <template is="dom-if" if="[[websiteResultList.length]]">
-                  <div class="self-end">
-                    <aggregation-sort order-by="{{websiteSortOrder}}"></aggregation-sort>
-                  </div>
-                </template>
-              </div>
-
-              <select-all
-                list="[[websiteResultList]]"
-                loading="[[websiteLoading]]"
-                selected="{{websiteSelectedList}}">
-              </select-all>
-
-              <iron-collapse id="website-list" class="filter-list" opened>
-                <feature-aggregation show-checkboxes
-                  checkbox-name="Search"
-                  hide-no-data-text hide-show-more small
-                  text-property="id"
-                  items="[[websiteResultList]]"
-                  selected-ids="{{websiteSelectedList}}">
-                </feature-aggregation>
-                <elastic-error error="[[websiteError]]" message="{{websiteErrorMessage}}"></elastic-error>
-                <status-text
-                  count="[[websiteResultList.length]]"
-                  error="[[websiteErrorMessage]]"
-                  loading="[[websiteLoading]]"
-                  empty="No [[websiteConfig.title]]">
-                </status-text>
-              </iron-collapse>
             </section>
 
             <section data-type="image"></section>
@@ -1674,34 +1146,6 @@ limitations under the License.
 
       app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
 
-      app.ageConfig = {
-        key: 'age',
-        title: 'Age',
-        queryField: 'fields.age.strict.name.raw',
-        aggregationField: 'fields.age.strict.name.raw',
-        value: ''
-      };
-      app.authorConfig = {
-        key: 'author',
-        title: 'Author',
-        queryField: 'fields.author.strict.name',
-        aggregationField: 'fields.author.strict.name.raw',
-        value: ''
-      };
-      app.companyNameConfig = {
-        key: 'companyName',
-        title: 'Company',
-        queryField: 'fields.company.strict.name',
-        aggregationField: 'fields.company.strict.name.raw',
-        value: ''
-      };
-      app.companyTypeConfig = {
-        key: 'companyType',
-        title: 'Company Type',
-        queryField: 'fields.company_type.strict.name',
-        aggregationField: 'fields.company_type.strict.name.raw',
-        value: ''
-      };
       app.dateStartConfig = {
         key: 'dateStart',
         title: 'From',
@@ -1722,84 +1166,79 @@ limitations under the License.
       };
       app.descriptionConfig = {
         key: 'description',
-        title: 'Page',
+        title: 'Content',
         queryField: 'fields.content.strict.name',
-        aggregationField: 'fields.content.strict.name.raw',
-        value: ''
-      };
-      app.forumConfig = {
-        key: 'forum',
-        title: 'Forum',
-        queryField: 'fields.forum_name.strict.name',
-        aggregationField: 'fields.forum_name.strict.name.raw',
+        aggregationField: 'fields.content.strict.key',
         value: ''
       };
       app.locationConfig = {
         key: 'location',
         title: 'Location',
         queryField: 'fields.location.strict.name',
-        aggregationField: 'fields.location.strict.name.raw',
+        aggregationField: 'fields.location.strict.key',
         value: ''
       };
-      app.moderatorConfig = {
-        key: 'moderator',
-        title: 'Moderator',
-        queryField: 'fields.moderator.strict.name',
-        aggregationField: 'fields.moderator.strict.name.raw',
+      app.moneyConfig = {
+        key: 'money',
+        title: 'Money',
+        queryField: 'fields.money.strict.name',
+        aggregationField: 'fields.money.strict.key',
         value: ''
       };
-      app.postTypeConfig = {
-        key: 'postType',
-        title: 'Post Type',
-        queryField: 'fields.type.strict.name',
-        aggregationField: 'fields.type.strict.name.raw',
+      app.orgConfig = {
+        key: 'org',
+        title: 'Organization',
+        queryField: 'fields.org.strict.name',
+        aggregationField: 'fields.org.strict.key',
         value: ''
       };
-      app.tickerSymbolConfig = {
-        key: 'tickerSymbol',
-        title: 'Ticker Symbol',
-        queryField: 'fields.ticker_symbol.strict.name',
-        aggregationField: 'fields.ticker_symbol.strict.name.raw',
+      app.personConfig = {
+        key: 'person',
+        title: 'Person',
+        queryField: 'fields.person.strict.name',
+        aggregationField: 'fields.person.strict.key',
+        value: ''
+      };
+      app.productConfig = {
+        key: 'product',
+        title: 'Product',
+        queryField: 'fields.product.strict.name',
+        aggregationField: 'fields.product.strict.key',
+        value: ''
+      };
+      app.tickerConfig = {
+        key: 'ticker',
+        title: 'Ticker',
+        queryField: 'fields.ticker.strict.name',
+        aggregationField: 'fields.ticker.strict.key',
         value: ''
       };
       app.titleConfig = {
         key: 'title',
         title: 'Title',
         queryField: 'fields.title.strict.name',
-        aggregationField: 'fields.title.strict.name.raw',
+        aggregationField: 'fields.title.strict.key',
         value: ''
       };
       app.urlConfig = {
         key: 'url',
         title: 'Url',
         queryField: 'fields.url.strict.name',
-        aggregationField: 'fields.url.strict.name.raw',
-        value: ''
-      };
-      app.websiteConfig = {
-        key: 'website',
-        title: 'Website',
-        queryField: 'tld',
-        aggregationField: 'tld.raw',
+        aggregationField: 'fields.url.strict.key',
         value: ''
       };
 
       app.userCanceled = false;
 
       app.searchFields = [
-        app.ageConfig,
-        app.authorConfig,
-        app.companyNameConfig,
-        app.companyTypeConfig,
+        app.moneyConfig,
         app.descriptionConfig,
-        app.forumConfig,
+        app.personConfig,
         app.locationConfig,
-        app.moderatorConfig,
-        app.postTypeConfig,
-        app.tickerSymbolConfig,
-        app.titleConfig,
-        //app.urlConfig,
-        app.websiteConfig
+        app.productConfig,
+        app.orgConfig,
+        app.tickerConfig,
+        app.titleConfig
       ];
 
       app.updateSearchParameterAndNotify = function(type, term, title, enabled) {
@@ -1886,11 +1325,6 @@ limitations under the License.
           return app.searchParameters[searchConfig.key][term].text;
         }).join(', ');
 
-        /*if(searchConfig.key === 'risk') {
-          searchConfig.value = searchConfig.value === 'yes' ? 'Yes' : (searchConfig.value === 'no' ? 'No' : 'Any');
-          document.querySelector('#riskList').selected = searchConfig.value === 'Yes' ? '1' : (searchConfig.value === 'No' ? '2' : '0');
-        }*/
-
         // Must update both the property value and the input element value!
         app.set(['searchFields', index, 'value'], searchConfig.value);
         document.querySelector('#input_' + searchConfig.key).value = searchConfig.value;
@@ -1949,7 +1383,7 @@ limitations under the License.
       /* end search dropdown panel code */
 
       app.getElasticTypes = function() {
-        return ['doc'];
+        return ['microcap'];
       };
 
       app.noSearchParameters = function() {

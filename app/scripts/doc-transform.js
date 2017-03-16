@@ -119,7 +119,7 @@ var docTransform = (function(_, commonTransforms) {
   }
 
   function getDocObject(record) {
-    var id = _.get(record, '_source.doc_id');
+    var id = _.get(record, '_id');
     var url = _.get(record, '_source.url');
 
     if(!id || !url) {
@@ -127,19 +127,26 @@ var docTransform = (function(_, commonTransforms) {
     }
 
     var rank = _.get(record, '_score');
-    var domain = _.get(record, '_source.tld');
+    //var domain = _.get(record, '_source.tld');
 
     var doc = {
       id: id,
       url: url,
       rank: rank ? rank.toFixed(2) : rank,
-      domain: domain || 'No Domain',
       type: 'doc',
       icon: commonTransforms.getIronIcon('doc'),
       link: commonTransforms.getLink(id, 'doc'),
       styleClass: commonTransforms.getStyleClass('doc'),
       title: getSingleItemFromRecord(record, '_source.fields.title') || 'No Title',
       content: getSingleItemFromRecord(record, '_source.fields.content') || 'No Content',
+      locations: getDataOfTypeFromRecord(record, '_source.fields.location', 'location'),
+      moneys: getDataOfTypeFromRecord(record, '_source.fields.money', 'money'),
+      orgs: getDataOfTypeFromRecord(record, '_source.fields.org', 'org'),
+      persons: getDataOfTypeFromRecord(record, '_source.fields.person', 'person'),
+      products: getDataOfTypeFromRecord(record, '_source.fields.product', 'product'),
+      tickers: getDataOfTypeFromRecord(record, '_source.fields.ticker', 'ticker'),
+      /*
+      domain: domain || 'No Domain',
       disclaimers: getSingleItemFromRecord(record, '_source.fields.disclaimer') || 'No Disclaimer',
       tickerSymbols: getDataOfTypeFromRecord(record, '_source.fields.ticker_symbol', 'ticker_symbol'),
       postTypes: getDataOfTypeFromRecord(record, '_source.fields.type', 'post_type'),
@@ -170,11 +177,20 @@ var docTransform = (function(_, commonTransforms) {
         text: getDate(record, '_source.fields.date_profile_created'),
         type: 'creation_date'
       },
+      */
       highlightedText: getHighlightedText(record, 'fields.title.strict.name', 'fields.title.relaxed.name'),
       descriptors: [],
       details: []
     };
 
+    doc.locations = addHighlights(doc.locations, record, ['fields.location.strict.name']);
+    doc.moneys = addHighlights(doc.moneys, record, ['fields.money.strict.name']);
+    doc.orgs = addHighlights(doc.orgs, record, ['fields.org.strict.name']);
+    doc.persons = addHighlights(doc.persons, record, ['fields.person.strict.name']);
+    doc.products = addHighlights(doc.products, record, ['fields.product.strict.name']);
+    doc.tickers = addHighlights(doc.tickers, record, ['fields.ticker.strict.name']);
+
+    /*
     doc.tickerSymbols = addHighlights(doc.tickerSymbols, record, ['fields.ticker_symbol.strict.name']);
     doc.postTypes = addHighlights(doc.postTypes, record, ['fields.type.strict.name']);
     doc.postIds = addHighlights(doc.postIds, record, ['fields.post_id.strict.name']);
@@ -189,7 +205,34 @@ var docTransform = (function(_, commonTransforms) {
     doc.numberOfPosts = addHighlights(doc.numberOfPosts, record, ['fields.num_posts.strict.name']);
     doc.stocksOwned = addHighlights(doc.stocksOwned, record, ['fields.stocks_owned.strict.name']);
     doc.moderators = addHighlights(doc.moderators, record, ['fields.moderator.strict.name']);
+    */
 
+    doc.descriptors.push({
+      name: 'Tickers',
+      data: doc.tickers
+    });
+    doc.descriptors.push({
+      name: 'Products',
+      data: doc.products
+    });
+    doc.descriptors.push({
+      name: 'People',
+      data: doc.persons
+    });
+    doc.descriptors.push({
+      name: 'Organizations',
+      data: doc.orgs
+    });
+    doc.descriptors.push({
+      name: 'Money',
+      data: doc.moneys
+    });
+    doc.descriptors.push({
+      name: 'Locations',
+      data: doc.locations
+    });
+
+    /*
     doc.descriptors.push({
       name: 'Ticker Symbols',
       data: doc.tickerSymbols
@@ -258,6 +301,7 @@ var docTransform = (function(_, commonTransforms) {
       name: 'Post IDs',
       data: doc.postIds
     });
+    */
 
     doc.details.push({
       name: 'Url',
@@ -269,11 +313,13 @@ var docTransform = (function(_, commonTransforms) {
       highlightedText: getHighlightedText(record, 'fields.content.strict.name', 'fields.content.relaxed.name'),
       text: doc.content
     });
+    /*
     doc.details.push({
       name: 'Disclaimers',
       highlightedText: getHighlightedText(record, 'fields.disclaimer.strict.name', 'fields.disclaimer.relaxed.name'),
       text: doc.disclaimers
     });
+    */
     doc.details.push({
       name: 'Cached Webpage',
       link: id ? commonTransforms.getLink(id, 'cache') : null,

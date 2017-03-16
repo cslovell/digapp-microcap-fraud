@@ -37,12 +37,13 @@ DigBehaviors.StateBehavior = {
    */
   buildEntityState: function(config) {
     var state = {
-      age: config.age || [],
-      forum: config.email || [],
-      image: config.image || [],
       location: config.location || [],
-      moderator: config.moderator || [],
-      weight: config.weight || []
+      money: config.money || [],
+      org: config.org || [],
+      person: config.person || [],
+      product: config.product || [],
+      ticker: config.ticker || [],
+      url: config.url || []
     };
 
     // Fix legacy IDs.
@@ -62,23 +63,17 @@ DigBehaviors.StateBehavior = {
    */
   buildSearchState: function(config) {
     var state = {
-      age: config.age || {},
-      author: config.author || {},
-      companyName: config.companyName || {},
-      companyType: config.companyType || {},
       description: config.description || {},
-      forum: config.forum || {},
-      image: config.image || {},
       location: config.location || {},
-      moderator: config.moderator || {},
+      money: config.money || {},
+      org: config.org || {},
+      person: config.person || {},
+      product: config.product || {},
       // start and end dates will be keys within postingDate
       postingDate: config.postingDate || {},
-      postType: config.postType || {},
-      tickerSymbol: config.tickerSymbol || {},
+      ticker: config.ticker || {},
       title: config.title || {},
       url: config.url || {},
-      website: config.website || {},
-      weight: config.weight || {},
       sort: config.sort || ''
     };
 

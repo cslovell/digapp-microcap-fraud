@@ -52,11 +52,16 @@ DigBehaviors.TypeBehavior = {
       case 'forum_name': return 'icons:account-circle';
       case 'location': return 'social:location-city';
       case 'moderator': return 'social:school';
+      case 'money': return 'editor:attach-money';
       case 'number_of_posts': return 'communication:chat';
       case 'object_id': return 'social:person';
+      case 'org': return 'social:group';
+      case 'person': return 'social:person';
       case 'post_id': return 'social:person';
       case 'post_type': return 'icons:description';
+      case 'product': return 'icons:work';
       case 'stocks_owned': return 'editor:show-chart';
+      case 'ticker': return 'social:public';
       case 'ticker_symbol': return 'social:public';
       case 'website': return 'av:web';
     }
