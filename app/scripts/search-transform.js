@@ -20,29 +20,15 @@
 var searchTransform = (function(_) {
   function getPredicate(type) {
     switch(type) {
-      case 'age': return 'age';
-      case 'city': return 'city';
-      case 'country': return 'country';
-      case 'description': return 'description';
-      case 'email': return 'email';
-      case 'ethnicity': return 'ethnicity';
-      case 'eyeColor': return 'eye_color';
-      case 'gender': return 'gender';
-      case 'hairColor': return 'hair_color';
-      case 'height': return 'height';
-      case 'image': return '';
-      case 'name': return 'name';
-      case 'phone': return 'phone';
-      case 'postingDate': return 'posting_date';
-      case 'price': return 'price';
-      case 'region': return 'state';
-      case 'review': return 'review_id';
-      case 'risk': return 'risk';
-      case 'services': return 'service';
-      case 'social': return 'social_media_id';
+      case 'description': return 'content';
+      case 'location': return 'location';
+      case 'money': return 'money';
+      case 'org': return 'org';
+      case 'person': return 'person';
+      case 'product': return 'product';
+      case 'ticker': return 'ticker';
       case 'title': return 'title';
-      case 'website': return 'tld';
-      case 'weight': return 'weight';
+      case 'url': return 'url';
     }
   }
 
@@ -132,8 +118,8 @@ var searchTransform = (function(_) {
           where: {
             clauses: clauses,
             filters: filters,
-            type: 'Ad',
-            variable: '?ad'
+            type: 'Doc',
+            variable: '?doc'
           }
         },
         type: 'Point Fact'
