@@ -119,8 +119,8 @@ var searchTransform = (function(_) {
           where: {
             clauses: clauses,
             filters: filters,
-            type: 'Doc',
-            variable: '?doc'
+            type: 'Microcap',
+            variable: '?microcap'
           }
         },
         type: 'Point Fact'

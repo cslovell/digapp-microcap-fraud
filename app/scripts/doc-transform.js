@@ -326,6 +326,9 @@ var docTransform = (function(_, commonTransforms) {
       text: id ? 'Open' : 'Unavailable'
     });
 
+    // Fix data issue.
+    doc.title = doc.title.indexOf('</title>') ? doc.title.substring(0, doc.title.indexOf('</title>')) : doc.title;
+
     return doc;
   }
 

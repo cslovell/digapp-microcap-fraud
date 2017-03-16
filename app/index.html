@@ -93,6 +93,7 @@ limitations under the License.
       client="{{esclient}}">
     </elastic-client>
 
+    <!--
     <query-builder demand
       description-field="[[descriptionConfig.queryField]]"
       location-field="[[locationConfig.queryField]]"
@@ -121,8 +122,8 @@ limitations under the License.
       loading="{{searchLoading}}"
       properties-ready="{{processRequest}}">
     </elastic-client-search>
+    -->
 
-    <!--
     <query-transformer
       error="{{searchError}}"
       loading="{{searchLoading}}"
@@ -135,7 +136,6 @@ limitations under the License.
       search-function="[[clientConfig.transforms.search.search]]"
       url="[[config.queryUrl]]">
     </query-transformer>
-    -->
 
     <json-transform
       data-in="{{searchResults}}"
