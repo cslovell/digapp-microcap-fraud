@@ -60,6 +60,12 @@ limitations under the License.
         margin-bottom: 10px;
         margin-right: 5px;
         padding: 0 5px;
+        min-width: 50px;
+      }
+
+      .rank > strong {
+        display: block;
+        text-align: center;
       }
 
       .head .vertical-text {
@@ -146,7 +152,7 @@ limitations under the License.
       <div class="layout vertical flex center-justified vertical-text">
         <div class="layout horizontal">
           <template is="dom-if" if="[[_getProperty(item, itemRankProperty)]]">
-            <div class="rank text" title$="Search Result Score:  [[_getProperty(item, itemRankProperty)]]">
+            <div class="layout self-center rank text" title$="Search Result Score:  [[_getProperty(item, itemRankProperty)]]">
               <strong>[[_getProperty(item, itemRankProperty)]]</strong>
             </div>
           </template>
