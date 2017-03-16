@@ -26,7 +26,7 @@ DigBehaviors.TypeBehavior = {
    * Returns the link for the given type and id.
    */
   getPageLink: function(id, type) {
-    if(!id || !type || !(type === 'cache' || type === 'doc')) {
+    if(!id || !type || !(type === 'cache' || type === 'doc' || type === 'ticker')) {
       return undefined;
     }
 

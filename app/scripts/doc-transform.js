@@ -641,35 +641,99 @@ var docTransform = (function(_, commonTransforms) {
       };
     },
 
-    offerPhones: function(data, ignoreId) {
-      var phones = [];
+    docTickers: function(data, ignoreId) {
+      var tickers = [];
       var sayOther = false;
-      if(data && data.aggregations && data.aggregations.phone && data.aggregations.phone.phone) {
-        phones = getPhonesFromList(data.aggregations.phone.phone.buckets || []).filter(function(phone) {
-          var result = ignoreId ? phone.id !== ignoreId : true;
+      if(data && data.aggregations && data.aggregations.ticker && data.aggregations.ticker.ticker) {
+        tickers = getDataOfTypeFromList(data.aggregations.ticker.ticker.buckets || [], 'ticker').filter(function(ticker) {
+          var result = ignoreId ? ticker.id !== ignoreId : true;
           sayOther = sayOther || !result;
           return result;
         });
       }
       return {
-        title: getTitle(phones.length, 'Telephone Number', sayOther),
-        phone: phones
+        title: getTitle(tickers.length, 'Ticker', sayOther),
+        ticker: tickers
       };
     },
 
-    offerEmails: function(data, ignoreId) {
-      var emails = [];
+    docProducts: function(data, ignoreId) {
+      var products = [];
       var sayOther = false;
-      if(data && data.aggregations && data.aggregations.email && data.aggregations.email.email) {
-        emails = getEmailsFromList(data.aggregations.email.email.buckets || []).filter(function(email) {
-          var result = ignoreId ? email.id !== ignoreId : true;
+      if(data && data.aggregations && data.aggregations.product && data.aggregations.product.product) {
+        products = getDataOfTypeFromList(data.aggregations.product.product.buckets || [], 'product').filter(function(product) {
+          var result = ignoreId ? product.id !== ignoreId : true;
           sayOther = sayOther || !result;
           return result;
         });
       }
       return {
-        title: getTitle(emails.length, 'Email Address', sayOther, 'es'),
-        email: emails
+        title: getTitle(products.length, 'Product', sayOther),
+        product: products
+      };
+    },
+
+    docPersons: function(data, ignoreId) {
+      var persons = [];
+      var sayOther = false;
+      if(data && data.aggregations && data.aggregations.person && data.aggregations.person.person) {
+        persons = getDataOfTypeFromList(data.aggregations.person.person.buckets || [], 'person').filter(function(person) {
+          var result = ignoreId ? person.id !== ignoreId : true;
+          sayOther = sayOther || !result;
+          return result;
+        });
+      }
+      return {
+        title: getTitle(persons.length, 'Person', sayOther),
+        person: persons
+      };
+    },
+
+    docOrgs: function(data, ignoreId) {
+      var orgs = [];
+      var sayOther = false;
+      if(data && data.aggregations && data.aggregations.org && data.aggregations.org.org) {
+        orgs = getDataOfTypeFromList(data.aggregations.org.org.buckets || [], 'org').filter(function(org) {
+          var result = ignoreId ? org.id !== ignoreId : true;
+          sayOther = sayOther || !result;
+          return result;
+        });
+      }
+      return {
+        title: getTitle(orgs.length, 'Org', sayOther),
+        org: orgs
+      };
+    },
+
+    docMoneys: function(data, ignoreId) {
+      var moneys = [];
+      var sayOther = false;
+      if(data && data.aggregations && data.aggregations.money && data.aggregations.money.money) {
+        moneys = getDataOfTypeFromList(data.aggregations.money.money.buckets || [], 'money').filter(function(money) {
+          var result = ignoreId ? money.id !== ignoreId : true;
+          sayOther = sayOther || !result;
+          return result;
+        });
+      }
+      return {
+        title: getTitle(moneys.length, 'Money', sayOther),
+        money: moneys
+      };
+    },
+
+    docLocations: function(data, ignoreId) {
+      var locations = [];
+      var sayOther = false;
+      if(data && data.aggregations && data.aggregations.location && data.aggregations.location.location) {
+        locations = getDataOfTypeFromList(data.aggregations.location.location.buckets || [], 'location').filter(function(location) {
+          var result = ignoreId ? location.id !== ignoreId : true;
+          sayOther = sayOther || !result;
+          return result;
+        });
+      }
+      return {
+        title: getTitle(locations.length, 'Location', sayOther),
+        location: locations
       };
     },
 
@@ -685,49 +749,6 @@ var docTransform = (function(_, commonTransforms) {
       return {
         title: getTitle(locations.length, 'Location'),
         location: locations
-      };
-    },
-
-    offerProviderAttributes: function(data) {
-      var attributes = [];
-      if(data && data.aggregations && data.aggregations.attribute && data.aggregations.attribute.attribute) {
-        attributes = getProviderAttributesFromList(data.aggregations.attribute.attribute.buckets || []);
-      }
-      return {
-        attribute: attributes
-      };
-    },
-
-    offerPublishers: function(data) {
-      var publishers = [];
-      if(data && data.aggregations && data.aggregations.publisher && data.aggregations.publisher.publisher) {
-        publishers = getPublishersFromList(data.aggregations.publisher.publisher.buckets || []);
-      }
-      return {
-        title: getTitle(publishers.length, 'Website'),
-        publisher: publishers
-      };
-    },
-
-    offerReviewIds: function(data) {
-      var reviewIds = [];
-      if(data && data.aggregations && data.aggregations.review && data.aggregations.review.review) {
-        reviewIds = getReviewIdsFromList(data.aggregations.review.review.buckets || []);
-      }
-      return {
-        title: getTitle(reviewIds.length, 'Review ID'),
-        review: reviewIds
-      };
-    },
-
-    offerSocialIds: function(data) {
-      var socialIds = [];
-      if(data && data.aggregations && data.aggregations.social && data.aggregations.social.social) {
-        socialIds = getSocialIdsFromList(data.aggregations.social.social.buckets || []);
-      }
-      return {
-        title: getTitle(socialIds.length, 'Social Media ID'),
-        social: socialIds
       };
     },
 

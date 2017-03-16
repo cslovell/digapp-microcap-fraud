@@ -80,15 +80,19 @@ limitations under the License.
         };
       }
 
-      .descriptors > div {
-        width: 50%;
+      .descriptors {
         min-height: 25px;
         line-height: 25px;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: normal;
+        word-break: break-word;
         -webkit-line-clamp: 5;
         -webkit-box-orient: vertical;
+      }
+
+      .descriptors > div {
+        width: 50%;
       }
 
       .body button-link ::content paper-button {

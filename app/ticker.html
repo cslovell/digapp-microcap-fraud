@@ -1,0 +1,590 @@
+<!--
+Copyright 2017 Next Century Corporation
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<!doctype html>
+
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit" />
+  <title>DIG</title>
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#2E3AA1">
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+
+  <link rel="import" href="styles/entity-view-styles.html">
+  <link rel="import" href="styles/icon-styles.html">
+  <style is="custom-style" include="entity-view-styles"></style>
+  <style is="custom-style" include="icon-styles"></style>
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+  <span id="browser-sync-binding"></span>
+  <template is="dom-bind" id="app">
+
+    <!-- exposes clientConfig object which is a container for data
+      transform functions -->
+    <client-config config="{{clientConfig}}"></client-config>
+
+    <!--get app configuration from server -->
+    <iron-ajax
+      id="ajax"
+      auto
+      url="/config"
+      handle-as="json"
+      last-response="{{config}}">
+    </iron-ajax>
+
+    <!--initialize new elastic client connection to server
+      esclient can be used throughout the application lifecycle -->
+    <elastic-client
+      config="[[config.elasticConfig]]"
+      client="{{esclient}}">
+    </elastic-client>
+
+    <elastic-client-query-builder
+      type="term"
+      fields='"fields.ticker.strict.key"'
+      values="[[params.id]]"
+      ejs-query="{{tickerDocsQuery}}">
+    </elastic-client-query-builder>
+
+    <elastic-client-search
+      client="[[esclient]]"
+      index="[[config.elasticIndex]]"
+      elastic-types='["microcap"]'
+      page="{{pageNum}}"
+      page-size="20"
+      query="[[tickerDocsQuery]]"
+      aggregations="[]"
+      filters="[[filterList]]"
+      results="{{tickerDocsResults}}"
+      loading="{{tickerDocsLoading}}"
+      last-error="{{tickerDocsError}}"
+      properties-ready="{{processRequest}}"
+      source-include='["doc_id", "fields", "url"]'>
+    </elastic-client-search>
+
+    <json-transform
+      data-in="[[tickerDocsResults]]"
+      data-out="{{tickerDocs}}"
+      transform-function="[[clientConfig.transforms.doc.docs]]">
+    </json-transform>
+
+    <!-- Location timeline for bar chart and itinerary -->
+
+    <!--
+    <location-timeline
+      location-aggregation-name="locations"
+      location-aggregation-field="fields.location.strict.key"
+      date-aggregation-name="dates"
+      date-aggregation-field="fields.posting_date.strict.key"
+      query-field="fields.ticker.strict.key"
+      query-value="[[params.id]]"
+      client="[[esclient]]"
+      index-name="[[config.elasticIndex]]"
+      index-types='["microcap"]'
+      filters="[[filterList]]"
+      transform-function="[[clientConfig.transforms.doc.locationTimeline]]"
+      count="[[tickerDocs.count]]"
+      interval="{{locationTimelineInterval}}"
+      results="{{timelineData}}"
+      loading="{{loadingLocationTimeline}}"
+      error="{{locationTimelineError}}">
+    </location-timeline>
+    -->
+
+    <!-- Main Content -->
+    <div class="entity">
+
+      <paper-header-panel class="flex" mode="waterfall-tall">
+
+        <!-- Entity header -->
+        <section class="paper-header layout horizontal">
+
+          <!-- Entity title -->
+          <div class="layout horizontal center flex">
+            <iron-icon class="iron-icon-huge entity-ticker-font" icon="social:public"></iron-icon>
+            <section>
+              <div class="paper-font-headline">
+                Ticker: <span>[[params.id]]</span>
+              </div>
+              <template is="dom-if" if="[[tickerDocs.count]]">
+                <div class="paper-font-subhead">
+                  [[tickerDocs.count]] Total Documents
+                </div>
+              </template>
+            </section>
+          </div>
+
+          <entity-filter-builder
+            filter-collection="{{filterCollection}}"
+            filter-list="{{filterList}}">
+          </entity-filter-builder>
+        </section>
+
+        <!-- Entity body -->
+        <div class="entity-page">
+
+          <div class="content">
+
+            <!-- Left Pane -->
+            <div class="flex layout vertical">
+
+              <!-- Phones Section -->
+              <paper-material>
+                <section class="who ticker-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-ticker-font" icon="social:public"></iron-icon>
+                    <div class="flex">[[tickerHeader]]</div>
+                    <div class="copy-data" id="tickerDataClipboard" title="Copy Other Tickers to Clipboard" data-clipboard-text$="[[getClipboardText(tickerData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[tickerError]]">
+                    <elastic-error error="[[tickerError]]" message="{{tickerErrorMessage}}"></elastic-error>
+                    <div>[[tickerErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="ticker"
+                    aggregation-field="fields.ticker.strict.key"
+                    selected="{{filterCollection.ticker}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{tickerError}}"
+                    filter-list="[[filterList]]"
+                    ignore-id="[[params.id]]"
+                    feature-transform="[[clientConfig.transforms.doc.docTickers]]"
+                    data-property="ticker"
+                    data="{{tickerData}}"
+                    header-property="title"
+                    header="{{tickerHeader}}"
+                    item-type="Ticker"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+
+              <!-- Products Section -->
+              <paper-material>
+                <section class="who product-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-product-font" icon="icons:work"></iron-icon>
+                    <div class="flex">[[productHeader]]</div>
+                    <div class="copy-data" id="productDataClipboard" title="Copy Products to Clipboard" data-clipboard-text$="[[getClipboardText(productData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[productError]]">
+                    <elastic-error error="[[productError]]" message="{{productErrorMessage}}"></elastic-error>
+                    <div>[[productErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="product"
+                    aggregation-field="fields.product.strict.key"
+                    selected="{{filterCollection.product}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{productError}}"
+                    filter-list="[[filterList]]"
+                    feature-transform="[[clientConfig.transforms.doc.docProducts]]"
+                    data-property="product"
+                    data="{{productData}}"
+                    header-property="title"
+                    header="{{productHeader}}"
+                    item-type="Product"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+
+              <!-- Persons Section -->
+              <paper-material>
+                <section class="who person-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-person-font" icon="social:person"></iron-icon>
+                    <div class="flex">[[personHeader]]</div>
+                    <div class="copy-data" id="personDataClipboard" title="Copy Persons to Clipboard" data-clipboard-text$="[[getClipboardText(personData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[personError]]">
+                    <elastic-error error="[[personError]]" message="{{personErrorMessage}}"></elastic-error>
+                    <div>[[personErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="person"
+                    aggregation-field="fields.person.strict.key"
+                    selected="{{filterCollection.person}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{personError}}"
+                    filter-list="[[filterList]]"
+                    feature-transform="[[clientConfig.transforms.doc.docPersons]]"
+                    data-property="person"
+                    data="{{personData}}"
+                    header-property="title"
+                    header="{{personHeader}}"
+                    item-type="Person"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+
+              <!-- Orgs Section -->
+              <paper-material>
+                <section class="who org-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-org-font" icon="social:group"></iron-icon>
+                    <div class="flex">[[orgHeader]]</div>
+                    <div class="copy-data" id="orgDataClipboard" title="Copy Orgs to Clipboard" data-clipboard-text$="[[getClipboardText(orgData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[orgError]]">
+                    <elastic-error error="[[orgError]]" message="{{orgErrorMessage}}"></elastic-error>
+                    <div>[[orgErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="org"
+                    aggregation-field="fields.org.strict.key"
+                    selected="{{filterCollection.org}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{orgError}}"
+                    filter-list="[[filterList]]"
+                    feature-transform="[[clientConfig.transforms.doc.docOrgs]]"
+                    data-property="org"
+                    data="{{orgData}}"
+                    header-property="title"
+                    header="{{orgHeader}}"
+                    item-type="Org"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+
+              <!-- Moneys Section -->
+              <paper-material>
+                <section class="who money-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-money-font" icon="editor:attach-money"></iron-icon>
+                    <div class="flex">[[moneyHeader]]</div>
+                    <div class="copy-data" id="moneyDataClipboard" title="Copy Moneys to Clipboard" data-clipboard-text$="[[getClipboardText(moneyData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[moneyError]]">
+                    <elastic-error error="[[moneyError]]" message="{{moneyErrorMessage}}"></elastic-error>
+                    <div>[[moneyErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="money"
+                    aggregation-field="fields.money.strict.key"
+                    selected="{{filterCollection.money}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{moneyError}}"
+                    filter-list="[[filterList]]"
+                    feature-transform="[[clientConfig.transforms.doc.docMoneys]]"
+                    data-property="money"
+                    data="{{moneyData}}"
+                    header-property="title"
+                    header="{{moneyHeader}}"
+                    item-type="Money"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+
+              <!-- Locations Section -->
+              <paper-material>
+                <section class="who location-section">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-location-font" icon="social:location-city"></iron-icon>
+                    <div class="flex">[[locationHeader]]</div>
+                    <div class="copy-data" id="locationDataClipboard" title="Copy Locations to Clipboard" data-clipboard-text$="[[getClipboardText(locationData)]]">
+                      Copy
+                      <iron-icon icon="content-copy"></iron-icon>
+                    </div>
+                  </div>
+
+                  <template is="dom-if" if="[[locationError]]">
+                    <elastic-error error="[[locationError]]" message="{{locationErrorMessage}}"></elastic-error>
+                    <div>[[locationErrorMessage]]</div>
+                  </template>
+
+                  <feature-query-and-display
+                    aggregation-name="location"
+                    aggregation-field="fields.location.strict.key"
+                    selected="{{filterCollection.location}}"
+                    query="[[tickerDocsQuery]]"
+                    client="[[esclient]]"
+                    index-name="[[config.elasticIndex]]"
+                    index-types='["microcap"]'
+                    error="{{locationError}}"
+                    filter-list="[[filterList]]"
+                    feature-transform="[[clientConfig.transforms.doc.docLocations]]"
+                    data-property="location"
+                    data="{{locationData}}"
+                    header-property="title"
+                    header="{{locationHeader}}"
+                    item-type="Location"
+                    count-type="Documents"
+                    entity-name="[[params.id]]"
+                    show-checkboxes
+                    show-other-counts>
+                  </feature-query-and-display>
+                </section>
+              </paper-material>
+            </div>
+
+            <!-- Right Pane -->
+            <div class="flex layout vertical">
+
+              <!-- Timeline -->
+              <!--
+              <paper-material>
+                <section class="when">
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big" icon="icons:timeline"></iron-icon>
+                    <div>[[barChartTitle]]</div>
+                  </div>
+
+                  <template is="dom-if" if="[[locationTimelineError]]">
+                    <elastic-error error="[[locationTimelineError]]" message="{{locationTimelineErrorMessage}}"></elastic-error>
+                    <div>[[locationTimelineErrorMessage]]</div>
+                  </template>
+
+                  <zoomable-bar-chart timeline
+                    bar-property="date"
+                    label-property="text"
+                    stack-property="locations"
+                    data="[[timelineData.dates]]"
+                    default-bar-name="Unknown Location(s)"
+                    default-label="Unknown Location(s)"
+                    source="Documents"
+                    interval="[[locationTimelineInterval]]"
+                    chart-title="{{barChartTitle}}"
+                    loading="[[loadingLocationTimeline]]">
+                  </zoomable-bar-chart>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+              -->
+
+              <!-- Event drops timeline -->
+              <!--
+              <paper-material>
+                <section>
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big" icon="editor:bubble-chart"></iron-icon>
+                    <div class="flex">Location Drops Timeline</div>
+                  </div>
+
+                  <drops-query-and-timeline
+                    client="[[esclient]]"
+                    index="[[config.elasticIndex]]"
+                    date-hist-name="dates"
+                    date-hist-field="fields.posting_date.strict.key"
+                    location-agg-name="locations"
+                    location-agg-field="fields.city.strict.key"
+                    index-types='["microcap"]'
+                    query="[[tickerDocsQuery]]"
+                    filter-list="[[filterList]]"
+                    transform="[[clientConfig.transforms.doc.createEventDropsTimeline]]">
+                  </drops-query-and-timeline>
+                </section>
+              </paper-material>
+
+              <div class="h-divider"></div>
+              -->
+
+              <!-- Docs -->
+              <paper-material>
+                <section>
+                  <div class="paper-font-title layout horizontal start center">
+                    <iron-icon class="iron-icon-big entity-doc-font" icon="icons:description"></iron-icon>
+                    <div class="flex">{{recordsListTitle}}</div>
+
+                    <export-button
+                      data="[[shownDocs]]"
+                      download-image-url="[[config.downloadImageUrl]]"
+                      type="Document"
+                      csv-transform-function="[[clientConfig.transforms.doc.createExportDataForCsv]]"
+                      pdf-transform-function="[[clientConfig.transforms.doc.createExportDataForPdf]]">
+                    </export-button>
+                  </div>
+
+                  <template is="dom-if" if="[[tickerDocsError]]">
+                    <elastic-error error="[[tickerDocsError]]" message="{{tickerDocsErrorMessage}}"></elastic-error>
+                    <div>[[tickerDocsErrorMessage]]</div>
+                  </template>
+
+                  <records-list
+                    client="[[esclient]]"
+                    item-name-property="title"
+                    query-results="[[tickerDocs.data]]"
+                    total-results="{{tickerDocs.count}}"
+                    shown-results="{{shownDocs}}"
+                    page="{{pageNum}}"
+                    page-size="20"
+                    loading="{{tickerDocsLoading}}"
+                    type="Document"
+                    records-list-title="{{recordsListTitle}}">
+                  </records-list>
+                </section>
+              </paper-material>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </paper-header-panel>
+    </div>
+  </template>
+
+  <!-- Need to include dependencies here for IE -->
+  <script src="bower_components/clipboard/dist/clipboard.min.js"></script>
+  <script src="bower_components/lodash/dist/lodash.js"></script>
+  <script src="behaviors/array-behavior.js"></script>
+  <script src="behaviors/browser-behavior.js"></script>
+  <script src="behaviors/state-behavior.js"></script>
+
+  <script>
+  (function(document) {
+    /* globals Clipboard, DigBehaviors */
+    var app = document.querySelector('#app');
+
+    app.filterCollection = DigBehaviors.StateBehavior.buildEntityState({});
+
+    app.params = DigBehaviors.BrowserBehavior.getUrlParameters(window.location.search);
+
+    DigBehaviors.BrowserBehavior.removeStateParameter(window.history, window.location);
+
+    app.buildArray = DigBehaviors.ArrayBehavior.buildArray;
+
+    app.ticker = {};
+
+    app.locationDataClipboard = new Clipboard('#locationDataClipboard');
+    app.moneyDataClipboard = new Clipboard('#moneyDataClipboard');
+    app.orgDataClipboard = new Clipboard('#orgDataClipboard');
+    app.personDataClipboard = new Clipboard('#personDataClipboard');
+    app.productDataClipboard = new Clipboard('#productDataClipboard');
+    app.tickerDataClipboard = new Clipboard('#tickerDataClipboard');
+
+    app.getClipboardText = function(list, isLocation) {
+      return list.map(function(item) {
+        if(isLocation && item.text.indexOf(',') >= 0) {
+          return item.text.substring(0, item.text.indexOf(','));
+        }
+        return item.id;
+      }).join(',');
+    };
+  })(document);
+  </script>
+</body>
+
+</html>
