@@ -25,6 +25,7 @@ var searchTransform = (function(_) {
       case 'money': return 'money';
       case 'org': return 'org';
       case 'person': return 'person';
+      case 'postingDate': return 'posting_date';
       case 'product': return 'product';
       case 'ticker': return 'ticker';
       case 'title': return 'title';
